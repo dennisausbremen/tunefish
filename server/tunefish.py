@@ -20,6 +20,7 @@ def hello_world():
 @app.route('/testband')
 def testband():
     b = Band('The Foo Fighters', 'foo3@bar.de')
+    b
     b.password = "foo"
     db_session.add(b)
     db_session.commit()
