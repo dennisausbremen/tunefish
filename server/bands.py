@@ -10,22 +10,26 @@ BAND_ID = 'band_id'
 
 bands = Blueprint('bands', __name__, template_folder='templates')
 
-@bands.route('/', defaults={'id': 1})
-@bands.route('/<id>')
-def show(id):
-    return Band.query.filter(Band.id == id).first().name
+
+@bands.route('/')
+def show():
+    if BAND_ID in session:
+        return Band.query.filter(Band.id == session[BAND_ID]).first().login
+    else:
+        return 'unkown'
 
 
 @bands.route('/login', methods=['POST'])
 def login():
-    login = request.args.get('login', None, type=str)  # todo normalize
-    password = request.args.get('password', None, type=str)
-    if login and password:
-        band = Band.query.filter(Band.login == 'login').first()
+    if 'login' in request.form and 'password' in request.form:
+        login = request.form['login']
+        password = request.form['password']
+        band = Band.query.filter(Band.login == login).first()
         if band:
             if band.password == password:
-                result = 'success'
                 session[BAND_ID] = band.id
+                session.modified = True
+                result = 'success'
             else:
                 result = 'bad_password'
         else:
@@ -43,15 +47,17 @@ def logout():
 
 @bands.route('/register', methods=['POST'])
 def register():
-    login = request.args.get('login', None, type=str)  # todo normalize
-    password = request.args.get('password', None, type=str)
-    if login and password:
+    if 'login' in request.form and 'password' in request.form:
         try:
-            band = Band(login, password)
+            band = Band(request.form['login'], request.form['password'])
             db_session.add(band)
             db_session.commit()
             session[BAND_ID] = band.id
+            session.modified = True
             result = 'success'
         except IntegrityError as e:
             result = 'already_exists'
+    else:
+        result = 'data_missing'
+
     return jsonify(result=result)
