@@ -19,9 +19,12 @@ def hello_world():
 
 @app.route('/testband')
 def testband():
-    b = Band('The Foo Fighters', 'foo3@bar.de')
-    b
-    b.password = "foo"
+    b = Band('The Foo Fighters', 'foo@bar.de')
+    b.login = 'foo'
+    b.password = "foobar"
+    b.descp = 'The Foo Fighters are the foo'
+    b.address = 'Fakestreet 123 in NY'
+    b.website = 'foofighters.com'
     db_session.add(b)
     db_session.commit()
     return 'Band created'
