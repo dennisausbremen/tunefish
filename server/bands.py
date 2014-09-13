@@ -47,8 +47,10 @@ def register():
     password = request.args.get('password', None, type=str)
     if login and password:
         try:
-            db_session.add(Band(login, password))
+            band = Band(login, password)
+            db_session.add(band)
             db_session.commit()
+            session[BAND_ID] = band.id
             result = 'success'
         except IntegrityError as e:
             result = 'already_exists'
