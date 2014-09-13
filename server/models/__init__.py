@@ -24,9 +24,9 @@ class Band(Base):
     phone = Column(String)
     address = Column(String)
 
-    def __init__(self, name=None, email=None):
-        self.name = name
-        self.email = email
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
 
     def __repr__(self):
         return '<Band %r>' % (self.name)
