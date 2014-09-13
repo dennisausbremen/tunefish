@@ -13,19 +13,20 @@ Base.query = db_session.query_property()
 class Band(Base):
     __tablename__ = 'bands'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
-    email = Column(String(120), unique=True)
-    emailConfirmed = Column(Boolean, default=False)
+    login = Column(String, unique=True)
     password = Column(PasswordType(schemes=['pbkdf2_sha512']))
+    name = Column(String)
     descp = Column(String)
+    email = Column(String)
+    emailConfirmed = Column(Boolean, default=False)
     website = Column(URLType)
     youtube_id = Column(String)
     phone = Column(String)
     address = Column(String)
 
-    def __init__(self, name=None, email=None):
-        self.name = name
-        self.email = email
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
 
     def __repr__(self):
         return '<Band %r>' % (self.name)
