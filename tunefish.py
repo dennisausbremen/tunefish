@@ -1,11 +1,11 @@
 from flask import Flask, jsonify
 
-from database import db_session, init_db
+from server.database import db_session, init_db
 from server.bands import bands
 from server.models import Band
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder = 'client')
 app.debug = True
 app.register_blueprint(bands, url_prefix='/bands')
 app.secret_key = "this_should_be_way_more_secret_like_urandom.its_only_static_for_debug_reasons"

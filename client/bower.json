@@ -1,0 +1,27 @@
+{
+  "name": "tunefish",
+  "version": "0.0.1",
+  "description": "An automated band application and voting platform",
+  "homepage": "https://github.com/dennisausbremen/tunefish",
+  "authors": [
+    "Dennis Gieseler <dennis.gieseler@hmmh.de>"
+  ],
+  "moduleType": [
+    "es6",
+    "globals"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "ractive": "~0.5.7",
+    "ractive-load": "~0.3.2",
+    "page.js": "~1.3.7"
+  }
+}
