@@ -1,11 +1,13 @@
 from flask import Flask, jsonify
 
 from database import db_session, init_db
+from server.bands import bands
 from server.models import Band
 
 
 app = Flask(__name__)
 app.debug = True
+app.register_blueprint(bands, url_prefix='/bands')
 
 init_db()
 
@@ -36,4 +38,4 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
