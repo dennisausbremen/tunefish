@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy_utils import PasswordType
 
 from server.database import db_session
 
@@ -13,6 +14,7 @@ class Band(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
     email = Column(String(120), unique=True)
+    password = Column(PasswordType(schemes=['pbkdf2_sha512']))
 
     def __init__(self, name=None, email=None):
         self.name = name

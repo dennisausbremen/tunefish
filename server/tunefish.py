@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 from database import db_session, init_db
 from server.models import Band
@@ -17,10 +17,18 @@ def hello_world():
 
 @app.route('/testband')
 def testband():
-    b = Band('The Foo Fighters', 'foo2@bar.de')
+    b = Band('The Foo Fighters', 'foo3@bar.de')
+    b.password = "foo"
     db_session.add(b)
     db_session.commit()
     return 'Band created'
+
+
+@app.route('/json')
+def json():
+    return jsonify(
+        bannames=[band.password for band in Band.query.all()]
+    )
 
 
 @app.teardown_appcontext
