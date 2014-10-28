@@ -1,13 +1,8 @@
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy_utils import PasswordType, URLType
 
-from server.database import db_session
-
-
-Base = declarative_base()
-Base.query = db_session.query_property()
+from server.database import Base
 
 
 class Band(Base):
@@ -30,3 +25,6 @@ class Band(Base):
 
     def __repr__(self):
         return '<Band %r>' % (self.name)
+
+    def __str__(self):
+        return 'Band %r' % (self.name)
