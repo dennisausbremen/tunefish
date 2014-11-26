@@ -3,9 +3,7 @@ import uuid
 from flask import Blueprint, request, jsonify, session
 from sqlalchemy.exc import IntegrityError
 
-from server.database import db_session
-
-from server.models import Band
+from server.models import Band, db
 
 
 BAND_ID = 'band_id'
@@ -13,12 +11,14 @@ BAND_ID = 'band_id'
 bands = Blueprint('bands', __name__, template_folder='templates')
 ajax_session = {}
 
+
 @bands.route('/')
 def show():
     if BAND_ID in session:
-        return Band.query.filter(Band.id == session[BAND_ID]).first().login
+        return Band.query.filter(Band.id == session[BAND_ID]).first_or_404().login
     else:
         return 'unkown'
+
 
 @bands.route('/login', methods=['POST'])
 def login():
@@ -26,16 +26,13 @@ def login():
     if 'login' in request.form and 'password' in request.form:
         login = request.form['login']
         password = request.form['password']
-        band = Band.query.filter(Band.login == login).first()
-        if band:
-            if band.password == password:
-                auth_token = str(uuid.uuid4())
-                session[auth_token] = band.id
-                result = 'success'
-            else:
-                result = 'bad_password'
+        band = Band.query.filter(Band.login == login).first_or_404()
+        if band.password == password:
+            auth_token = str(uuid.uuid4())
+            session[auth_token] = band.id
+            result = 'success'
         else:
-            result = 'unkown'
+            result = 'bad_password'
     else:
         result = 'data_missing'
 
@@ -54,8 +51,8 @@ def register():
     if 'login' in request.form and 'password' in request.form:
         try:
             band = Band(request.form['login'], request.form['password'])
-            db_session.add(band)
-            db_session.commit()
+            db.session.add(band)
+            db.session.commit()
             auth_token = str(uuid.uuid4())
             session[auth_token] = band.id
             result = 'success'
