@@ -9,7 +9,7 @@ app.register_blueprint(bands, url_prefix='/bands')
 @app.route('/')
 def hello_world():
     return 'Hello World! These are the bands: <br>' + '<br>'.join(
-        [band.name for band in Band.query.all()])
+        [band.login for band in Band.query.all()])
 
 
 @app.route('/testband')
