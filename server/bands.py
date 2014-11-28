@@ -19,10 +19,12 @@ class LoginForm(Form):
 class RegistrationForm(Form):
     login = StringField('Login',
                         [validators.Length(min=4, max=25, message="Login muss zwischen 4 und 25 Zeichen lang sein")])
-    email = StringField('E-Mail Adresse', [validators.Length(min=6, max=35)])
+    email = StringField('E-Mail Adresse', [
+        validators.Length(min=6, max=35, message=u'Die E-Mail Adresse muss zwischen 6 und 36 Zeichen lang sein.'),
+        validators.Email(message=u'Die angegebene E-Mail Adresse ist ungültig.')])
     password = PasswordField('Passwort', [
-        validators.Length(min=6),
-        validators.EqualTo('confirm', message='Passwörter müssen identisch sein')
+        validators.Length(min=6, message=u'Das gewählte Passwort muss mindestens 6 Zeichen lang sein.'),
+        validators.EqualTo('confirm', message=u'Passwörter müssen identisch sein')
     ])
     confirm = PasswordField('Passwort wiederholen')
 

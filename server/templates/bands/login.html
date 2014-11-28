@@ -1,33 +1,32 @@
 {% extends "layout.html" %}
+
+{% macro show_errors(field) %}
+    {{ field.label }}<br/> {{ field(size=20) }}<br/>
+
+{% for error in field.errors %}
+<span style="color: red;">{{error}}</span><br/>
+{% endfor %}
+<br/>
+{% endmacro %}
+
 {% block body %}
 <h2>Login</h2>
 <form method="POST" action="{{ url_for('bands.login') }}">
     {{ loginForm.csrf_token }}
-    {{ loginForm.login.label }}<br/> {{ loginForm.login(size=20) }}
-    {% for error in loginForm.login.errors %}
-    <font color="red">{{error}}</font>
-    {% endfor %}
-    <br/>
-
-    {{ loginForm.password.label }}<br/> {{ loginForm.password(size=20) }}
-    {% for error in loginForm.password.errors %}
-    <font color="red">{{error}}</font>
-    {% endfor %}
-    <br/>
-
+    {{ show_errors(loginForm.login) }}
+    {{ show_errors(loginForm.password) }}
     <input type="submit" value="Go">
 </form>
+
+<h2>Neuen Benutzer erstellen</h2>
 
 <form method="POST" action="{{ url_for('bands.register') }}">
     {{ registerForm.csrf_token }}
-    {{ registerForm.login.label }}<br/> {{ registerForm.login(size=20) }}<br/>
-    {% for error in registerForm.login.errors %}
-    <font color="red">{{error}}</font>
-    {% endfor %}
-
-    {{ registerForm.email.label }}<br/> {{ registerForm.email(size=20) }}<br/>
-    {{ registerForm.password.label }}<br/> {{ registerForm.password(size=20) }}<br/>
-    {{ registerForm.confirm.label }}<br/> {{ registerForm.confirm(size=20) }}<br/>
+    {{ show_errors(registerForm.login) }}
+    {{ show_errors(registerForm.email) }}
+    {{ show_errors(registerForm.password) }}
+    {{ show_errors(registerForm.confirm) }}
     <input type="submit" value="Go">
 </form>
 {% endblock %}
+
