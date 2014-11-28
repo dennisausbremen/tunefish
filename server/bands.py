@@ -9,7 +9,6 @@ from flask_wtf import Form
 
 from server.models import Band, db
 
-
 class LoginForm(Form):
     login = StringField('Login', [validators.DataRequired()])
     password = PasswordField('Passwort', [validators.DataRequired()])
@@ -28,13 +27,12 @@ class RegistrationForm(Form):
     confirm = PasswordField('Passwort wiederholen')
 
 
-bands = Blueprint('bands', __name__, template_folder='templates/bands')
-ajax_session = {}
+bands = Blueprint('bands', __name__, template_folder='../client/app/bands')
 
 
 class Index(MethodView):
     def render(self, loginForm, regForm):
-        return render_template('login.html', loginForm=loginForm, registerForm=regForm)
+        return render_template('loginAndRegister.html', loginForm=loginForm, registerForm=regForm)
 
     def get(self):
         return self.render(LoginForm(), RegistrationForm())
