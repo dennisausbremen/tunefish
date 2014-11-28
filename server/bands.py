@@ -1,67 +1,91 @@
-import uuid
+# coding=utf-8
 
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, session, redirect, url_for
+from flask.templating import render_template
+from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
+from wtforms import PasswordField, validators, StringField
+from flask_wtf import Form
 
-from server.database import db_session
+from server.models import Band, db
 
-from server.models import Band
+class LoginForm(Form):
+    login = StringField('Login', [validators.DataRequired()])
+    password = PasswordField('Passwort', [validators.DataRequired()])
 
 
-BAND_ID = 'band_id'
+class RegistrationForm(Form):
+    login = StringField('Login',
+                        [validators.Length(min=4, max=25, message="Login muss zwischen 4 und 25 Zeichen lang sein")])
+    email = StringField('E-Mail Adresse', [
+        validators.Length(min=6, max=35, message=u'Die E-Mail Adresse muss zwischen 6 und 36 Zeichen lang sein.'),
+        validators.Email(message=u'Die angegebene E-Mail Adresse ist ungültig.')])
+    password = PasswordField('Passwort', [
+        validators.Length(min=6, message=u'Das gewählte Passwort muss mindestens 6 Zeichen lang sein.'),
+        validators.EqualTo('confirm', message=u'Passwörter müssen identisch sein')
+    ])
+    confirm = PasswordField('Passwort wiederholen')
 
-bands = Blueprint('bands', __name__, template_folder='templates')
-ajax_session = {}
 
-@bands.route('/')
-def show():
-    if BAND_ID in session:
-        return Band.query.filter(Band.id == session[BAND_ID]).first().login
-    else:
-        return 'unkown'
+bands = Blueprint('bands', __name__, template_folder='../client/app/bands')
 
-@bands.route('/login', methods=['POST'])
-def login():
-    auth_token = None
-    if 'login' in request.form and 'password' in request.form:
-        login = request.form['login']
-        password = request.form['password']
-        band = Band.query.filter(Band.login == login).first()
-        if band:
-            if band.password == password:
-                auth_token = str(uuid.uuid4())
-                session[auth_token] = band.id
-                result = 'success'
+
+class Index(MethodView):
+    def render(self, loginForm, regForm):
+        return render_template('loginAndRegister.html', loginForm=loginForm, registerForm=regForm)
+
+    def get(self):
+        return self.render(LoginForm(), RegistrationForm())
+
+
+class Register(Index):
+    def post(self):
+        regForm = RegistrationForm()
+        loginForm = LoginForm()
+        if regForm.validate_on_submit():
+            try:
+                band = Band(regForm.login.data, regForm.password.data)
+                band.email = regForm.email.data
+                db.session.add(band)
+                db.session.commit()
+                redirect('/')
+            except IntegrityError as e:
+                regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
+                return self.render(loginForm, regForm)
+        return self.render(loginForm, regForm)
+
+
+class Login(Index):
+    def post(self):
+        regForm = RegistrationForm()
+        loginForm = LoginForm()
+        if loginForm.validate_on_submit():
+            band = Band.query.filter(Band.login == loginForm.login.data).first()
+            if band:
+                if band.password == loginForm.password.data:
+                    session['bandId'] = band.id
+                    return redirect(url_for('bands.profile'))
+                else:
+                    loginForm.password.errors.append("Falsches Passwort")
             else:
-                result = 'bad_password'
-        else:
-            result = 'unkown'
-    else:
-        result = 'data_missing'
-
-    return jsonify(result=result, auth_token=auth_token)
+                loginForm.login.errors.append("Unbekannter Login")
+        return self.render(loginForm, regForm)
 
 
-@bands.route('/logout', methods=['POST'])
-def logout():
-    auth_token = request.form['auth_token']
-    ajax_session.pop(auth_token, None)
+class Logout(MethodView):
+    def get(self):
+        del session['bandId']
+        return redirect(url_for('bands.index'))
 
 
-@bands.route('/register', methods=['POST'])
-def register():
-    auth_token = None
-    if 'login' in request.form and 'password' in request.form:
-        try:
-            band = Band(request.form['login'], request.form['password'])
-            db_session.add(band)
-            db_session.commit()
-            auth_token = str(uuid.uuid4())
-            session[auth_token] = band.id
-            result = 'success'
-        except IntegrityError as e:
-            result = 'already_exists'
-    else:
-        result = 'data_missing'
+class Profile(MethodView):
+    def get(self):
+        band = Band.query.get_or_404(session['bandId'])
+        return "welcome band with login %s" % band.login
 
-    return jsonify(result=result, auth_token=auth_token)
+
+bands.add_url_rule('/', view_func=Index.as_view('index'))
+bands.add_url_rule('/register', view_func=Register.as_view('register'))
+bands.add_url_rule('/login', view_func=Login.as_view('login'))
+bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
+bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
