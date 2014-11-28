@@ -28,7 +28,7 @@ def testband():
 @app.route('/json')
 def json():
     return jsonify(
-        bannames=[band.password for band in Band.query.all()]
+        bannames=[band.login for band in Band.query.all()]
     )
 
 

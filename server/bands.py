@@ -11,6 +11,11 @@ from flask_wtf import Form
 from server.models import Band, db
 
 
+class LoginForm(Form):
+    login = StringField('Login', [validators.DataRequired()])
+    password = PasswordField('Passwort', [validators.DataRequired()])
+
+
 class RegistrationForm(Form):
     login = StringField('Login',
                         [validators.Length(min=4, max=25, message="Login muss zwischen 4 und 25 Zeichen lang sein")])
@@ -27,16 +32,17 @@ ajax_session = {}
 
 
 class Index(MethodView):
-    def render(self, regForm):
-        return render_template('login.html', registerForm=regForm)
+    def render(self, loginForm, regForm):
+        return render_template('login.html', loginForm=loginForm, registerForm=regForm)
 
     def get(self):
-        return self.render(RegistrationForm())
+        return self.render(LoginForm(), RegistrationForm())
 
 
 class Register(Index):
     def post(self):
         regForm = RegistrationForm()
+        loginForm = LoginForm()
         if regForm.validate_on_submit():
             try:
                 band = Band(regForm.login.data, regForm.password.data)
@@ -46,12 +52,29 @@ class Register(Index):
                 redirect('/')
             except IntegrityError as e:
                 regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
-                return self.render(regForm)
-        return self.render(regForm)
+                return self.render(loginForm, regForm)
+        return self.render(loginForm, regForm)
+
+
+class Login(Index):
+    def post(self):
+        regForm = RegistrationForm()
+        loginForm = LoginForm()
+        if loginForm.validate_on_submit():
+            band = Band.query.filter(Band.login == loginForm.login.data).first()
+            if band:
+                if band.password == loginForm.password.data:
+                    return redirect('../json')
+                else:
+                    loginForm.password.errors.append("Falsches Passwort")
+            else:
+                loginForm.login.errors.append("Unbekannter Login")
+        return self.render(loginForm, regForm)
 
 
 bands.add_url_rule('/', view_func=Index.as_view('foo'))
 bands.add_url_rule('/register', view_func=Register.as_view('register'))
+bands.add_url_rule('/login', view_func=Login.as_view('login'))
 
 
 @bands.route('/login2', methods=['POST'])
