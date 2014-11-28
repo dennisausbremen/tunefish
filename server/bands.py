@@ -1,7 +1,7 @@
 # coding=utf-8
 import uuid
 
-from flask import Blueprint, request, jsonify, session, redirect
+from flask import Blueprint, request, jsonify, session, redirect, url_for
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
@@ -9,6 +9,11 @@ from wtforms import PasswordField, validators, StringField
 from flask_wtf import Form
 
 from server.models import Band, db
+
+
+class LoginForm(Form):
+    login = StringField('Login', [validators.DataRequired()])
+    password = PasswordField('Passwort', [validators.DataRequired()])
 
 
 class RegistrationForm(Form):
@@ -27,16 +32,17 @@ ajax_session = {}
 
 
 class Index(MethodView):
-    def render(self, regForm):
-        return render_template('login.html', registerForm=regForm)
+    def render(self, loginForm, regForm):
+        return render_template('login.html', loginForm=loginForm, registerForm=regForm)
 
     def get(self):
-        return self.render(RegistrationForm())
+        return self.render(LoginForm(), RegistrationForm())
 
 
 class Register(Index):
     def post(self):
         regForm = RegistrationForm()
+        loginForm = LoginForm()
         if regForm.validate_on_submit():
             try:
                 band = Band(regForm.login.data, regForm.password.data)
@@ -46,12 +52,44 @@ class Register(Index):
                 redirect('/')
             except IntegrityError as e:
                 regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
-                return self.render(regForm)
-        return self.render(regForm)
+                return self.render(loginForm, regForm)
+        return self.render(loginForm, regForm)
 
 
-bands.add_url_rule('/', view_func=Index.as_view('foo'))
+class Login(Index):
+    def post(self):
+        regForm = RegistrationForm()
+        loginForm = LoginForm()
+        if loginForm.validate_on_submit():
+            band = Band.query.filter(Band.login == loginForm.login.data).first()
+            if band:
+                if band.password == loginForm.password.data:
+                    session['bandId'] = band.id
+                    return redirect(url_for('bands.profile'))
+                else:
+                    loginForm.password.errors.append("Falsches Passwort")
+            else:
+                loginForm.login.errors.append("Unbekannter Login")
+        return self.render(loginForm, regForm)
+
+
+class Logout(MethodView):
+    def get(self):
+        del session['bandId']
+        return redirect(url_for('bands.index'))
+
+
+class Profile(MethodView):
+    def get(self):
+        band = Band.query.get_or_404(session['bandId'])
+        return "welcome band with login %s" % band.login
+
+
+bands.add_url_rule('/', view_func=Index.as_view('index'))
 bands.add_url_rule('/register', view_func=Register.as_view('register'))
+bands.add_url_rule('/login', view_func=Login.as_view('login'))
+bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
+bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
 
 
 @bands.route('/login2', methods=['POST'])
