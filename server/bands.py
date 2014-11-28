@@ -27,7 +27,7 @@ class RegistrationForm(Form):
     confirm = PasswordField('Passwort wiederholen')
 
 
-bands = Blueprint('bands', __name__, template_folder='../client/app/bands')
+bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
 
 
 class Index(MethodView):

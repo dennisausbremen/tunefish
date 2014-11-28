@@ -163,6 +163,7 @@ module.exports = function (grunt) {
                        dest: '<%= cfg.dist %>/',
                        filter: 'isFile'
                    },
+                   //Copy Views
                    //Copy JS
                    {
                        expand: true,
