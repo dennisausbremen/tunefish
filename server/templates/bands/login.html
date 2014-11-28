@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% macro show_errors(field) %}
-    {{ field.label }}<br/> {{ field(size=20) }}<br/>
+    {{ field.label }}<br/>
+    {{ field(size=20) }}<br/>
 
 {% for error in field.errors %}
 <span style="color: red;">{{error}}</span><br/>
@@ -15,7 +16,7 @@
     {{ loginForm.csrf_token }}
     {{ show_errors(loginForm.login) }}
     {{ show_errors(loginForm.password) }}
-    <input type="submit" value="Go">
+    <input type="submit" value="Login">
 </form>
 
 <h2>Neuen Benutzer erstellen</h2>
@@ -26,7 +27,7 @@
     {{ show_errors(registerForm.email) }}
     {{ show_errors(registerForm.password) }}
     {{ show_errors(registerForm.confirm) }}
-    <input type="submit" value="Go">
+    <input type="submit" value="Band registrieren">
 </form>
 {% endblock %}
 
