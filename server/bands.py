@@ -1,18 +1,19 @@
 # coding=utf-8
 import uuid
 
-from flask import Blueprint, request, jsonify, session, render_template
+from flask import Blueprint, request, jsonify, session, redirect
+from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
 from wtforms import PasswordField, validators, StringField
 from flask_wtf import Form
 
-
 from server.models import Band, db
 
 
 class RegistrationForm(Form):
-    login = StringField('Login', [validators.Length(min=4, max=25)])
+    login = StringField('Login',
+                        [validators.Length(min=4, max=25, message="Login muss zwischen 4 und 25 Zeichen lang sein")])
     email = StringField('E-Mail Adresse', [validators.Length(min=6, max=35)])
     password = PasswordField('Passwort', [
         validators.Length(min=6),
@@ -20,20 +21,33 @@ class RegistrationForm(Form):
     ])
     confirm = PasswordField('Passwort wiederholen')
 
+
 bands = Blueprint('bands', __name__, template_folder='templates/bands')
 ajax_session = {}
 
 
 class Index(MethodView):
-    def get(self):
-        regForm = RegistrationForm()
+    def render(self, regForm):
         return render_template('login.html', registerForm=regForm)
 
+    def get(self):
+        return self.render(RegistrationForm())
 
 
-class Register(MethodView):
+class Register(Index):
     def post(self):
-        pass
+        regForm = RegistrationForm()
+        if regForm.validate_on_submit():
+            try:
+                band = Band(regForm.login.data, regForm.password.data)
+                band.email = regForm.email.data
+                db.session.add(band)
+                db.session.commit()
+                redirect('/')
+            except IntegrityError as e:
+                regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
+                return self.render(regForm)
+        return self.render(regForm)
 
 
 bands.add_url_rule('/', view_func=Index.as_view('foo'))

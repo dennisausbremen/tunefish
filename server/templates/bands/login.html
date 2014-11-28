@@ -3,10 +3,14 @@
 <h2>Login</h2>
 <form method="POST" action="{{ url_for('bands.register') }}">
     {{ registerForm.csrf_token }}
-    {{ registerForm.login.label }}<br /> {{ registerForm.login(size=20) }}<br/>
-    {{ registerForm.email.label }}<br /> {{ registerForm.email(size=20) }}<br/>
-    {{ registerForm.password.label }}<br /> {{ registerForm.password(size=20) }}<br/>
-    {{ registerForm.confirm.label }}<br /> {{ registerForm.confirm(size=20) }}<br/>
+    {{ registerForm.login.label }}<br/> {{ registerForm.login(size=20) }}<br/>
+    {% for error in registerForm.login.errors %}
+    <font color="red">{{error}}</font>
+    {% endfor %}
+
+    {{ registerForm.email.label }}<br/> {{ registerForm.email(size=20) }}<br/>
+    {{ registerForm.password.label }}<br/> {{ registerForm.password(size=20) }}<br/>
+    {{ registerForm.confirm.label }}<br/> {{ registerForm.confirm(size=20) }}<br/>
     <input type="submit" value="Go">
 </form>
 {% endblock %}
