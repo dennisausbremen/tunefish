@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
 
 {% macro show_errors(field) %}
+    {{ field.label }}<br/> {{ field(size=20) }}<br/>
+
 {% for error in field.errors %}
-{{ field.label }}<br/> {{ field(20) }}<br/>
 <span style="color: red;">{{error}}</span><br/>
 {% endfor %}
 <br/>
 {% endmacro %}
 
-
-
+{% block body %}
 <h2>Login</h2>
 <form method="POST" action="{{ url_for('bands.login') }}">
     {{ loginForm.csrf_token }}
@@ -18,7 +18,6 @@
     <input type="submit" value="Go">
 </form>
 
-{% block body %}
 <h2>Neuen Benutzer erstellen</h2>
 
 <form method="POST" action="{{ url_for('bands.register') }}">
