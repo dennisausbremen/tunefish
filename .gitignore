@@ -2,3 +2,4 @@
 .idea/tasks.xml
 client/bower_components/
 **/*.db
+**/*.pyc
