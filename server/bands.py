@@ -20,15 +20,14 @@ class RegistrationForm(Form):
     ])
     confirm = PasswordField('Passwort wiederholen')
 
-bands = Blueprint('bands', __name__, template_folder='templates')
+bands = Blueprint('bands', __name__, template_folder='templates/bands')
 ajax_session = {}
 
 
 class Index(MethodView):
     def get(self):
         regForm = RegistrationForm()
-        # todo push regForm
-        return render_template('login.html', error=None)
+        return render_template('login.html', registerForm=regForm)
 
 
 

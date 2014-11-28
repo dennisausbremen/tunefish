@@ -1,14 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Login</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="{{ url_for('bands.login') }}" method=post>
-    <dl>
-      <dt>Username:</dt>
-      <dd><input type="text" name="login"></dd>
-      <dt>Password:</dt>
-      <dd><input type="password" name="password"></dd>
-      <dd><input type="submit" value="Login"></dd>
-    </dl>
-  </form>
+<h2>Login</h2>
+<form method="POST" action="{{ url_for('bands.register') }}">
+    {{ registerForm.csrf_token }}
+    {{ registerForm.login.label }}<br /> {{ registerForm.login(size=20) }}<br/>
+    {{ registerForm.email.label }}<br /> {{ registerForm.email(size=20) }}<br/>
+    {{ registerForm.password.label }}<br /> {{ registerForm.password(size=20) }}<br/>
+    {{ registerForm.confirm.label }}<br /> {{ registerForm.confirm(size=20) }}<br/>
+    <input type="submit" value="Go">
+</form>
 {% endblock %}
