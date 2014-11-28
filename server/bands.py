@@ -1,15 +1,21 @@
 import uuid
 
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, render_template
 from sqlalchemy.exc import IntegrityError
+
 
 from server.models import Band, db
 
 
 BAND_ID = 'band_id'
 
-bands = Blueprint('bands', __name__, template_folder='templates')
+bands = Blueprint('bands', __name__, template_folder='templates/bands')
 ajax_session = {}
+
+
+@bands.route('/test', methods=['GET', 'POST'])
+def test():
+    return render_template('login.html', error=None)
 
 
 @bands.route('/')
