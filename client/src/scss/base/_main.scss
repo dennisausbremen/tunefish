@@ -1,0 +1,19 @@
+html {
+//    @include gradientBGAlt();
+    position: relative;
+    height: 100%;
+}
+
+body {
+    font-family: "Source Sans Pro", sans-serif;
+
+    font: 500 $base-font-size/#{$base-line-height} $font-family;
+    -webkit-text-size-adjust: 100%;
+    color: $text-dark;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.main-content {
+
+}

@@ -1,0 +1,57 @@
+@keyframes swim-large {
+    0% {
+        transform: /*scale3d(1, 1, 1)*/ translateY(0);
+    }
+
+//    20% {
+//        transform: /*scale3d(0.98, 1.01, 1)*/ translateY(-2px);
+//    }
+//
+//    45% {
+//      transform: /*scale3d(1, 1, 1)*/ translateY(-5px);
+//    }
+
+    25% {
+        transform: /*scale3d(1, 1, 1)*/ translateY(0);
+    }
+
+    50% {
+        transform: /*scale3d(1, 1, 1)*/ translateY(-5px);
+    }
+
+    75% {
+        transform: /*scale3d(1, 1, 1)*/ translateY(3px);
+    }
+
+    100% {
+        transform: /*scale3d(1, 1, 1)*/ translateY(0px);
+    }
+}
+
+.anim-logo {
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+
+.logo {
+    float: left;
+    border-right: 1px solid #efefef;
+    font-weight: 200;
+
+    > * {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    span {
+        line-height: $base-line-height * 2;
+        padding: 0 30px 0 20px;
+    }
+
+    &:hover {
+        .anim-logo {
+            animation-name: swim-large;
+        }
+    }
+}

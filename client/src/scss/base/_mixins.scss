@@ -1,0 +1,37 @@
+@mixin gradientBG() {
+    background: -webkit-linear-gradient(0deg, #360033 10%, #0b8793 90%); /* Chrome 10+, Saf5.1+ */
+    background:    -moz-linear-gradient(0deg, #360033 10%, #0b8793 90%); /* FF3.6+ */
+    background:     -ms-linear-gradient(0deg, #360033 10%, #0b8793 90%); /* IE10 */
+    background:      -o-linear-gradient(0deg, #360033 10%, #0b8793 90%); /* Opera 11.10+ */
+    background:         linear-gradient(0deg, #360033 10%, #0b8793 90%); /* W3C */
+}
+
+@mixin gradientBGAlt() {
+    background: -webkit-linear-gradient(0deg, $bg-sec 10%, lighten($bg-sec,10%) 90%); /* Chrome 10+, Saf5.1+ */
+    background:    -moz-linear-gradient(0deg, $bg-sec 10%, lighten($bg-sec,10%) 90%); /* FF3.6+ */
+    background:     -ms-linear-gradient(0deg, $bg-sec 10%, lighten($bg-sec,10%) 90%); /* IE10 */
+    background:      -o-linear-gradient(0deg, $bg-sec 10%, lighten($bg-sec,10%) 90%); /* Opera 11.10+ */
+    background:         linear-gradient(0deg, $bg-sec 10%, lighten($bg-sec,10%) 90%); /* W3C */
+}
+
+@mixin clearfix() {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin breakpoint($point) {
+    @each $breakpoint in $breakpoints {
+        $query: nth($breakpoint, 1);
+        $name: nth($breakpoint, 2);
+        @if ($name == $point) {
+            @media #{$query} { @content }
+        }
+    }
+}
+
+@mixin smallfont() {
+    font-size: $base-font-size / 2;
+}
