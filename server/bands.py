@@ -1,27 +1,46 @@
+# coding=utf-8
 import uuid
 
 from flask import Blueprint, request, jsonify, session
+from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
+from wtforms import PasswordField, validators, StringField
+from flask_wtf import Form
 
 from server.models import Band, db
 
 
-BAND_ID = 'band_id'
+class RegistrationForm(Form):
+    login = StringField('Login', [validators.Length(min=4, max=25)])
+    email = StringField('E-Mail Adresse', [validators.Length(min=6, max=35)])
+    password = PasswordField('Passwort', [
+        validators.Length(min=6),
+        validators.EqualTo('confirm', message='Passwörter müssen identisch sein')
+    ])
+    confirm = PasswordField('Passwort wiederholen')
+
 
 bands = Blueprint('bands', __name__, template_folder='templates')
-ajax_session = {}
 
 
-@bands.route('/')
-def show():
-    if BAND_ID in session:
-        return Band.query.filter(Band.id == session[BAND_ID]).first_or_404().login
-    else:
-        return 'unkown'
+class Index(MethodView):
+    def get(self):
+        regForm = RegistrationForm()
+        # todo push regForm
+        return 'test'
 
 
-@bands.route('/login', methods=['POST'])
-def login():
+class Register(MethodView):
+    def post(self):
+        pass
+
+
+bands.add_url_rule('/', view_func=Index.as_view('foo'))
+bands.add_url_rule('/register', view_func=Register.as_view('register'))
+
+
+@bands.route('/login2', methods=['POST'])
+def login2():
     auth_token = None
     if 'login' in request.form and 'password' in request.form:
         login = request.form['login']
@@ -39,14 +58,14 @@ def login():
     return jsonify(result=result, auth_token=auth_token)
 
 
-@bands.route('/logout', methods=['POST'])
-def logout():
+@bands.route('/logout2', methods=['POST'])
+def logout2():
     auth_token = request.form['auth_token']
     ajax_session.pop(auth_token, None)
 
 
-@bands.route('/register', methods=['POST'])
-def register():
+@bands.route('/register2', methods=['POST'])
+def register2():
     auth_token = None
     if 'login' in request.form and 'password' in request.form:
         try:
