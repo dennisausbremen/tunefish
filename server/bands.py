@@ -4,10 +4,11 @@ from flask import Blueprint, session, redirect, url_for
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
-from wtforms import PasswordField, validators, StringField
+from wtforms import PasswordField, validators, StringField, TextAreaField
 from flask_wtf import Form
 
 from server.models import Band, db
+
 
 class LoginForm(Form):
     login = StringField('Login', [validators.DataRequired()])
@@ -24,7 +25,15 @@ class RegistrationForm(Form):
         validators.Length(min=6, message=u'Das gewählte Passwort muss mindestens 6 Zeichen lang sein.'),
         validators.EqualTo('confirm', message=u'Passwörter müssen identisch sein')
     ])
-    confirm = PasswordField('Passwort wiederholen')
+    confirm = PasswordField('Passwort wiederholen', [validators.EqualTo('password', message='')])
+
+
+class BandForm(Form):
+    descp = TextAreaField('Band-Beschreibung', [validators.length(min=20, message=u"Die Bandbeschreibung muss mindestens 20 Zeichen umfassen.")])
+    website = StringField('Webseite', [validators.Length(min=5)])
+    youtube_id = StringField('Youtube VideoID')
+    phone = StringField('Telefon')
+    city = StringField('Stadt')
 
 
 bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
@@ -61,14 +70,12 @@ class Login(Index):
         loginForm = LoginForm()
         if loginForm.validate_on_submit():
             band = Band.query.filter(Band.login == loginForm.login.data).first()
-            if band:
-                if band.password == loginForm.password.data:
-                    session['bandId'] = band.id
-                    return redirect(url_for('bands.profile'))
-                else:
-                    loginForm.password.errors.append("Falsches Passwort")
+            if band and band.password == loginForm.password.data:
+                session['bandId'] = band.id
+                return redirect(url_for('bands.profile'))
             else:
                 loginForm.login.errors.append("Unbekannter Login")
+                loginForm.password.errors.append("")
         return self.render(loginForm, regForm)
 
 
@@ -81,7 +88,8 @@ class Logout(MethodView):
 class Profile(MethodView):
     def get(self):
         band = Band.query.get_or_404(session['bandId'])
-        return "welcome band with login %s" % band.login
+        bandForm = BandForm()
+        return render_template('profile.html', bandForm=bandForm)
 
 
 bands.add_url_rule('/', view_func=Index.as_view('index'))
