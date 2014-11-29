@@ -7,3 +7,4 @@ client/app
 **/*.db
 **/*.pyc
 /settings.py
+uploads/

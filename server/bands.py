@@ -1,4 +1,5 @@
 # coding=utf-8
+from uuid import uuid4
 
 from flask import Blueprint, session, redirect, url_for, request
 from flask.templating import render_template
@@ -7,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
 from flask_wtf import Form
 from flask_mail import Message
-from app import mailer
+from app import mailer, trackPool
 
 from server.models import Band, db, Track
 
@@ -141,7 +142,7 @@ class ProfileGeneral(Profile):
 class Audio(MethodView):
     def render(self, audioForm):
         tracks = Track.query.filter_by(band_id=session['bandId'])
-        return render_template('audio.html', audioForm=audioForm, tracks=tracks)
+        return render_template('audio.html', audioForm=audioForm, tracks=tracks, trackPool=trackPool)
 
 
     def get(self):
@@ -155,6 +156,8 @@ class AudioGeneral(Audio):
             try:
                 track = Track()
                 track.band_id = session['bandId']
+                trackFilename = str(session['bandId']) + '_' + str(uuid4()) + '.mp3'
+                track.filename = trackPool.save(request.files[audioForm.audioFile.name],name=trackFilename)
                 track.trackname = audioForm.trackname.data
                 db.session.add(track)
                 db.session.commit()

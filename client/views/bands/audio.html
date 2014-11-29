@@ -10,13 +10,16 @@
 {% if tracks %}
 <ul>
     {% for track in tracks %}
-        <li>{{track.trackname}}</li>
+        <li>
+            {{track.trackname}}
+            <audio src="{{ trackPool.url(track.filename) }}" controls></audio>
+        </li>
     {% endfor %}
 </ul>
 {% endif %}
 
 
-<form method="POST" action="{{ url_for('bands.audioGeneral') }}" enctype=multipart/form-data">
+<form method="POST" action="{{ url_for('bands.audioGeneral') }}" enctype="multipart/form-data">
     {{ audioForm.csrf_token }}
 
     {{ renderDefault(audioForm.audioFile) }}

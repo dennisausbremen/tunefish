@@ -1,4 +1,6 @@
 from flask import Flask
+from flask.ext.uploads import UploadSet, configure_uploads
+
 from flask_mail import Mail
 from settings import SETTINGS
 
@@ -8,3 +10,6 @@ app.secret_key = "this_should_be_way_more_secret_like_urandom.its_only_static_fo
 app.config.update(SETTINGS)
 
 mailer = Mail(app)
+trackPool = UploadSet('trackPool', ('mp3',))
+configure_uploads(app, (trackPool,))
+

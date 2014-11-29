@@ -34,6 +34,7 @@ class Band(db.Model):
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'))
+    filename = db.Column(String)
     trackname = db.Column(String)
 
 db.create_all()
