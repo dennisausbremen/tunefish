@@ -1,4 +1,5 @@
 # coding=utf-8
+from __builtin__ import super
 from os import unlink
 from uuid import uuid4
 
@@ -41,9 +42,11 @@ class BandForm(Form):
     phone = StringField('Telefon', [validators.Length(min=6)])
     city = StringField('Stadt', [validators.Length(min=3)])
 
+
 class AudioForm(Form):
     audioFile = FileField('Audiodatei', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
-    trackname = StringField('Trackname',[validators.Length(min=2, message=u'Bitte geben Sie dem Track einen Namen.')])
+    trackname = StringField('Trackname', [validators.Length(min=2, message=u'Bitte geben Sie dem Track einen Namen.')])
+
 
 bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
 
@@ -111,7 +114,19 @@ class Confirm(MethodView):
         return redirect(url_for('bands.profile'))
 
 
-class Profile(MethodView):
+class RestrictedBandPage(MethodView):
+    def dispatch_request(self, *args, **kwargs):
+        if not 'bandId' in session:
+            return redirect(url_for('bands.index'))
+        else:
+            self.band = Band.query.get(session['bandId'])
+            if not self.band:
+                return redirect(url_for('bands.index'))
+            else:
+                return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)
+
+
+class Profile(RestrictedBandPage):
     def get(self):
         band = Band.query.get(session['bandId'])
         bandForm = BandForm()
@@ -140,6 +155,7 @@ class ProfileGeneral(Profile):
             db.session.commit()
         return render_template('profile.html', bandForm=bandForm)
 
+
 class Audio(MethodView):
     def render(self, audioForm):
         tracks = Track.query.filter_by(band_id=session['bandId'])
@@ -158,7 +174,7 @@ class AudioGeneral(Audio):
                 track = Track()
                 track.band_id = session['bandId']
                 trackFilename = str(session['bandId']) + '_' + str(uuid4()) + '.mp3'
-                track.filename = trackPool.save(request.files[audioForm.audioFile.name],name=trackFilename)
+                track.filename = trackPool.save(request.files[audioForm.audioFile.name], name=trackFilename)
                 track.trackname = audioForm.trackname.data
                 db.session.add(track)
                 db.session.commit()
@@ -167,6 +183,7 @@ class AudioGeneral(Audio):
                 audioForm.trackname.errors.append("Fehler")
                 return self.render(audioForm)
         return self.render(audioForm)
+
 
 class AudioDelete(Audio):
     def get(self, track_id):
