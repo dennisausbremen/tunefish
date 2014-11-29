@@ -4,10 +4,10 @@ from flask import Blueprint, session, redirect, url_for
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
-from wtforms import PasswordField, validators, StringField, TextAreaField, HiddenField
+from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
 from flask_wtf import Form
 
-from server.models import Band, db
+from server.models import Band, db, Track
 
 
 class LoginForm(Form):
@@ -37,6 +37,9 @@ class BandForm(Form):
     phone = StringField('Telefon', [validators.Length(min=6)])
     city = StringField('Stadt', [validators.Length(min=3)])
 
+class AudioForm(Form):
+    audioFile = FileField('Audiodatei')
+    trackname = StringField('Trackname')
 
 bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
 
@@ -103,7 +106,7 @@ class Profile(MethodView):
 
 class ProfileGeneral(Profile):
     def post(self):
-        bandForm = BandForm();
+        bandForm = BandForm()
         if bandForm.validate_on_submit():
             band = Band.query.get(session['bandId'])
             band.descp = bandForm.descp.data
@@ -116,6 +119,32 @@ class ProfileGeneral(Profile):
             db.session.commit()
         return render_template('profile.html', bandForm=bandForm)
 
+class Audio(MethodView):
+    def render(self, audioForm):
+        tracks = Track.query.filter_by(band_id=session['bandId'])
+        return render_template('audio.html', audioForm=audioForm, tracks=tracks)
+
+
+    def get(self):
+        return self.render(AudioForm())
+
+
+class AudioGeneral(Audio):
+    def post(self):
+        audioForm = AudioForm()
+        if audioForm.validate_on_submit():
+            try:
+                track = Track()
+                track.band_id = session['bandId']
+                track.trackname = audioForm.trackname.data
+                db.session.add(track)
+                db.session.commit()
+                return self.render(audioForm)
+            except IntegrityError as e:
+                audioForm.trackname.errors.append("Fehler")
+                return self.render(audioForm)
+        return self.render(audioForm)
+
 
 bands.add_url_rule('/', view_func=Index.as_view('index'))
 bands.add_url_rule('/register', view_func=Register.as_view('register'))
@@ -123,3 +152,5 @@ bands.add_url_rule('/login', view_func=Login.as_view('login'))
 bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
 bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
 bands.add_url_rule('/profileGeneral', view_func=ProfileGeneral.as_view('profileGeneral'))
+bands.add_url_rule('/audio', view_func=Audio.as_view('audio'))
+bands.add_url_rule('/audioGeneral', view_func=AudioGeneral.as_view('audioGeneral'))
