@@ -57,7 +57,7 @@ class Register(Index):
                               body=u"""Hallo %s,
 
 willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
-bestätigen. Klick hierzu einfach auf folgenden Link: %s/bands/confim/%d""" % (band.login, request.url_root, band.id))
+bestätigen. Klick hierzu einfach auf folgenden Link: %sbands/confirm/%d""" % (band.login, request.url_root, band.id))
                 mailer.send(msg)
                 session['bandId'] = band.id
                 return redirect(url_for('bands.profile'))
@@ -90,6 +90,14 @@ class Logout(MethodView):
         return redirect(url_for('bands.index'))
 
 
+class Confirm(MethodView):
+    def get(self, band_id):
+        band = Band.query.get_or_404(band_id)
+        band.emailConfirmed = True
+        db.session.commit()
+        return redirect(url_for('bands.profile'))
+
+
 class Profile(MethodView):
     def get(self):
         band = Band.query.get_or_404(session['bandId'])
@@ -100,4 +108,5 @@ bands.add_url_rule('/', view_func=Index.as_view('index'))
 bands.add_url_rule('/register', view_func=Register.as_view('register'))
 bands.add_url_rule('/login', view_func=Login.as_view('login'))
 bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
+bands.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('confirm'))
 bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
