@@ -1,11 +1,13 @@
 # coding=utf-8
 
-from flask import Blueprint, session, redirect, url_for
+from flask import Blueprint, session, redirect, url_for, request
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
 from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
 from flask_wtf import Form
+from flask_mail import Message
+from app import mailer
 
 from server.models import Band, db, Track
 
@@ -62,7 +64,16 @@ class Register(Index):
                 band.email = regForm.email.data
                 db.session.add(band)
                 db.session.commit()
-                redirect('/')
+                msg = Message("Willkommen %s" % band.login,
+                              sender="noreply@vorstrasse-bremen.de",
+                              recipients=[band.email],
+                              body=u"""Hallo %s,
+
+willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
+bestätigen. Klick hierzu einfach auf folgenden Link: %sbands/confirm/%d""" % (band.login, request.url_root, band.id))
+                mailer.send(msg)
+                session['bandId'] = band.id
+                return redirect(url_for('bands.profile'))
             except IntegrityError as e:
                 regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render(loginForm, regForm)
@@ -88,6 +99,14 @@ class Logout(MethodView):
     def get(self):
         del session['bandId']
         return redirect(url_for('bands.index'))
+
+
+class Confirm(MethodView):
+    def get(self, band_id):
+        band = Band.query.get_or_404(band_id)
+        band.emailConfirmed = True
+        db.session.commit()
+        return redirect(url_for('bands.profile'))
 
 
 class Profile(MethodView):
@@ -150,6 +169,7 @@ bands.add_url_rule('/', view_func=Index.as_view('index'))
 bands.add_url_rule('/register', view_func=Register.as_view('register'))
 bands.add_url_rule('/login', view_func=Login.as_view('login'))
 bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
+bands.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('confirm'))
 bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
 bands.add_url_rule('/profileGeneral', view_func=ProfileGeneral.as_view('profileGeneral'))
 bands.add_url_rule('/audio', view_func=Audio.as_view('audio'))
