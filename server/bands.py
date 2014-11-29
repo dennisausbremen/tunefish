@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from flask import Blueprint, session, redirect, url_for
+from flask import Blueprint, session, redirect, url_for, request
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
@@ -51,12 +51,16 @@ class Register(Index):
                 band.email = regForm.email.data
                 db.session.add(band)
                 db.session.commit()
-                msg = Message("Hello",
+                msg = Message("Willkommen %s" % band.login,
                               sender="noreply@vorstrasse-bremen.de",
                               recipients=[band.email],
-                              body="Klick auf http://www.google.de um deine E-Mail zu bestätigen")
+                              body=u"""Hallo %s,
+
+willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
+bestätigen. Klick hierzu einfach auf folgenden Link: %s/bands/confim/%d""" % (band.login, request.url_root, band.id))
                 mailer.send(msg)
-                redirect(url_for('bands.profile'))
+                session['bandId'] = band.id
+                return redirect(url_for('bands.profile'))
             except IntegrityError as e:
                 regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render(loginForm, regForm)
