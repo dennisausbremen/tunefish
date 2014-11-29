@@ -1,5 +1,5 @@
 SETTINGS = {
-    'SQLALCHEMY_DATABASE_URI' : 'sqlite:///test.db',,
+    'SQLALCHEMY_DATABASE_URI' : 'sqlite:///test.db',
     'MAIL_SERVER': '',
     'MAIL_PORT': 587,
     'MAIL_USE_TLS': True,
