@@ -16,8 +16,10 @@ class Band(db.Model):
     email = db.Column(String)
     emailConfirmed = db.Column(Boolean, default=False)
     descp = db.Column(String)
+    amount_members = db.Column(String)
     website = db.Column(URLType)
     youtube_id = db.Column(String)
+    facebook_page = db.Column(String)
     phone = db.Column(String)
     city = db.Column(String)
 

@@ -29,11 +29,13 @@ class RegistrationForm(Form):
 
 
 class BandForm(Form):
-    descp = TextAreaField('Band-Beschreibung')
-    website = StringField('Webseite')
-    youtube_id = StringField('Youtube VideoID')
-    phone = StringField('Telefon')
-    city = StringField('Stadt')
+    descp = TextAreaField('Band-Beschreibung', [validators.Length(min=30)])
+    amount_members = StringField('Anzahl Bandmitglieder', [validators.Length(min=1, max=10)])
+    website = StringField('Webseite', [validators.Length(min=6)])
+    youtube_id = StringField('Youtube VideoID', [validators.Length(min=6)])
+    facebook_page = StringField('facebook Seite')
+    phone = StringField('Telefon', [validators.Length(min=6)])
+    city = StringField('Stadt', [validators.Length(min=3)])
 
 
 bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
@@ -90,8 +92,10 @@ class Profile(MethodView):
         band = Band.query.get(session['bandId'])
         bandForm = BandForm()
         bandForm.descp.data = band.descp
+        bandForm.amount_members.data = band.amount_members
         bandForm.website.data = band.website
         bandForm.youtube_id.data = band.youtube_id
+        bandForm.facebook_page.data = band.facebook_page
         bandForm.phone.data = band.phone
         bandForm.city.data = band.city
         return render_template('profile.html', bandForm=bandForm)
@@ -103,8 +107,10 @@ class ProfileGeneral(Profile):
         if bandForm.validate_on_submit():
             band = Band.query.get(session['bandId'])
             band.descp = bandForm.descp.data
+            band.amount_members = bandForm.amount_members.data
             band.website = bandForm.website.data
             band.youtube_id = bandForm.youtube_id.data
+            band.facebook_page = bandForm.facebook_page.data
             band.phone = bandForm.phone.data
             band.city = bandForm.city.data
             db.session.commit()
