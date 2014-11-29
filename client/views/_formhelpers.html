@@ -22,3 +22,10 @@
     {{ getErrors(field) }}
 <br/>
 {% endmacro %}
+
+
+{% macro renderMessages() %}
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="{{category}}">{{message}}</div>
+    {% endfor %}
+{% endmacro %}

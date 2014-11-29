@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from flask import Blueprint, session, redirect, url_for, request
+from flask import Blueprint, session, redirect, url_for, request, flash
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
@@ -52,6 +52,7 @@ class Register(Index):
                               body=MAIL_BODY % (band.login, request.url_root, band.id))
                 mailer.send(msg)
                 session['bandId'] = band.id
+                flash('Willkommen Band "%s".' % band.login, 'info')
                 return redirect(url_for('bands.profile.index'))
             except IntegrityError as e:
                 self.registration_form.login.errors.append("Eine Band mit diesem Login existiert bereits")

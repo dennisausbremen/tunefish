@@ -1,7 +1,7 @@
 # coding=utf-8
 from __builtin__ import super
 
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint, redirect, url_for, flash
 from flask.templating import render_template
 from server.bands import RestrictedBandPage
 from server.bands.forms import BandForm
@@ -35,6 +35,9 @@ class ProfileUpdate(Index):
         if self.form.validate_on_submit():
             self.form.apply_to_model(self.band)
             db.session.commit()
+            flash('Bandinformationen erfolgreich gespeichert.', 'info')
+        else:
+            flash('Beim Speichern der Bandinformationen sind Fehler aufgetreten. Die Informationen wurden noch nicht gespeichert.', 'error')
         return self.render()
 
 
