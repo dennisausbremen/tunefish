@@ -4,7 +4,7 @@ from flask import Blueprint, session, redirect, url_for
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
-from wtforms import PasswordField, validators, StringField, TextAreaField
+from wtforms import PasswordField, validators, StringField, TextAreaField, HiddenField
 from flask_wtf import Form
 
 from server.models import Band, db
@@ -29,8 +29,8 @@ class RegistrationForm(Form):
 
 
 class BandForm(Form):
-    descp = TextAreaField('Band-Beschreibung', [validators.length(min=20, message=u"Die Bandbeschreibung muss mindestens 20 Zeichen umfassen.")])
-    website = StringField('Webseite', [validators.Length(min=5)])
+    descp = TextAreaField('Band-Beschreibung')
+    website = StringField('Webseite')
     youtube_id = StringField('Youtube VideoID')
     phone = StringField('Telefon')
     city = StringField('Stadt')
@@ -87,8 +87,27 @@ class Logout(MethodView):
 
 class Profile(MethodView):
     def get(self):
-        band = Band.query.get_or_404(session['bandId'])
+        band = Band.query.get(session['bandId'])
         bandForm = BandForm()
+        bandForm.descp.data = band.descp
+        bandForm.website.data = band.website
+        bandForm.youtube_id.data = band.youtube_id
+        bandForm.phone.data = band.phone
+        bandForm.city.data = band.city
+        return render_template('profile.html', bandForm=bandForm)
+
+
+class ProfileGeneral(Profile):
+    def post(self):
+        bandForm = BandForm();
+        if bandForm.validate_on_submit():
+            band = Band.query.get(session['bandId'])
+            band.descp = bandForm.descp.data
+            band.website = bandForm.website.data
+            band.youtube_id = bandForm.youtube_id.data
+            band.phone = bandForm.phone.data
+            band.city = bandForm.city.data
+            db.session.commit()
         return render_template('profile.html', bandForm=bandForm)
 
 
@@ -97,3 +116,4 @@ bands.add_url_rule('/register', view_func=Register.as_view('register'))
 bands.add_url_rule('/login', view_func=Login.as_view('login'))
 bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
 bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
+bands.add_url_rule('/profileGeneral', view_func=ProfileGeneral.as_view('profileGeneral'))

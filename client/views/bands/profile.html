@@ -1,29 +1,18 @@
 {% extends "layout.html" %}
-
-{% macro show_errors(field) %}
-    {{ field.label }}<br/>
-        {% if field.errors %}
-            {{ field(size=20, class_='fail') }}
-        {% else %}
-            {{ field(size=20) }}
-        {% endif %}
-<br/>
-{% for error in field.errors %}
-<span style="color: red;">{{error}}</span><br/>
-{% endfor %}
-<br/>
-{% endmacro %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
 
 {% block body %}
 <h2>Allgemeine Bandinfos</h2>
 
-<form method="POST" action="{{ url_for('bands.register') }}">
+<form method="POST" action="{{ url_for('bands.profileGeneral') }}">
     {{ bandForm.csrf_token }}
-    {{ show_errors(bandForm.descp) }}
-    {{ show_errors(bandForm.website) }}
-    {{ show_errors(bandForm.youtube_id) }}
-    {{ show_errors(bandForm.phone) }}
-    {{ show_errors(bandForm.city) }}
+    {{ renderDefault(bandForm.descp) }}
+    http://{{ getField(bandForm.website) }}{{ getErrors(bandForm.website) }}
+    http://www.youtube.com/{{ getField(bandForm.youtube_id) }}{{ getErrors(bandForm.youtube_id) }}
+    {{ renderDefault(bandForm.phone) }}
+    {{ renderDefault(bandForm.city) }}
     <input type="submit" value="Bandinformationen vervollständigt">
 </form>
 {% endblock %}

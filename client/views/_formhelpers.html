@@ -1,0 +1,24 @@
+
+{% macro getField(field) %}
+    {% if field.errors %}
+        {{ field(size=20, class_='fail') }}
+    {% else %}
+        {{ field(size=20) }}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro getErrors(field) %}
+    {% for error in field.errors %}
+       <br /> <span style="color: red;">{{error}}</span>
+    {% endfor %}
+    <br/>
+{% endmacro %}
+
+
+{% macro renderDefault(field) %}
+    {{ field.label }}<br/>
+    {{ getField(field) }}
+    {{ getErrors(field) }}
+<br/>
+{% endmacro %}
