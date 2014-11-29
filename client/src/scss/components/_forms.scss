@@ -1,0 +1,17 @@
+
+input {
+    display: block;
+    height: $base-line-height*2;
+    padding: $pad-half;
+    margin-bottom: $space-half;
+    border: 0;
+}
+
+input[type=submit] {
+    background-color: #000;
+    color: #ffffff;
+
+    &:hover {
+        background-color: lighten(#000,25%);
+    }
+}

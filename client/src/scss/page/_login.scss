@@ -1,5 +1,38 @@
 .login {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0
+    padding: 0 $pad;
+}
+
+
+.login-container {
+    margin: $space 0 $space-double;
+    text-align: left;
+    background-color: #efefef;
+    overflow: hidden;
+
+    h2 {
+        margin-top: 0;
+        font-weight: 200;
+    }
+
+    .form-action {
+        padding: $space;
+        padding-bottom: $space-half;
+    }
+
+    label {
+        display: none;
+    }
+
+    input {
+        width: 100%;
+    }
+
+}
+
+.form-action-wrapper {
+    position: relative;
+    width: 200%;
+    transition: transform 0.5s ease-in-out;
 }

@@ -6,10 +6,11 @@
       <excludeFolder url="file://$MODULE_DIR$/client/app" />
       <excludeFolder url="file://$MODULE_DIR$/client/bower_components" />
       <excludeFolder url="file://$MODULE_DIR$/client/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/client/views" />
       <excludeFolder url="file://$MODULE_DIR$/server" />
     </content>
     <orderEntry type="inheritedJdk" />
-     <orderEntry type="jdk" jdkName="Python 2.7.4 (/usr/bin/python)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 2.7.4 (/usr/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>

@@ -1,0 +1,25 @@
+.tabs {
+    @include inline-list();
+    margin-top: 0;
+    margin-bottom: 0;
+
+    background-color: darken(#efefef,25%);
+
+    li:hover {
+        background-color: darken(#efefef,15%);
+    }
+
+    .active,
+    .active:hover {
+        background: #efefef;
+    }
+
+    a {
+        display: inline-block;
+        padding: $space-half $pad;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+
+}

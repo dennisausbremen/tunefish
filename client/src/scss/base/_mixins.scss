@@ -35,3 +35,11 @@
 @mixin smallfont() {
     font-size: $base-font-size / 2;
 }
+
+@mixin inline-list() {
+    @include clearfix;
+
+    > li {
+        float: left;
+    }
+}

@@ -24,7 +24,7 @@ module.exports = function (grunt) {
             },
             sass: {
                 files: ['<%= cfg.src %>/scss/{,*/}*.{scss,sass}'],
-                tasks: ['sass:dev', 'autoprefixer:dist']
+                tasks: ['sass:dev', 'autoprefixer:dist', 'cssmin:dist']
             },
             js: {
                 files: ['<%= cfg.src %>/js/**/*'],
@@ -90,6 +90,18 @@ module.exports = function (grunt) {
                     '<%= cfg.dist %>/css/app.css': '<%= cfg.src %>/scss/app.scss',
                     '<%= cfg.dist %>/css/source-sans-pro.woff.css': '<%= cfg.src %>/scss/source-sans-pro.woff.scss'
                 }
+            }
+        },
+
+        cssmin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= cfg.dist %>/css/',
+                    src: ['*.css', '!*.min.css'],
+                    dest: '<%= cfg.dist %>/css/',
+                    ext: '.min.css'
+                }]
             }
         },
 
@@ -164,7 +176,13 @@ module.exports = function (grunt) {
                        filter: 'isFile'
                    },
                    //Copy Views
-                   //Copy JS
+                   {
+                        expand: true,
+                        cwd: '<%= cfg.src %>/views/',
+                        filter: 'isFile',
+                        src: ['**'],
+                        dest: 'views/'
+                   },
                    {
                        expand: true,
                        cwd: '<%= cfg.src %>/js/',
@@ -182,7 +200,7 @@ module.exports = function (grunt) {
                         cwd: '<%= cfg.src %>/views/',
                         filter: 'isFile',
                         src: ['**'],
-                        dest: '<%= cfg.dist %>/views/'
+                        dest: 'views/'
                     }
                 ]
             },
@@ -236,27 +254,29 @@ module.exports = function (grunt) {
 
     });
 
-    grunt.registerTask('build', [
-        'clean:dist',
-        'imagemin:dist',
-        'sass:dist',
-        'autoprefixer:dist',
-        'bowercopy:dist',
-        'jshint',
-        'useminPrepare',
-        'concat:generated',
-        'cssmin:generated',
-        'uglify:generated',
-        'filerev',
-        'usemin',
-        'watch'
-    ]);
+    // TODO
+    //grunt.registerTask('build', [
+    //    'clean:dist',
+    //    'imagemin:dist',
+    //    'sass:dist',
+    //    'autoprefixer:dist',
+    //    'bowercopy:dist',
+    //    'jshint',
+    //    'useminPrepare',
+    //    'concat:generated',
+    //    'cssmin:generated',
+    //    'uglify:generated',
+    //    'filerev',
+    //    'usemin',
+    //    'copy:all'
+    //]);
 
     grunt.registerTask('dev', [
         'clean:dist',
         'imagemin:dist',
         'sass:dev',
         'autoprefixer:dist',
+        'cssmin:dist',
         'bowercopy:dev',
         'jshint',
         'copy:all',

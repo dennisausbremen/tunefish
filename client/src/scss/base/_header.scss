@@ -2,7 +2,7 @@ header {
     @include clearfix();
     background: $bg-primary;
     height: $base-line-height * 2;
-    padding: 0 20px;
+    padding: 0 $pad;
     border-bottom: 1px solid #efefef;
 //
 //    box-shadow: 0 0 5px 5px rgba($shadow-dark, 0.5);

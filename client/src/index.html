@@ -2,10 +2,13 @@
 <html>
 <head lang="de">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
     <title>tunefish-login</title>
 
     <!-- build:css app/css/app.min.css -->
-    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/app.min.css"/>
     <!-- build:css app/css/app.min.css -->
 
     <!-- WEBFONT CACHING -->
@@ -21,12 +24,13 @@
             try {
 //                window.localStorage.clear();
                 if (localStorage.sourceSansPro) {
+                    alert('inLocal');
                     // The font is in localStorage, we can load it directly
                     addFont();
                 } else {
                     // We have to first load the font file asynchronously
                     var request = new XMLHttpRequest();
-                    request.open('GET', 'css/source-sans-pro.woff.css', true);
+                    request.open('GET', 'css/source-sans-pro.min.css', true);
 
                     request.onload = function() {
                         if (request.status >= 200 && request.status < 400) {
@@ -59,41 +63,54 @@
     </header>
 
 
-    <section id="main" class="grid grid--gutters main-content login">
+    <section id="main" class="main-content login">
 
-        <div class="grid grid--fit">
+        <div class="grid grid--fit grid-center">
             <div class="grid-cell">
-                <h1>Welcome to tunefish</h1>
+                <h1>tunefish</h1>
             </div>
         </div>
 
-        <div class="grid grid--gutters grid--1of2">
-            <div class="grid-cell">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur cupiditate dolorum iste nihil officiis placeat quas qui similique, voluptates. Cupiditate deserunt doloremque error ex hic iusto laboriosam, nostrum possimus sunt.</p>
-            </div>
-        </div>
-
-        <section class="grid grid--fit">
-            <div class="grid-cell">
-                <h2>Easy as 1,2,3...</h2>
-            </div>
-        </section>
-
-        <div class="grid grid--gutters s-grid--full m-grid--1of2 l-grid--1of3">
-            <div class="grid-cell">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur cupiditate dolorum iste nihil officiis placeat quas qui similique, voluptates. Cupiditate deserunt doloremque error ex hic iusto laboriosam, nostrum possimus sunt.</p>
-            </div>
-            <div class="grid-cell">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur cupiditate dolorum iste nihil officiis placeat quas qui similique, voluptates. Cupiditate deserunt doloremque error ex hic iusto laboriosam, nostrum possimus sunt.</p>
-            </div>
-            <div class="grid-cell">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur cupiditate dolorum iste nihil officiis placeat quas qui similique, voluptates. Cupiditate deserunt doloremque error ex hic iusto laboriosam, nostrum possimus sunt.</p>
+        <div class="grid grid-center s-grid--full m-grid--3of4 l-grid-1of2">
+            <div class="grid-cell login-container">
+                <ul class="tabs">
+                    <li><a href="#" title="Login" class="active">Login</a></li>
+                    <li><a href="#" title="Registrieren">Registrieren</a></li>
+                </ul>
+                <div class="form-action-wrapper grid grid-fit">
+                    <div class="form-action grid-cell">
+                        <h2>Login</h2>
+                        <form method="POST" action="/bands/login">
+                            <input id="csrf_token" name="csrf_token" type="hidden" value="1417225442##836eede1b784b999d44de08fdb392b3b9eb8d2fe">
+                            <label for="login">Login</label>
+                            <input id="login" name="login" size="20" type="text" value="">
+                            <label for="password">Passwort</label>
+                            <input id="password" name="password" size="20" type="password" value="">
+                            <input type="submit" value="Login">
+                        </form>
+                    </div>
+                    <div class="form-action grid-cell">
+                        <h2>Registrieren</h2>
+                        <form method="POST" action="/bands/register">
+                            <input id="csrf_token" name="csrf_token" type="hidden" value="1417225442##836eede1b784b999d44de08fdb392b3b9eb8d2fe">
+                            <label for="login">Login</label>
+                            <input id="login" name="login" size="20" type="text" value="">
+                            <label for="email">E-Mail Adresse</label>
+                            <input id="email" name="email" size="20" type="text" value="">
+                            <label for="password">Passwort</label>
+                            <input id="password" name="password" size="20" type="password" value="">
+                            <label for="confirm">Passwort wiederholen</label>
+                            <input id="confirm" name="confirm" size="20" type="password" value="">
+                            <input type="submit" value="Band registrieren">
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
     </section>
 
-    <div class="bg-img-gradient"></div>
+
 
 
     <footer>
