@@ -1,7 +1,7 @@
 
 {% macro getField(field, placeholder = '') %}
     {% if field.errors %}
-        {{ field(size=20, class_='fail', placeholder='abcdef') }}
+        {{ field(size=20, class_='fail', placeholder=placeholder) }}
     {% else %}
         {{ field(size=20, placeholder=placeholder) }}
     {% endif %}
