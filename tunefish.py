@@ -1,7 +1,7 @@
 from flask import jsonify
 from server.app import app
 from server.bands.profile import profile
-from server.bands.session import session_mgmt
+from server.bands.session_mgmt import session_mgmt
 from server.bands.tracks import tracks
 from server.models import Band, db
 

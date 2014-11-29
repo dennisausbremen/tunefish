@@ -56,7 +56,7 @@ class Login(Index):
             band = Band.query.filter(Band.login == loginForm.login.data).first()
             if band and band.password == loginForm.password.data:
                 session['bandId'] = band.id
-                return redirect(url_for('bands.profile.profile'))
+                return redirect(url_for('bands.profile.index'))
             else:
                 loginForm.login.errors.append("Unbekannter Login")
                 loginForm.password.errors.append("")

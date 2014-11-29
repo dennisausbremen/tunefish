@@ -6,7 +6,7 @@
 {% block body %}
 <h2>Allgemeine Bandinfos</h2>
 
-<form method="POST" action="{{ url_for('bands.profile.profileGeneral') }}">
+<form method="POST" action="{{ url_for('bands.profile.update') }}">
     {{ bandForm.csrf_token }}
     {{ renderDefault(bandForm.descp) }}
     {{ renderDefault(bandForm.amount_members) }}
