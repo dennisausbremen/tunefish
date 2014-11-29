@@ -2,10 +2,10 @@
 {% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import getField %}
 {% from "_formhelpers.html" import getErrors %}
-        
+
 {% block body %}
 <h2>Login</h2>
-<form method="POST" action="{{ url_for('bands.login') }}">
+<form method="POST" action="{{ url_for('bands.session.login') }}">
     {{ loginForm.csrf_token }}
     {{ renderDefault(loginForm.login) }}
     {{ renderDefault(loginForm.password) }}
@@ -14,7 +14,7 @@
 
 <h2>Neuen Benutzer erstellen</h2>
 
-<form method="POST" action="{{ url_for('bands.register') }}">
+<form method="POST" action="{{ url_for('bands.session.register') }}">
     {{ registerForm.csrf_token }}
     {{ renderDefault(registerForm.login) }}
     {{ renderDefault(registerForm.email) }}

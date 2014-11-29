@@ -10,18 +10,18 @@
 {% if tracks %}
 <ul>
     {% for track in tracks %}
-        <li>
-            {{track.trackname}}
-            <a href="{{ url_for('bands.audioDelete', track_id=track.id) }}">[x]</a>
-            <audio src="{{ trackPool.url(track.filename) }}" controls></audio>
+    <li>
+        {{track.trackname}}
+        <a href="{{ url_for('bands.tracks.audioDelete', track_id=track.id) }}">[x]</a>
+        <audio src="{{ trackPool.url(track.filename) }}" controls></audio>
 
-        </li>
+    </li>
     {% endfor %}
 </ul>
 {% endif %}
 
 
-<form method="POST" action="{{ url_for('bands.audioGeneral') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ url_for('bands.tracks.audioGeneral') }}" enctype="multipart/form-data">
     {{ audioForm.csrf_token }}
 
     {{ renderDefault(audioForm.audioFile) }}
