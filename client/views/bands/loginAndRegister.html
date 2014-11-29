@@ -4,23 +4,47 @@
 {% from "_formhelpers.html" import getErrors %}
 
 {% block body %}
-<h2>Login</h2>
-<form method="POST" action="{{ url_for('bands.session.login') }}">
-    {{ loginForm.csrf_token }}
-    {{ renderDefault(loginForm.login) }}
-    {{ renderDefault(loginForm.password) }}
-    <input type="submit" value="Login">
-</form>
 
-<h2>Neuen Benutzer erstellen</h2>
+<section class="main-content login">
+    <div class="row center-xs end-sm middle-xs ">
+        <div class="col-xs-12 col-sm-4 col-md-6 login-text">
+            <h1>
+                <span>welcome to</span>
+                tunefish
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="login-container">
+                <ul class="tabs">
+                    <li><a href="#" title="Login" class="active">Login</a></li>
+                    <li><a href="#" title="Registrieren">Registrieren</a></li>
+                </ul>
+                <div class="form-action-wrapper">
+                    <div class="form-action">
+                        <h2>Login</h2>
+                        <form method="POST" action="{{ url_for('bands.session.login') }}">
+                            {{ loginForm.csrf_token }}
+                            {{ renderDefault(loginForm.login, 'Login') }}
+                            {{ renderDefault(loginForm.password, 'Passwort') }}
+                            <input type="submit" value="Login">
+                        </form>
+                    </div>
+                    <div class="form-action">
+                        <h2>Registrieren</h2>
+                        <form method="POST" action="{{ url_for('bands.session.register') }}">
+                            {{ registerForm.csrf_token }}
+                            {{ renderDefault(registerForm.login, 'Login') }}
+                            {{ renderDefault(registerForm.email, 'E-Mail') }}
+                            {{ renderDefault(registerForm.password, 'Passwort') }}
+                            {{ renderDefault(registerForm.confirm, 'Passwort wiederholen') }}
+                            <input type="submit" value="Band registrieren">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<form method="POST" action="{{ url_for('bands.session.register') }}">
-    {{ registerForm.csrf_token }}
-    {{ renderDefault(registerForm.login) }}
-    {{ renderDefault(registerForm.email) }}
-    {{ renderDefault(registerForm.password) }}
-    {{ renderDefault(registerForm.confirm) }}
-    <input type="submit" value="Band registrieren">
-</form>
 {% endblock %}
 

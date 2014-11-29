@@ -1,10 +1,43 @@
 
+form {
+    padding-bottom: $space-half;
+}
+
 input {
     display: block;
-    height: $base-line-height*2;
+    height: $space-and-half;
     padding: $pad-half;
     margin-bottom: $space-half;
     border: 0;
+    border-radius: 0;
+
+    &:focus {
+        outline: 0;
+    }
+
+    &.fail {
+        border: 2px solid $error;
+    }
+}
+
+.fail[placeholder]{
+    color: $error;
+}
+
+.fail::-webkit-input-placeholder{
+    color: $error;
+}
+
+.fail:-moz-placeholder{
+    color: $error;
+}
+
+.fail::-moz-placeholder{
+    color: $error;
+}
+
+.fail:-ms-input-placeholder {
+    color: $error;
 }
 
 input[type=submit] {

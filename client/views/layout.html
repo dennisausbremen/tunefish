@@ -2,7 +2,11 @@
 <html>
 <head lang="de">
     <meta charset="UTF-8">
-    <title>Tunefish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>tunefish-login</title>
+
     <link href="{{ url_for('static', filename='css/app.min.css') }}" type="text/css"  rel="stylesheet" />
 
     <!-- WEBFONT CACHING -->
@@ -47,12 +51,26 @@
 
 </head>
 <body>
-    <div class="page">
+
+    <header>
+        <div class="logo">
+            <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
+            <span>tunefish</span>
+        </div>
+    </header>
+
+    <main class="grid main">
+
         {% block body %}{% endblock %}
-    </div>
+        <div class="footer-push"></div>
+
+    </main>
 
     <footer>
         &copy;2014 - Wohnpark am Fleet e.V.
     </footer>
+
+    <script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

@@ -1,15 +1,37 @@
 .login {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 $pad;
+
+    h1 {
+        @extend h2;
+        margin-top: $space;
+
+        span {
+            @extend h3;
+            font-weight: 200;
+            display: block;
+            margin: 0;
+        }
+    }
+
+    img {
+        display: inline-block;
+    }
 }
 
-
 .login-container {
-    margin: $space 0 $space-double;
+    margin: 0 0 $space;
     text-align: left;
     background-color: #efefef;
     overflow: hidden;
+    position: relative;
+
+    transform: translateZ(0);
+
+    transition: height 0.3s ease;
+
+    @include breakpoint(m) {
+        margin-top: $space;
+    }
 
     h2 {
         margin-top: 0;
@@ -19,6 +41,8 @@
     .form-action {
         padding: $space;
         padding-bottom: $space-half;
+        width: 50%;
+        float: left;
     }
 
     label {

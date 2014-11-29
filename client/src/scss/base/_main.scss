@@ -12,13 +12,22 @@ body {
     color: $text-dark;
     margin: 0 auto;
     padding: 0;
+    height: 100%;
 
 //    background-image: linear-gradient(to bottom,#0ff 0,rgba(255,255,255,0)1px);
 //    background-repeat: repeat-y;
-//    background-size: 100% 1.875rem;
+//    background-size: 100% 1.625rem;
 }
 
 
-.main-content {
+.main {
+    min-height:100%;
+    height: auto !important; // the magic!
+    height:100%;
+    margin-bottom:-92px; // the height of our footer + margin
+    padding-top: 52px;
+}
 
+.main-content {
+    margin: 0 auto;
 }

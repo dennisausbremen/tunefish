@@ -24,7 +24,6 @@
             try {
 //                window.localStorage.clear();
                 if (localStorage.sourceSansPro) {
-                    alert('inLocal');
                     // The font is in localStorage, we can load it directly
                     addFont();
                 } else {
@@ -62,53 +61,57 @@
         </div>
     </header>
 
+    <main class="grid main">
 
-    <section id="main" class="main-content login">
-
-        <div class="grid grid--fit grid-center">
-            <div class="grid-cell">
-                <h1>tunefish</h1>
-            </div>
-        </div>
-
-        <div class="grid grid-center s-grid--full m-grid--3of4 l-grid-1of2">
-            <div class="grid-cell login-container">
-                <ul class="tabs">
-                    <li><a href="#" title="Login" class="active">Login</a></li>
-                    <li><a href="#" title="Registrieren">Registrieren</a></li>
-                </ul>
-                <div class="form-action-wrapper grid grid-fit">
-                    <div class="form-action grid-cell">
-                        <h2>Login</h2>
-                        <form method="POST" action="/bands/login">
-                            <input id="csrf_token" name="csrf_token" type="hidden" value="1417225442##836eede1b784b999d44de08fdb392b3b9eb8d2fe">
-                            <label for="login">Login</label>
-                            <input id="login" name="login" size="20" type="text" value="">
-                            <label for="password">Passwort</label>
-                            <input id="password" name="password" size="20" type="password" value="">
-                            <input type="submit" value="Login">
-                        </form>
-                    </div>
-                    <div class="form-action grid-cell">
-                        <h2>Registrieren</h2>
-                        <form method="POST" action="/bands/register">
-                            <input id="csrf_token" name="csrf_token" type="hidden" value="1417225442##836eede1b784b999d44de08fdb392b3b9eb8d2fe">
-                            <label for="login">Login</label>
-                            <input id="login" name="login" size="20" type="text" value="">
-                            <label for="email">E-Mail Adresse</label>
-                            <input id="email" name="email" size="20" type="text" value="">
-                            <label for="password">Passwort</label>
-                            <input id="password" name="password" size="20" type="password" value="">
-                            <label for="confirm">Passwort wiederholen</label>
-                            <input id="confirm" name="confirm" size="20" type="password" value="">
-                            <input type="submit" value="Band registrieren">
-                        </form>
+        <section class="main-content login">
+            <div class="row center-xs end-sm middle-xs">
+                <div class="col-xs-12 col-sm-4 col-md-6 login-text">
+                    <h1>
+                        <span>welcome to</span>
+                        tunefish
+                    </h1>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-6">
+                    <div class="login-container">
+                        <ul class="tabs">
+                            <li><a href="#" title="Login" class="active">Login</a></li>
+                            <li><a href="#" title="Registrieren">Registrieren</a></li>
+                        </ul>
+                        <div class="form-action-wrapper">
+                            <div class="form-action">
+                                <h2>Login</h2>
+                                <form method="POST" action="/bands/login">
+                                    <input id="csrf_token" name="csrf_token" type="hidden" value="1417225442##836eede1b784b999d44de08fdb392b3b9eb8d2fe">
+                                    <label for="login">Login</label>
+                                    <input id="login" name="login" size="20" type="text" value="" placeholder="Login">
+                                    <label for="password">Passwort</label>
+                                    <input id="password" name="password" size="20" type="password" value="" placeholder="Passwort">
+                                    <input type="submit" value="Login">
+                                </form>
+                            </div>
+                            <div class="form-action">
+                                <h2>Registrieren</h2>
+                                <form method="POST" action="/bands/register">
+                                    <input id="csrf_token" name="csrf_token" type="hidden" value="1417225442##836eede1b784b999d44de08fdb392b3b9eb8d2fe">
+                                    <label for="login">Login</label>
+                                    <input id="login" name="login" size="20" type="text" value="" placeholder="Login">
+                                    <label for="email">E-Mail Adresse</label>
+                                    <input id="email" name="email" size="20" type="text" value="" placeholder="eMail">
+                                    <label for="password">Passwort</label>
+                                    <input id="password" name="password" size="20" type="password" value="" placeholder="Passwort">
+                                    <label for="confirm">Passwort wiederholen</label>
+                                    <input id="confirm" name="confirm" size="20" type="password" value="" placeholder="Passwort wiederholen">
+                                    <input type="submit" value="Band registrieren">
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="footer-push"></div>
+        </section>
 
-    </section>
+    </main>
 
 
 
