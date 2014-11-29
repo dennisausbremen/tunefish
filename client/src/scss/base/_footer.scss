@@ -4,11 +4,13 @@
 }
 
 footer {
-//    @include smallfont();
+
+    font-weight: 200;
     text-align: center;
     padding: 1rem;
     background-color: #fff;
 
+    border-top: 1px solid $border-light;
     margin-top:$space;
     height:62px;
 }

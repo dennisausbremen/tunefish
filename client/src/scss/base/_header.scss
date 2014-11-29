@@ -3,7 +3,7 @@ header {
     background: $bg-primary;
     height: $base-line-height * 2;
     padding: 0 $pad;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid $border-light;
 
     position: absolute;
     top: 0;

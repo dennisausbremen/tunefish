@@ -14,15 +14,13 @@
     {% for error in field.errors %}
        <br /> <span style="color: red;">{{error}}</span>
     {% endfor %}
-    <br/>
 {% endmacro %}
 
 
 {% macro renderDefault(field, placeholder='') %}
     {{ field.label }}
     {{ getField(field, placeholder) }}
-    {{ getErrors(field) }}
-<br/>
+    <!--{{ getErrors(field) }}-->
 {% endmacro %}
 
 

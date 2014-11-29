@@ -22,7 +22,7 @@
                 <div class="form-action-wrapper">
                     <div class="form-action">
                         <h2>Login</h2>
-                        <form method="POST" action="{{ url_for('bands.session.login') }}">
+                       <form method="POST" action="{{ url_for('bands.session.login') }}">
                             {{ loginForm.csrf_token }}
                             {{ renderDefault(loginForm.login, 'Login') }}
                             {{ renderDefault(loginForm.password, 'Passwort') }}
