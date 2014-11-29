@@ -12,7 +12,9 @@
     {% for track in tracks %}
         <li>
             {{track.trackname}}
+            <a href="{{ url_for('bands.audioDelete', track_id=track.id) }}">[x]</a>
             <audio src="{{ trackPool.url(track.filename) }}" controls></audio>
+
         </li>
     {% endfor %}
 </ul>

@@ -1,4 +1,5 @@
 # coding=utf-8
+from os import unlink
 from uuid import uuid4
 
 from flask import Blueprint, session, redirect, url_for, request
@@ -41,8 +42,8 @@ class BandForm(Form):
     city = StringField('Stadt', [validators.Length(min=3)])
 
 class AudioForm(Form):
-    audioFile = FileField('Audiodatei')
-    trackname = StringField('Trackname')
+    audioFile = FileField('Audiodatei', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
+    trackname = StringField('Trackname',[validators.Length(min=2, message=u'Bitte geben Sie dem Track einen Namen.')])
 
 bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
 
@@ -167,6 +168,15 @@ class AudioGeneral(Audio):
                 return self.render(audioForm)
         return self.render(audioForm)
 
+class AudioDelete(Audio):
+    def get(self, track_id):
+        track = Track.query.get_or_404(track_id)
+        filename = trackPool.path(track.filename)
+        unlink(filename)
+        db.session.delete(track)
+        db.session.commit()
+        return redirect(url_for('bands.audio'))
+
 
 bands.add_url_rule('/', view_func=Index.as_view('index'))
 bands.add_url_rule('/register', view_func=Register.as_view('register'))
@@ -177,3 +187,4 @@ bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
 bands.add_url_rule('/profileGeneral', view_func=ProfileGeneral.as_view('profileGeneral'))
 bands.add_url_rule('/audio', view_func=Audio.as_view('audio'))
 bands.add_url_rule('/audioGeneral', view_func=AudioGeneral.as_view('audioGeneral'))
+bands.add_url_rule('/audioDelete/<int:track_id>', view_func=AudioDelete.as_view('audioDelete'))
