@@ -2,7 +2,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy_utils import URLType, PasswordType
 
-from server.app import app
+from server.app import app, trackPool
 
 
 db = SQLAlchemy(app)
@@ -31,10 +31,20 @@ class Band(db.Model):
     def __repr__(self):
         return '<Band %r>' % (self.name)
 
+
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'))
     filename = db.Column(String)
     trackname = db.Column(String)
+
+    @property
+    def url(self):
+        return trackPool.url(self.filename)
+
+    @property
+    def path(self):
+        return trackPool.path(self.filename)
+
 
 db.create_all()

@@ -12,8 +12,8 @@
     {% for track in tracks %}
     <li>
         {{track.trackname}}
-        <a href="{{ url_for('bands.tracks.audioDelete', track_id=track.id) }}">[x]</a>
-        <audio src="{{ trackPool.url(track.filename) }}" controls></audio>
+        <a href="{{ url_for('bands.tracks.delete', track_id=track.id) }}">[x]</a>
+        <audio src="{{track.url}}" controls></audio>
 
     </li>
     {% endfor %}
@@ -21,11 +21,11 @@
 {% endif %}
 
 
-<form method="POST" action="{{ url_for('bands.tracks.audioGeneral') }}" enctype="multipart/form-data">
-    {{ audioForm.csrf_token }}
+<form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data">
+    {{ uploadForm.csrf_token }}
 
-    {{ renderDefault(audioForm.audioFile) }}
-    {{ renderDefault(audioForm.trackname, 'Track') }}
+    {{ renderDefault(uploadForm.audioFile) }}
+    {{ renderDefault(uploadForm.trackname, 'Track') }}
 
     <input type="submit" value="Song hochladen">
 </form>
