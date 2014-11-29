@@ -6,8 +6,11 @@ from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
 from wtforms import PasswordField, validators, StringField
 from flask_wtf import Form
+from flask_mail import Message
+from app import mailer
 
 from server.models import Band, db
+
 
 class LoginForm(Form):
     login = StringField('Login', [validators.DataRequired()])
@@ -48,7 +51,12 @@ class Register(Index):
                 band.email = regForm.email.data
                 db.session.add(band)
                 db.session.commit()
-                redirect('/')
+                msg = Message("Hello",
+                              sender="noreply@vorstrasse-bremen.de",
+                              recipients=[band.email],
+                              body="Klick auf http://www.google.de um deine E-Mail zu bestätigen")
+                mailer.send(msg)
+                redirect(url_for('bands.profile'))
             except IntegrityError as e:
                 regForm.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render(loginForm, regForm)
