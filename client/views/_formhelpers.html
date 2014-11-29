@@ -1,9 +1,9 @@
 
-{% macro getField(field) %}
+{% macro getField(field, placeholder = '') %}
     {% if field.errors %}
-        {{ field(size=20, class_='fail') }}
+        {{ field(size=20, class_='fail', placeholder=placeholder) }}
     {% else %}
-        {{ field(size=20) }}
+        {{ field(size=20, placeholder=placeholder) }}
     {% endif %}
 {% endmacro %}
 
@@ -16,9 +16,9 @@
 {% endmacro %}
 
 
-{% macro renderDefault(field) %}
+{% macro renderDefault(field, placeholder='') %}
     {{ field.label }}
-    {{ getField(field) }}
+    {{ getField(field, placeholder) }}
     {{ getErrors(field) }}
 <br/>
 {% endmacro %}

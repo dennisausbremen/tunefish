@@ -6,3 +6,5 @@ client/node_modules
 client/app
 **/*.db
 **/*.pyc
+/settings.py
+uploads/

@@ -16,11 +16,13 @@ class Band(db.Model):
     email = db.Column(String)
     emailConfirmed = db.Column(Boolean, default=False)
     descp = db.Column(String)
+    amount_members = db.Column(String)
     website = db.Column(URLType)
     youtube_id = db.Column(String)
+    facebook_page = db.Column(String)
     phone = db.Column(String)
     city = db.Column(String)
-
+    tracks = db.relationship('Track', backref='band', lazy='dynamic')
 
     def __init__(self, login, password):
         self.login = login
@@ -29,5 +31,10 @@ class Band(db.Model):
     def __repr__(self):
         return '<Band %r>' % (self.name)
 
+class Track(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'))
+    filename = db.Column(String)
+    trackname = db.Column(String)
 
 db.create_all()
