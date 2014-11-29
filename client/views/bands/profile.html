@@ -2,9 +2,11 @@
 {% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import getField %}
 {% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
 <h2>Allgemeine Bandinfos</h2>
+{{ renderMessages() }}
 
 <form method="POST" action="{{ url_for('bands.profile.update') }}">
     {{ bandForm.csrf_token }}

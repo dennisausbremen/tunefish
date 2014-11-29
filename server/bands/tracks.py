@@ -2,7 +2,7 @@
 from os import unlink
 from uuid import uuid4
 
-from flask import Blueprint, redirect, url_for, request
+from flask import Blueprint, redirect, url_for, request, flash
 from flask.templating import render_template
 from server.app import trackPool
 from server.bands import RestrictedBandPage
@@ -26,15 +26,15 @@ class TrackPage(RestrictedBandPage):
 
 class TrackUpload(TrackPage):
     def post(self):
-        audioForm = TrackUploadForm()
-        if audioForm.validate_on_submit():
+        if self.uploadForm.validate_on_submit():
             track = Track()
             track.band_id = self.band.id
             trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.mp3'
-            track.filename = trackPool.save(request.files[audioForm.audioFile.name], name=trackFilename)
-            track.trackname = audioForm.trackname.data
+            track.filename = trackPool.save(request.files[self.uploadForm.audioFile.name], name=trackFilename)
+            track.trackname = self.uploadForm.trackname.data
             db.session.add(track)
             db.session.commit()
+            flash('Song "%s" erfolgreich hochgeladen.' % track.trackname, 'info')
 
         return self.render()
 
@@ -46,6 +46,7 @@ class TrackDelete(RestrictedBandPage):
         unlink(filename)
         db.session.delete(track)
         db.session.commit()
+        flash(u'Song "%s" gelöscht.' % track.trackname, 'info')
         return redirect(url_for('bands.tracks.index'))
 
 

@@ -2,9 +2,12 @@
 {% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import getField %}
 {% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
 <h2>Demo-Songs hochladen</h2>
+
+{{ renderMessages() }}
 
 <h3>Bisher hochgeladen</h3>
 {% if tracks %}

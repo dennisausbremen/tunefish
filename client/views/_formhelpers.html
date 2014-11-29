@@ -1,24 +1,33 @@
 
 {% macro getField(field, placeholder = '') %}
-{% if field.errors %}
-{% for error in field.errors %}
-{{ field(size=20, class_='fail', value='', placeholder=error) }}
-{% endfor %}
-{% else %}
-{{ field(size=20, placeholder=placeholder) }}
-{% endif %}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            {{ field(size=20, class_='fail', value='', placeholder=error) }}
+        {% endfor %}
+    {% else %}
+        {{ field(size=20, placeholder=placeholder) }}
+    {% endif %}
 {% endmacro %}
 
 
-<!--{% macro getErrors(field) %}-->
-    <!--{% for error in field.errors %}-->
-       <!--<span style="color: red;">{{error}}</span>-->
-    <!--{% endfor %}-->
-<!--{% endmacro %}-->
+{% macro getErrors(field) %}
+    {% for error in field.errors %}
+       <br /> <span style="color: red;">{{error}}</span>
+    {% endfor %}
+    <br/>
+{% endmacro %}
 
 
 {% macro renderDefault(field, placeholder='') %}
     {{ field.label }}
     {{ getField(field, placeholder) }}
-    <!--{{ getErrors(field) }}-->
+    {{ getErrors(field) }}
+<br/>
+{% endmacro %}
+
+
+{% macro renderMessages() %}
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="{{category}}">{{message}}</div>
+    {% endfor %}
 {% endmacro %}
