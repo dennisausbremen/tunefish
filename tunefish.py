@@ -1,9 +1,13 @@
 from flask import jsonify
 from server.app import app
-from server.bands import bands
+from server.bands.profile import profile
+from server.bands.session_mgmt import session_mgmt
+from server.bands.tracks import tracks
 from server.models import Band, db
 
-app.register_blueprint(bands, url_prefix='/bands')
+app.register_blueprint(session_mgmt, url_prefix='/bands')
+app.register_blueprint(profile, url_prefix='/bands')
+app.register_blueprint(tracks, url_prefix='/bands')
 
 
 @app.route('/')
