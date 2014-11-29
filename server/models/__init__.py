@@ -13,13 +13,16 @@ class Band(db.Model):
     login = db.Column(String, unique=True)
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
     name = db.Column(String)
-    descp = db.Column(String)
     email = db.Column(String)
     emailConfirmed = db.Column(Boolean, default=False)
+    descp = db.Column(String)
+    amount_members = db.Column(String)
     website = db.Column(URLType)
     youtube_id = db.Column(String)
+    facebook_page = db.Column(String)
     phone = db.Column(String)
-    address = db.Column(String)
+    city = db.Column(String)
+
 
     def __init__(self, login, password):
         self.login = login

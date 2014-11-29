@@ -1,21 +1,14 @@
 {% extends "layout.html" %}
-
-{% macro show_errors(field) %}
-    {{ field.label }}<br/>
-    {{ field(size=20) }}<br/>
-
-{% for error in field.errors %}
-<span style="color: red;">{{error}}</span><br/>
-{% endfor %}
-<br/>
-{% endmacro %}
-
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+        
 {% block body %}
 <h2>Login</h2>
 <form method="POST" action="{{ url_for('bands.login') }}">
     {{ loginForm.csrf_token }}
-    {{ show_errors(loginForm.login) }}
-    {{ show_errors(loginForm.password) }}
+    {{ renderDefault(loginForm.login) }}
+    {{ renderDefault(loginForm.password) }}
     <input type="submit" value="Login">
 </form>
 
@@ -23,10 +16,10 @@
 
 <form method="POST" action="{{ url_for('bands.register') }}">
     {{ registerForm.csrf_token }}
-    {{ show_errors(registerForm.login) }}
-    {{ show_errors(registerForm.email) }}
-    {{ show_errors(registerForm.password) }}
-    {{ show_errors(registerForm.confirm) }}
+    {{ renderDefault(registerForm.login) }}
+    {{ renderDefault(registerForm.email) }}
+    {{ renderDefault(registerForm.password) }}
+    {{ renderDefault(registerForm.confirm) }}
     <input type="submit" value="Band registrieren">
 </form>
 {% endblock %}

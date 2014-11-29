@@ -18,7 +18,7 @@ def testband():
     b.login = 'foo'
     b.password = "foobar"
     b.descp = 'The Foo Fighters are the foo'
-    b.address = 'Fakestreet 123 in NY'
+    b.city = 'Fakestreet 123 in NY'
     b.website = 'foofighters.com'
     db.session.add(b)
     db.session.commit()

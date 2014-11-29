@@ -4,7 +4,7 @@ from flask import Blueprint, session, redirect, url_for, request
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
-from wtforms import PasswordField, validators, StringField
+from wtforms import PasswordField, validators, StringField, TextAreaField, HiddenField
 from flask_wtf import Form
 from flask_mail import Message
 from app import mailer
@@ -27,7 +27,17 @@ class RegistrationForm(Form):
         validators.Length(min=6, message=u'Das gewählte Passwort muss mindestens 6 Zeichen lang sein.'),
         validators.EqualTo('confirm', message=u'Passwörter müssen identisch sein')
     ])
-    confirm = PasswordField('Passwort wiederholen')
+    confirm = PasswordField('Passwort wiederholen', [validators.EqualTo('password', message='')])
+
+
+class BandForm(Form):
+    descp = TextAreaField('Band-Beschreibung', [validators.Length(min=30)])
+    amount_members = StringField('Anzahl Bandmitglieder', [validators.Length(min=1, max=10)])
+    website = StringField('Webseite', [validators.Length(min=6)])
+    youtube_id = StringField('Youtube VideoID', [validators.Length(min=6)])
+    facebook_page = StringField('facebook Seite')
+    phone = StringField('Telefon', [validators.Length(min=6)])
+    city = StringField('Stadt', [validators.Length(min=3)])
 
 
 bands = Blueprint('bands', __name__, template_folder='../client/views/bands')
@@ -73,14 +83,12 @@ class Login(Index):
         loginForm = LoginForm()
         if loginForm.validate_on_submit():
             band = Band.query.filter(Band.login == loginForm.login.data).first()
-            if band:
-                if band.password == loginForm.password.data:
-                    session['bandId'] = band.id
-                    return redirect(url_for('bands.profile'))
-                else:
-                    loginForm.password.errors.append("Falsches Passwort")
+            if band and band.password == loginForm.password.data:
+                session['bandId'] = band.id
+                return redirect(url_for('bands.profile'))
             else:
                 loginForm.login.errors.append("Unbekannter Login")
+                loginForm.password.errors.append("")
         return self.render(loginForm, regForm)
 
 
@@ -100,8 +108,32 @@ class Confirm(MethodView):
 
 class Profile(MethodView):
     def get(self):
-        band = Band.query.get_or_404(session['bandId'])
-        return "welcome band with login %s" % band.login
+        band = Band.query.get(session['bandId'])
+        bandForm = BandForm()
+        bandForm.descp.data = band.descp
+        bandForm.amount_members.data = band.amount_members
+        bandForm.website.data = band.website
+        bandForm.youtube_id.data = band.youtube_id
+        bandForm.facebook_page.data = band.facebook_page
+        bandForm.phone.data = band.phone
+        bandForm.city.data = band.city
+        return render_template('profile.html', bandForm=bandForm)
+
+
+class ProfileGeneral(Profile):
+    def post(self):
+        bandForm = BandForm();
+        if bandForm.validate_on_submit():
+            band = Band.query.get(session['bandId'])
+            band.descp = bandForm.descp.data
+            band.amount_members = bandForm.amount_members.data
+            band.website = bandForm.website.data
+            band.youtube_id = bandForm.youtube_id.data
+            band.facebook_page = bandForm.facebook_page.data
+            band.phone = bandForm.phone.data
+            band.city = bandForm.city.data
+            db.session.commit()
+        return render_template('profile.html', bandForm=bandForm)
 
 
 bands.add_url_rule('/', view_func=Index.as_view('index'))
@@ -110,3 +142,4 @@ bands.add_url_rule('/login', view_func=Login.as_view('login'))
 bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
 bands.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('confirm'))
 bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
+bands.add_url_rule('/profileGeneral', view_func=ProfileGeneral.as_view('profileGeneral'))

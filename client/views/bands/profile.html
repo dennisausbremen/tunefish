@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+
+{% block body %}
+<h2>Allgemeine Bandinfos</h2>
+
+<form method="POST" action="{{ url_for('bands.profileGeneral') }}">
+    {{ bandForm.csrf_token }}
+    {{ renderDefault(bandForm.descp) }}
+    {{ renderDefault(bandForm.amount_members) }}
+    {{ bandForm.website.label }}
+    http://{{ getField(bandForm.website) }}{{ getErrors(bandForm.website) }}
+    {{ bandForm.youtube_id.label }}    http://www.youtube.com/{{ getField(bandForm.youtube_id) }}{{ getErrors(bandForm.youtube_id) }}
+    {{ bandForm.facebook_page.label }}    http://www.facebook.com/{{ getField(bandForm.facebook_page) }}{{ getErrors(bandForm.facebook_page) }}
+
+    {{ renderDefault(bandForm.phone) }}
+    {{ renderDefault(bandForm.city) }}
+    <input type="submit" value="Bandinformationen vervollständigt">
+</form>
+{% endblock %}
