@@ -126,34 +126,38 @@ class RestrictedBandPage(MethodView):
                 return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)
 
 
-class Profile(RestrictedBandPage):
+class ProfilePage(RestrictedBandPage):
+    def __init__(self):
+        super(ProfilePage, self).__init__()
+        self.form = BandForm()
+
+    def render(self):
+        return render_template('profile.html', bandForm=self.form)
+
     def get(self):
-        band = Band.query.get(session['bandId'])
-        bandForm = BandForm()
-        bandForm.descp.data = band.descp
-        bandForm.amount_members.data = band.amount_members
-        bandForm.website.data = band.website
-        bandForm.youtube_id.data = band.youtube_id
-        bandForm.facebook_page.data = band.facebook_page
-        bandForm.phone.data = band.phone
-        bandForm.city.data = band.city
-        return render_template('profile.html', bandForm=bandForm)
+        self.form.descp.data = self.band.descp
+        self.form.amount_members.data = self.band.amount_members
+        self.form.website.data = self.band.website
+        self.form.youtube_id.data = self.band.youtube_id
+        self.form.facebook_page.data = self.band.facebook_page
+        self.form.phone.data = self.band.phone
+        self.form.city.data = self.band.city
+
+        return self.render()
 
 
-class ProfileGeneral(Profile):
+class ProfileGeneral(ProfilePage):
     def post(self):
-        bandForm = BandForm()
-        if bandForm.validate_on_submit():
-            band = Band.query.get(session['bandId'])
-            band.descp = bandForm.descp.data
-            band.amount_members = bandForm.amount_members.data
-            band.website = bandForm.website.data
-            band.youtube_id = bandForm.youtube_id.data
-            band.facebook_page = bandForm.facebook_page.data
-            band.phone = bandForm.phone.data
-            band.city = bandForm.city.data
+        if self.form.validate_on_submit():
+            self.band.descp = self.form.descp.data
+            self.band.amount_members = self.form.amount_members.data
+            self.band.website = self.form.website.data
+            self.band.youtube_id = self.form.youtube_id.data
+            self.band.facebook_page = self.form.facebook_page.data
+            self.band.phone = self.form.phone.data
+            self.band.city = self.form.city.data
             db.session.commit()
-        return render_template('profile.html', bandForm=bandForm)
+        return self.render()
 
 
 class Audio(MethodView):
@@ -200,7 +204,7 @@ bands.add_url_rule('/register', view_func=Register.as_view('register'))
 bands.add_url_rule('/login', view_func=Login.as_view('login'))
 bands.add_url_rule('/logout', view_func=Logout.as_view('logout'))
 bands.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('confirm'))
-bands.add_url_rule('/profile', view_func=Profile.as_view('profile'))
+bands.add_url_rule('/profile', view_func=ProfilePage.as_view('profile'))
 bands.add_url_rule('/profileGeneral', view_func=ProfileGeneral.as_view('profileGeneral'))
 bands.add_url_rule('/audio', view_func=Audio.as_view('audio'))
 bands.add_url_rule('/audioGeneral', view_func=AudioGeneral.as_view('audioGeneral'))
