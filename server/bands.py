@@ -42,6 +42,24 @@ class BandForm(Form):
     phone = StringField('Telefon', [validators.Length(min=6)])
     city = StringField('Stadt', [validators.Length(min=3)])
 
+    def set_from_model(self, band):
+        self.descp.data = band.descp
+        self.amount_members.data = band.amount_members
+        self.website.data = band.website
+        self.youtube_id.data = band.youtube_id
+        self.facebook_page.data = band.facebook_page
+        self.phone.data = band.phone
+        self.city.data = band.city
+
+    def apply_to_model(self, band):
+        band.descp = self.descp.data
+        band.amount_members = self.amount_members.data
+        band.website = self.website.data
+        band.youtube_id = self.youtube_id.data
+        band.facebook_page = self.facebook_page.data
+        band.phone = self.phone.data
+        band.city = self.city.data
+
 
 class AudioForm(Form):
     audioFile = FileField('Audiodatei', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
@@ -135,27 +153,14 @@ class ProfilePage(RestrictedBandPage):
         return render_template('profile.html', bandForm=self.form)
 
     def get(self):
-        self.form.descp.data = self.band.descp
-        self.form.amount_members.data = self.band.amount_members
-        self.form.website.data = self.band.website
-        self.form.youtube_id.data = self.band.youtube_id
-        self.form.facebook_page.data = self.band.facebook_page
-        self.form.phone.data = self.band.phone
-        self.form.city.data = self.band.city
-
+        self.form.set_from_model(self.band)
         return self.render()
 
 
 class ProfileGeneral(ProfilePage):
     def post(self):
         if self.form.validate_on_submit():
-            self.band.descp = self.form.descp.data
-            self.band.amount_members = self.form.amount_members.data
-            self.band.website = self.form.website.data
-            self.band.youtube_id = self.form.youtube_id.data
-            self.band.facebook_page = self.form.facebook_page.data
-            self.band.phone = self.form.phone.data
-            self.band.city = self.form.city.data
+            self.form.apply_to_model(self.band)
             db.session.commit()
         return self.render()
 
