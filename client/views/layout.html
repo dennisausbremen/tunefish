@@ -57,6 +57,24 @@
             <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
             <span>tunefish</span>
         </div>
+        {% if g.band %}
+        <div class="logo">
+            <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
+            <span>Band "{{ g.band.name }}"</span>
+            </div>
+
+        <div class="logo">
+            <span>
+                Eingeloggt als "{{ g.band.login }}"
+            </span>
+        </div>
+
+        <div class="logo">
+            <span>
+                <a href="{{ url_for('bands.session.logout') }}">Logout</a>
+            </span>
+        </div>
+        {% endif %}
     </header>
 
     <main class="grid main">
