@@ -24,6 +24,7 @@ class RegistrationForm(Form):
 
 
 class BandForm(Form):
+    name = StringField('BandName', [validators.Length(min=2, max=60)])
     descp = TextAreaField('Band-Beschreibung', [validators.Length(min=30)])
     amount_members = StringField('Anzahl Bandmitglieder', [validators.Length(min=1, max=10)])
     website = StringField('Webseite', [validators.Length(min=6)])
@@ -33,6 +34,7 @@ class BandForm(Form):
     city = StringField('Stadt', [validators.Length(min=3)])
 
     def set_from_model(self, band):
+        self.name.data = band.name
         self.descp.data = band.descp
         self.amount_members.data = band.amount_members
         self.website.data = band.website
@@ -42,6 +44,7 @@ class BandForm(Form):
         self.city.data = band.city
 
     def apply_to_model(self, band):
+        band.name = self.name.data
         band.descp = self.descp.data
         band.amount_members = self.amount_members.data
         band.website = self.website.data

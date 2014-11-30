@@ -1,4 +1,4 @@
-from flask import session, redirect, url_for
+from flask import session, redirect, url_for, g
 from flask.views import MethodView
 from server.models import Band
 
@@ -12,4 +12,5 @@ class RestrictedBandPage(MethodView):
             if not self.band:
                 return redirect(url_for('bands.session.index'))
             else:
+                g.band = self.band
                 return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)
