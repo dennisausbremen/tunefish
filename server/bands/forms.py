@@ -19,7 +19,7 @@ class TunefishForm(Form):
     
 class LoginForm(TunefishForm):
 
-    login = TextField('Login', [InputRequired('Bitte Login eintragen')])
+    login = StringField('Login', [InputRequired('Bitte Login eintragen')])
     password = PasswordField('Passwort', [InputRequired('Bitte Passwort eintragen')])
     
     def getErrors(self):
@@ -31,7 +31,7 @@ class LoginForm(TunefishForm):
 
 
 class RegistrationForm(Form):
-    login = TextField('Login',
+    login = StringField('Login',
                         [InputRequired("Bitte Login eintragen"), validators.Length(min=4, max=25, message=u'Bitte überprüfe deinen Login (4-26 Zeichen)')])
     email = EmailField("Email", [InputRequired("Bitte E-Mail Adresse eintragen"), Email("Bitte überprüfe deine E-Mail Adresse")])
     password = PasswordField('Passwort', [
