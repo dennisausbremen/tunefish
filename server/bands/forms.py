@@ -17,17 +17,10 @@ class TunefishForm(Form):
             self.errors.append([error, field.name])
 
     
-class LoginForm(TunefishForm):
+class LoginForm(Form):
 
     login = StringField('Login', [InputRequired('Bitte Login eintragen')])
     password = PasswordField('Passwort', [InputRequired('Bitte Passwort eintragen')])
-    
-    def getErrors(self):
-        self.errors = []
-        self.addError(self.login)
-        self.addError(self.password)
-
-        return self.errors
 
 
 class RegistrationForm(Form):
@@ -37,9 +30,11 @@ class RegistrationForm(Form):
     password = PasswordField('Passwort', [
         InputRequired('Bitte Passwort eintragen'),
         validators.Length(min=6, message=u'Bitte überprüfe dein Passwort (mind. 6 Zeichen)'),
-        validators.EqualTo('confirm', message=u'Passwörter müssen identisch sein')
     ])
-    confirm = PasswordField('Passwort wiederholen', [InputRequired('Bitte Passwort wiederholen'), validators.EqualTo('password', message='')])
+    confirm = PasswordField('Passwort wiederholen', [
+        InputRequired('Bitte Passwort wiederholen'),
+        validators.EqualTo('password', message=u'Passwörter müssen identisch sein')
+    ])
 
 
 class BandForm(Form):

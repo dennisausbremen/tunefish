@@ -66,15 +66,11 @@ class Login(Index):
             band = Band.query.filter(Band.login == self.login_form.login.data).first()
             if band and band.password == self.login_form.password.data:
                 session['bandId'] = band.id
-                return jsonify(login=band.login, name=band.name)
-                # return redirect(url_for('bands.profile.index'))
+                return redirect(url_for('bands.profile.index'))
             else:
-                self.login_form.login.errors.append("Unbekannter Login")
-                self.login_form.password.errors.append("")
-        return jsonify(errors=self.login_form.getErrors()), 400
-        #     self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
-        #     self.login_form.password.errors.append("Passwort eingeben")
-        # return self.render()
+                self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
+                self.login_form.password.errors.append("Passwort eingeben")
+        return self.render()
 
 class Logout(MethodView):
     def get(self):
@@ -83,8 +79,6 @@ class Logout(MethodView):
         finally:
             return redirect(url_for('bands.session.index'))
 
-        # del session['bandId']
-        # return redirect(url_for('bands.session.index'))
 
 
 session_mgmt = Blueprint('bands.session', __name__, template_folder='../../client/views/bands')
