@@ -2,6 +2,7 @@
 {% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import getField %}
 {% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
 
@@ -15,6 +16,9 @@
         </div>
         <div class="col-xs-12 col-sm-8 col-md-6">
             <div class="login-container">
+
+                {{ renderMessages() }}
+
                 <ul class="tabs">
                     <li><a href="#" title="Login" class="active">Login</a></li>
                     <li><a href="#" title="Registrieren">Registrieren</a></li>
@@ -24,8 +28,8 @@
                         <h2>Login</h2>
                        <form method="POST" action="{{ url_for('bands.session.login') }}">
                             {{ loginForm.csrf_token }}
-                            {{ renderDefault(loginForm.login, 'Login') }}
-                            {{ renderDefault(loginForm.password, 'Passwort') }}
+                            {{ renderDefault(loginForm.login, 'Login', true) }}
+                            {{ renderDefault(loginForm.password, 'Passwort', true) }}
                             <input type="submit" value="Login">
                         </form>
                     </div>
