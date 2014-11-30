@@ -26,6 +26,7 @@ class Band(db.Model):
 
     def __init__(self, login, password):
         self.login = login
+        self.name = login
         self.password = password
 
     def __repr__(self):
