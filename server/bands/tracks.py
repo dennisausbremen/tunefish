@@ -42,8 +42,7 @@ class TrackUpload(TrackPage):
 class TrackDelete(RestrictedBandPage):
     def get(self, track_id):
         track = Track.query.get_or_404(track_id)
-        filename = trackPool.path(track.filename)
-        unlink(filename)
+        unlink(track.path)
         db.session.delete(track)
         db.session.commit()
         flash(u'Song "%s" gelöscht.' % track.trackname, 'info')
