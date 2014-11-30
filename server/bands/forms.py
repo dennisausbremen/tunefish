@@ -6,13 +6,32 @@ from wtforms.validators import InputRequired, Email
 from wtforms.fields.html5 import EmailField
 
 
-class LoginForm(Form):
-    login = TextField('Login', [InputRequired('Bitte Login eintragen')])
+class TunefishForm(Form):
+    errors = []
+
+    def getErrors(self):
+        return self.errors
+
+    def addError(self, field):
+        for error in field.errors:
+            self.errors.append([error, field.name])
+
+    
+class LoginForm(TunefishForm):
+
+    login = StringField('Login', [InputRequired('Bitte Login eintragen')])
     password = PasswordField('Passwort', [InputRequired('Bitte Passwort eintragen')])
+    
+    def getErrors(self):
+        self.errors = []
+        self.addError(self.login)
+        self.addError(self.password)
+
+        return self.errors
 
 
 class RegistrationForm(Form):
-    login = TextField('Login',
+    login = StringField('Login',
                         [InputRequired("Bitte Login eintragen"), validators.Length(min=4, max=25, message=u'Bitte überprüfe deinen Login (4-26 Zeichen)')])
     email = EmailField("Email", [InputRequired("Bitte E-Mail Adresse eintragen"), Email("Bitte überprüfe deine E-Mail Adresse")])
     password = PasswordField('Passwort', [
