@@ -1,7 +1,9 @@
 # coding=utf-8
 
-from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
-from flask_wtf import Form
+from flask.ext.wtf import Form
+from wtforms import PasswordField, validators, StringField, TextField, TextAreaField, FileField
+from wtforms.validators import InputRequired, Email
+from wtforms.fields.html5 import EmailField
 
 
 class TunefishForm(Form):
@@ -14,12 +16,12 @@ class TunefishForm(Form):
         for error in field.errors:
             self.errors.append([error, field.name])
 
-
+    
 class LoginForm(TunefishForm):
 
-    login = StringField('Login', [validators.DataRequired()])
-    password = PasswordField('Passwort', [validators.DataRequired()])
-
+    login = TextField('Login', [InputRequired('Bitte Login eintragen')])
+    password = PasswordField('Passwort', [InputRequired('Bitte Passwort eintragen')])
+    
     def getErrors(self):
         self.errors = []
         self.addError(self.login)
@@ -29,16 +31,15 @@ class LoginForm(TunefishForm):
 
 
 class RegistrationForm(Form):
-    login = StringField('Login',
-                        [validators.Length(min=4, max=25, message="Login muss zwischen 4 und 25 Zeichen lang sein")])
-    email = StringField('E-Mail Adresse', [
-        validators.Length(min=6, max=35, message=u'Die E-Mail Adresse muss zwischen 6 und 36 Zeichen lang sein.'),
-        validators.Email(message=u'Die angegebene E-Mail Adresse ist ungültig.')])
+    login = TextField('Login',
+                        [InputRequired("Bitte Login eintragen"), validators.Length(min=4, max=25, message=u'Bitte überprüfe deinen Login (4-26 Zeichen)')])
+    email = EmailField("Email", [InputRequired("Bitte E-Mail Adresse eintragen"), Email("Bitte überprüfe deine E-Mail Adresse")])
     password = PasswordField('Passwort', [
-        validators.Length(min=6, message=u'Das gewählte Passwort muss mindestens 6 Zeichen lang sein.'),
+        InputRequired('Bitte Passwort eintragen'),
+        validators.Length(min=6, message=u'Bitte überprüfe dein Passwort (mind. 6 Zeichen)'),
         validators.EqualTo('confirm', message=u'Passwörter müssen identisch sein')
     ])
-    confirm = PasswordField('Passwort wiederholen', [validators.EqualTo('password', message='')])
+    confirm = PasswordField('Passwort wiederholen', [InputRequired('Bitte Passwort wiederholen'), validators.EqualTo('password', message='')])
 
 
 class BandForm(Form):

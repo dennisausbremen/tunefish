@@ -1,11 +1,23 @@
 
-{% macro getField(field, placeholder = '') %}
+{% macro getField(field, placeholder = '', required=False) %}
     {% if field.errors %}
         {% for error in field.errors %}
-            {{ field(size=20, class_='fail', value='', placeholder=error) }}
+
+            {% if field.flags.required %}
+                {{ field(size=20, class_='fail', value='', placeholder=error, required=field.flags.required) }}
+            {% else %}
+                {{ field(size=20, class_='fail', value='', placeholder=error) }}
+            {% endif %}
+
         {% endfor %}
     {% else %}
-        {{ field(size=20, placeholder=placeholder) }}
+
+        {% if field.flags.required %}
+            {{ field(size=20, placeholder=placeholder, required=field.flags.required) }}
+        {% else %}
+            {{ field(size=20, placeholder=placeholder, required=field.flags.required) }}
+        {% endif %}
+
     {% endif %}
 {% endmacro %}
 
@@ -17,10 +29,9 @@
 {% endmacro %}
 
 
-{% macro renderDefault(field, placeholder='') %}
+{% macro renderDefault(field, placeholder='', required=False) %}
     {{ field.label }}
     {{ getField(field, placeholder) }}
-    <!--{{ getErrors(field) }}-->
 {% endmacro %}
 
 
