@@ -4,9 +4,28 @@ from wtforms import PasswordField, validators, StringField, TextAreaField, FileF
 from flask_wtf import Form
 
 
-class LoginForm(Form):
+class TunefishForm(Form):
+    errors = []
+
+    def getErrors(self):
+        return self.errors
+
+    def addError(self, field):
+        for error in field.errors:
+            self.errors.append([error, field.name])
+
+
+class LoginForm(TunefishForm):
+
     login = StringField('Login', [validators.DataRequired()])
     password = PasswordField('Passwort', [validators.DataRequired()])
+
+    def getErrors(self):
+        self.errors = []
+        self.addError(self.login)
+        self.addError(self.password)
+
+        return self.errors
 
 
 class RegistrationForm(Form):
