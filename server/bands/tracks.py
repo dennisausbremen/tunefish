@@ -27,15 +27,17 @@ class TrackPage(RestrictedBandPage):
 class TrackUpload(TrackPage):
     def post(self):
         if self.uploadForm.validate_on_submit():
-            track = Track()
-            track.band_id = self.band.id
-            trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.mp3'
-            track.filename = trackPool.save(request.files[self.uploadForm.audioFile.name], name=trackFilename)
-            track.trackname = self.uploadForm.trackname.data
-            db.session.add(track)
-            db.session.commit()
-            flash('Song "%s" erfolgreich hochgeladen.' % track.trackname, 'info')
-
+            if len(self.band.tracks.all()) == 5:
+                flash(u'Es dürfen nur maximal 5 Demo-Songs hochgeladen werden.', 'error')
+            else:
+                track = Track()
+                track.band_id = self.band.id
+                trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.mp3'
+                track.filename = trackPool.save(request.files[self.uploadForm.audioFile.name], name=trackFilename)
+                track.trackname = self.uploadForm.trackname.data
+                db.session.add(track)
+                db.session.commit()
+                flash('Song "%s" erfolgreich hochgeladen.' % track.trackname, 'info')
         return self.render()
 
 
