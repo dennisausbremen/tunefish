@@ -68,8 +68,8 @@ class Login(Index):
                 session['bandId'] = band.id
                 return redirect(url_for('bands.profile.index'))
             else:
-                self.login_form.login.errors.append("Unbekannter Login")
-                self.login_form.password.errors.append("")
+                self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
+                self.login_form.password.errors.append("Passwort eingeben")
         return self.render()
 
 

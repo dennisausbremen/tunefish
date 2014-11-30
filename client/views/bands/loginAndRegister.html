@@ -20,11 +20,11 @@
                 {{ renderMessages() }}
 
                 <ul class="tabs">
-                    <li><a href="#" title="Login" class="active">Login</a></li>
-                    <li><a href="#" title="Registrieren">Registrieren</a></li>
+                    <li><a href="#login" title="Login" class="active">Login</a></li>
+                    <li><a href="#register" title="Registrieren">Registrieren</a></li>
                 </ul>
                 <div class="form-action-wrapper">
-                    <div class="form-action">
+                    <div id="login" class="form-action">
                         <h2>Login</h2>
                        <form method="POST" action="{{ url_for('bands.session.login') }}">
                             {{ loginForm.csrf_token }}
@@ -33,7 +33,7 @@
                             <input type="submit" value="Login">
                         </form>
                     </div>
-                    <div class="form-action">
+                    <div id="register" class="form-action">
                         <h2>Registrieren</h2>
                         <form method="POST" action="{{ url_for('bands.session.register') }}">
                             {{ registerForm.csrf_token }}
