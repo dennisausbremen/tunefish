@@ -5,7 +5,7 @@ from uuid import uuid4
 from flask import Blueprint, request, render_template
 
 from server.app import techriderPool
-from server.bands import RestrictedBandPage, AjaxForm, AJAX_SUCCESS
+from server.bands import RestrictedBandPage, AjaxForm
 from server.bands.forms import TechriderUploadForm
 from server.models import db
 
@@ -28,7 +28,8 @@ class TechriderUpload(RestrictedBandPage, AjaxForm):
                 unlink(oldTechrider)
             except:
                 pass
-        return {"techrider": render_template('techrider_link.html')}
+        return {"techrider": render_template('techrider_link.html'),
+                'check_tab': render_template('check.html')}
 
 
 techrider = Blueprint('bands.techrider', __name__, template_folder='../../client/views/bands')

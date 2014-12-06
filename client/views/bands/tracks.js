@@ -9,7 +9,7 @@ $('#track_form').submit(function (e) {
     upload(this,
         function (result) {
             $("#track_list ul").append(result['track']).click(onTrackDeleteClick);
-             addMessage('info', 'Techrider erfolgreich hochgeladen');
+             addMessage('info', 'Track erfolgreich hochgeladen');
         },
         function (errors) {
             console.log("errors", errors);

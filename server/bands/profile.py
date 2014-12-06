@@ -4,7 +4,7 @@ from __builtin__ import super
 from flask import Blueprint, redirect, url_for
 from flask.templating import render_template
 from flask.views import MethodView
-from server.bands import RestrictedBandPage, AjaxForm, AJAX_SUCCESS
+from server.bands import RestrictedBandPage, AjaxForm
 from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
 
 from server.models import Band, db
@@ -53,7 +53,7 @@ class ProfileUpdate(RestrictedBandPage, AjaxForm):
     def on_submit(self):
         self.form.apply_to_model(self.band)
         db.session.commit()
-        return AJAX_SUCCESS
+        return {'check_tab': render_template('check.html')}
 
 
 profile = Blueprint('bands.profile', __name__, template_folder='../../client/views/bands')

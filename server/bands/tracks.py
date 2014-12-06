@@ -2,10 +2,10 @@
 from os import unlink
 from uuid import uuid4
 
-from flask import Blueprint, request, flash
+from flask import Blueprint, request, jsonify
 from flask.templating import render_template
 from server.app import trackPool
-from server.bands import RestrictedBandPage, AjaxForm, AjaxException, AJAX_SUCCESS
+from server.bands import RestrictedBandPage, AjaxForm, AjaxException
 from server.bands.forms import TrackUploadForm
 
 from server.models import db, Track
@@ -27,7 +27,8 @@ class TrackUpload(RestrictedBandPage, AjaxForm):
             track.trackname = self.form.trackname.data
             db.session.add(track)
             db.session.commit()
-            return {'track': render_template("track_item.html", track=track) }
+            return {'track': render_template("track_item.html", track=track),
+                    'check_tab': render_template('check.html')}
 
 
 class TrackDelete(RestrictedBandPage):
@@ -36,8 +37,7 @@ class TrackDelete(RestrictedBandPage):
         unlink(track.path)
         db.session.delete(track)
         db.session.commit()
-        flash(u'Song "%s" gelöscht.' % track.trackname, 'info')
-        return AJAX_SUCCESS
+        return jsonify({'check_tab': render_template('check.html')})
 
 
 tracks = Blueprint('bands.tracks', __name__, template_folder='../../client/views/bands')

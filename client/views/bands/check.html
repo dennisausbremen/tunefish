@@ -20,7 +20,7 @@
         {% if g.band.is_tracks_valid %}
         <td class="info">{{ g.band.tracks.count() }} Tracks</td>
         {% else %}
-        <td class="error">Es fehlen mindestens {{ 2 - g.band.tracks.count() }} Tracks</td>
+        <td class="error">Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</td>
         {% endif %}
     </tr>
     <tr>

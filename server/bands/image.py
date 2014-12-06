@@ -31,7 +31,8 @@ class ImageUpload(RestrictedBandPage, AjaxForm):
                 unlink(oldfile)
             except:
                 pass
-        return {"image": render_template('image_preview.html')}
+        return {"image": render_template('image_preview.html'),
+                'check_tab': render_template('check.html')}
 
 
 images = Blueprint('bands.images', __name__, template_folder='../../client/views/bands')

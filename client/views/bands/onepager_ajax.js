@@ -10,7 +10,10 @@ $(document).ready(function() {
             cache: false,
             dataType: 'json',
             processData: false,
-            'success': onSuccess
+            success: function(data) {
+                updateCheckTab(data);
+                onSuccess(data);
+            }
         }).fail(function (data) {
             console.log(data);
             if ( typeof data.responseJSON !== 'undefined' ) {
@@ -23,7 +26,10 @@ $(document).ready(function() {
 
     var submit = function (form, onSuccess, onFailure) {
         clearMessages();
-        $.post(form.action, $(form).serialize(), onSuccess).fail(function (data) {
+        $.post(form.action, $(form).serialize(), function(data) {
+            updateCheckTab(data);
+            onSuccess(data);
+        }).fail(function (data) {
             onFailure(data.responseJSON.errors);
         });
     };
@@ -34,6 +40,7 @@ $(document).ready(function() {
             e.preventDefault();
             var target = $(e.target);
             $.post(e.target.href, function(data) {
+                updateCheckTab(data);
                 onSuccess(target, data);
             });
         };
@@ -61,14 +68,19 @@ $(document).ready(function() {
     {% include "techrider.js" %}
 
 
-    $('.tabs div').hide();
-    $('.tabs div:nth-child(1)').show();
+    function updateCheckTab(data) {
+        if (data['check_tab'] !== 'undefined')
+            $('#summary').html(data['check_tab']);
+    }
+
+    $('.tabs>div').hide();
+    $('.tabs>div:nth-child(1)').show();
 
     $('.tabctrl a').click(function(e) {
         e.preventDefault();
 
-        $('.tabs div').hide();
-        $('.tabs div:nth-child('+ $(this).data("index") + ')').show();
+        $('.tabs>div').hide();
+        $('.tabs>div:nth-child('+ $(this).data("index") + ')').show();
 
     });
 });
