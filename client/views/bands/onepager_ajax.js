@@ -59,5 +59,16 @@ $(document).ready(function() {
     {% include "tracks.js" %}
     {% include "image.js" %}
     {% include "techrider.js" %}
-    
+
+
+    $('.tabs div').hide();
+    $('.tabs div:nth-child(1)').show();
+
+    $('.tabctrl a').click(function(e) {
+        e.preventDefault();
+
+        $('.tabs div').hide();
+        $('.tabs div:nth-child('+ $(this).data("index") + ')').show();
+
+    });
 });

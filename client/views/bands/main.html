@@ -11,16 +11,24 @@
 {% block body %}
 {{ renderMessages() }}
 
+
 <div id="messages">
 
 </div>
-
-{% include "profile.html" %}
-<hr/>
-{% include "tracks.html" %}
-<hr/>
-{% include "image.html" %}
-<hr/>
-{% include "techrider.html" %}
-
+<div class="tabctrl">
+    <ul>
+        <li><a href="#" data-index="1">Allgemein</a></li>
+        <li><a href="#" data-index="2">Tracks</a></li>
+        <li><a href="#" data-index="3">Image</a></li>
+        <li><a href="#" data-index="4">Tech</a></li>
+        <li><a href="#" data-index="5">Summary and submit</a></li>
+    </ul>
+</div>
+<div class="tabs">
+    <div>{% include "profile.html" %}</div>
+    <div>{% include "tracks.html" %}</div>
+    <div>{% include "image.html" %}</div>
+    <div>{% include "techrider.html" %}</div>
+    <div>{% include "check.html" %}</div>
+</div>
 {% endblock %}

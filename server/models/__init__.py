@@ -35,9 +35,11 @@ class Band(db.Model):
     def __repr__(self):
         return '<Band %r>' % (self.name)
 
+    @property
     def is_tracks_valid(self):
-        return 2 < self.tracks.count < 6
+        return 2 < self.tracks.count() < 6
 
+    @property
     def is_profile_valid(self):
         bandForm = BandForm()
         bandForm.set_from_model(self)
