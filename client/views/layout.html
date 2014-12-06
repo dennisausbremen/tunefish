@@ -2,16 +2,16 @@
 <html>
 <head lang="de">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <title>tunefish-login</title>
 
-    <link href="{{ url_for('static', filename='css/app.min.css') }}" type="text/css"  rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/app.min.css') }}" type="text/css" rel="stylesheet"/>
 
     <!-- WEBFONT CACHING -->
     <script>
-        (function(){
+        (function () {
             function addFont() {
                 var style = document.createElement('style');
                 style.rel = 'stylesheet';
@@ -27,9 +27,15 @@
                 } else {
                     // We have to first load the font file asynchronously
                     var request = new XMLHttpRequest();
-                    request.open('GET', '{{ url_for('static', filename='css/source-sans-pro.min.css') }}', true);
+                    request.open('GET', '{{ url_for('
+                    static
+                    ', filename='
+                    css / source - sans - pro.min.css
+                    ') }}', true
+                )
+                    ;
 
-                    request.onload = function() {
+                    request.onload = function () {
                         if (request.status >= 200 && request.status < 400) {
                             // We save the file in localStorage
                             localStorage.sourceSansPro = request.responseText;
@@ -41,7 +47,7 @@
 
                     request.send();
                 }
-            } catch(ex) {
+            } catch (ex) {
                 // maybe load the font synchronously for woff-capable browsers
                 // to avoid blinking on every request when localStorage is not available
             }
@@ -52,44 +58,46 @@
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
-            <span>tunefish</span>
-        </div>
-        {% if g.band %}
-        <div class="logo">
-            <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
-            <span>Band "{{ g.band.name }}"</span>
-            </div>
+<header>
+    <div class="logo">
+        <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
+        <span>tunefish</span>
+    </div>
+    {% if g.band %}
+    <div class="logo">
+        <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
+        <span>Band "{{ g.band.name }}"</span>
+    </div>
 
-        <div class="logo">
+    <div class="logo">
             <span>
                 Eingeloggt als "{{ g.band.login }}"
             </span>
-        </div>
+    </div>
 
-        <div class="logo">
+    <div class="logo">
             <span>
                 <a href="{{ url_for('bands.session.logout') }}">Logout</a>
             </span>
-        </div>
-        {% endif %}
-    </header>
+    </div>
+    {% endif %}
+</header>
 
-    <main class="grid main">
+<main class="grid main">
 
-        {% block body %}{% endblock %}
-        <div class="footer-push"></div>
+    {% block body %}{% endblock %}
+    <div class="footer-push"></div>
 
-    </main>
+</main>
 
-    <footer>
-        &copy;2014 - Wohnpark am Fleet e.V.
-    </footer>
+<footer>
+    &copy;2014 - Wohnpark am Fleet e.V.
+</footer>
 
-    <script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lib/helpers.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/helpers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+{% block inlinejs %}{% endblock %}
 </body>
 </html>

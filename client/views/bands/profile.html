@@ -4,24 +4,71 @@
 {% from "_formhelpers.html" import getErrors %}
 {% from "_formhelpers.html" import renderMessages %}
 
+{% block inlinejs %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').submit(function (e) {
+            e.preventDefault();
+
+            $.post(this.action, $(this).serialize(),function (data) {
+                console.log("success", data);
+            }).fail(function (data) {
+                        console.log("fail", data.responseJSON);
+                    });
+        });
+    });
+</script>
+{% endblock %}
+
 {% block body %}
-<h2>Allgemeine Bandinfos</h2>
 {{ renderMessages() }}
 
-<form method="POST" action="{{ url_for('bands.profile.update') }}">
-    {{ bandForm.csrf_token }}
-    {{ renderDefault(bandForm.name) }}
-    {{ renderDefault(bandForm.descp) }}
-    {{ renderDefault(bandForm.amount_members) }}
-    {{ bandForm.website.label }}
-    http://{{ getField(bandForm.website) }}{{ getErrors(bandForm.website) }}
-    {{ bandForm.youtube_id.label }} http://www.youtube.com/{{ getField(bandForm.youtube_id) }}{{
-    getErrors(bandForm.youtube_id) }}
-    {{ bandForm.facebook_page.label }} http://www.facebook.com/{{ getField(bandForm.facebook_page) }}{{
-    getErrors(bandForm.facebook_page) }}
 
-    {{ renderDefault(bandForm.phone) }}
-    {{ renderDefault(bandForm.city) }}
+<h2>Tab 1: Allg Bandinfos</h2>
+
+<form method="POST" action="{{ url_for('bands.profile.update') }}">
+    {{ band_form.csrf_token }}
+    {{ renderDefault(band_form.name) }}
+    {{ renderDefault(band_form.descp) }}
+    {{ renderDefault(band_form.amount_members) }}
+    {{ band_form.website.label }}
+    http://{{ getField(band_form.website) }}{{ getErrors(band_form.website) }}
+    {{ band_form.youtube_id.label }} http://www.youtube.com/{{ getField(band_form.youtube_id) }}{{
+    getErrors(band_form.youtube_id) }}
+    {{ band_form.facebook_page.label }} http://www.facebook.com/{{ getField(band_form.facebook_page) }}{{
+    getErrors(band_form.facebook_page) }}
+
+    {{ renderDefault(band_form.phone) }}
+    {{ renderDefault(band_form.city) }}
     <input type="submit" value="Bandinformationen vervollständigt">
 </form>
+
+<hr/>
+<h2>Tab 2: Tracks</h2>
+
+<h3>Bisher hochgeladen</h3>
+{% if tracks %}
+<ul>
+    {% for track in tracks %}
+    <li>
+        {{track.trackname}}
+        <a href="{{ url_for('bands.tracks.delete', track_id=track.id) }}">[x]</a>
+        <audio src="{{track.url}}" controls></audio>
+
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data">
+    {{ track_form.csrf_token }}
+
+    {{ renderDefault(track_form.audioFile) }}
+    {{ renderDefault(track_form.trackname, 'Track') }}
+
+    <input type="submit" value="Song hochladen">
+</form>
+
 {% endblock %}

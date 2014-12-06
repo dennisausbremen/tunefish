@@ -28,7 +28,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['<%= cfg.src %>/js/**/*'],
-                tasks: ['jshint','copy:js']
+                tasks: ['jshint', 'copy:js']
             },
             images: {
                 files: ['<%= cfg.src %>/img/**/*'],
@@ -47,29 +47,33 @@ module.exports = function (grunt) {
         // Clean CSS & Generated JS
         clean: {
             dist: {
-                files: [{
-                    dot: true,
-                    src: ['<%= cfg.dist %>/**/*', '<%= cfg.src %>/css/**/*']
-                }]
+                files: [
+                    {
+                        dot: true,
+                        src: ['<%= cfg.dist %>/**/*', '<%= cfg.src %>/css/**/*']
+                    }
+                ]
             }
         },
 
         //Optimize Images
         imagemin: {
             dist: {                         // Another target
-                files: [{
-                    expand: true,                  // Enable dynamic expansion
-                    cwd: '<%= cfg.src %>/img',                   // Src matches are relative to this path
-                    src: ['**/*.{png,jpg,gif,svg}'],   // Actual patterns to match
-                    dest: '<%= cfg.dist %>/img'                  // Destination path prefix
-                }]
+                files: [
+                    {
+                        expand: true,                  // Enable dynamic expansion
+                        cwd: '<%= cfg.src %>/img',                   // Src matches are relative to this path
+                        src: ['**/*.{png,jpg,gif,svg}'],   // Actual patterns to match
+                        dest: '<%= cfg.dist %>/img'                  // Destination path prefix
+                    }
+                ]
             }
         },
 
         //Compile SASS
         sass: {
-            options:{
-                includePaths : ['<%= cfg.src %>/scss']
+            options: {
+                includePaths: ['<%= cfg.src %>/scss']
             },
             dist: {
                 options: {
@@ -95,13 +99,15 @@ module.exports = function (grunt) {
 
         cssmin: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= cfg.dist %>/css/',
-                    src: ['*.css', '!*.min.css'],
-                    dest: '<%= cfg.dist %>/css/',
-                    ext: '.min.css'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= cfg.dist %>/css/',
+                        src: ['*.css', '!*.min.css'],
+                        dest: '<%= cfg.dist %>/css/',
+                        ext: '.min.css'
+                    }
+                ]
             }
         },
 
@@ -158,38 +164,38 @@ module.exports = function (grunt) {
             // Copy All
             all: {
 
-               files: [
-                   //Copy Views
-                   {
-                       expand: true,
-                       cwd: '<%= cfg.src %>/views/',
-                       filter: 'isFile',
-                       src: ['**'],
-                       dest: '<%= cfg.dist %>/views/'
-                   },
-                   //Copy Html
-                   {
-                       expand: true,
-                       cwd: '<%= cfg.src %>/',
-                       src: ['*.html'],
-                       dest: '<%= cfg.dist %>/',
-                       filter: 'isFile'
-                   },
-                   //Copy Views
-                   {
+                files: [
+                    //Copy Views
+                    {
+                        expand: true,
+                        cwd: '<%= cfg.src %>/views/',
+                        filter: 'isFile',
+                        src: ['**'],
+                        dest: '<%= cfg.dist %>/views/'
+                    },
+                    //Copy Html
+                    {
+                        expand: true,
+                        cwd: '<%= cfg.src %>/',
+                        src: ['*.html'],
+                        dest: '<%= cfg.dist %>/',
+                        filter: 'isFile'
+                    },
+                    //Copy Views
+                    {
                         expand: true,
                         cwd: '<%= cfg.src %>/views/',
                         filter: 'isFile',
                         src: ['**'],
                         dest: 'views/'
-                   },
-                   {
-                       expand: true,
-                       cwd: '<%= cfg.src %>/js/',
-                       src: ['**'],
-                       dest: '<%= cfg.dist %>/js'
-                   }
-               ]
+                    },
+                    {
+                        expand: true,
+                        cwd: '<%= cfg.src %>/js/',
+                        src: ['**'],
+                        dest: '<%= cfg.dist %>/js'
+                    }
+                ]
             },
 
             //Copy Views
@@ -273,7 +279,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('dev', [
         'clean:dist',
-        'imagemin:dist',
+        // 'imagemin:dist',
         'sass:dev',
         'autoprefixer:dist',
         'cssmin:dist',
