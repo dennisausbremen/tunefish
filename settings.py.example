@@ -6,6 +6,6 @@ SETTINGS = {
     'MAIL_USERNAME': '',
     'MAIL_PASSWORD': '',
     'UPLOADED_TRACKPOOL_DEST': 'uploads/tracks',
-    'UPLOADED_IMAGES_DEST': 'uploads/images',
-    'UPLOADED_TECHRIDER_DEST': 'uploads/techrider'
+    'UPLOADED_IMAGEPOOL_DEST': 'uploads/images',
+    'UPLOADED_TECHRIDERPOOL_DEST': 'uploads/techrider'
 }
