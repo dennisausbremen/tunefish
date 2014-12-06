@@ -16,7 +16,6 @@ class TrackUpload(RestrictedBandPage, AjaxForm):
         super(AjaxForm, self).__init__()
         self.form = TrackUploadForm()
 
-
     def on_submit(self):
         if self.band.tracks.count() == 5:
             raise AjaxException(u'Es dürfen nur maximal 5 Demo-Songs hochgeladen werden.')
@@ -29,7 +28,6 @@ class TrackUpload(RestrictedBandPage, AjaxForm):
             db.session.add(track)
             db.session.commit()
             return {'track': render_template("track_item.html", track=track) }
-
 
 
 class TrackDelete(RestrictedBandPage):
