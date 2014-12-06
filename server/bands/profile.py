@@ -1,10 +1,10 @@
 # coding=utf-8
 from __builtin__ import super
 
-from flask import Blueprint, redirect, url_for, flash
+from flask import Blueprint, redirect, url_for
 from flask.templating import render_template
-from server.bands import RestrictedBandPage
-from server.bands.forms import BandForm
+from server.bands import RestrictedBandPage, AjaxForm, AJAX_SUCCESS
+from server.bands.forms import BandForm, TrackUploadForm
 
 from server.models import Band, db
 
@@ -20,25 +20,27 @@ class Confirm(RestrictedBandPage):
 class Index(RestrictedBandPage):
     def __init__(self):
         super(Index, self).__init__()
-        self.form = BandForm()
+        self.band_form = BandForm()
+        self.track_form = TrackUploadForm()
 
     def render(self):
-        return render_template('profile.html', bandForm=self.form)
+        return render_template('profile.html', band_form=self.band_form, track_form=self.track_form)
 
     def get(self):
-        self.form.set_from_model(self.band)
+        self.band_form.set_from_model(self.band)
         return self.render()
 
 
-class ProfileUpdate(Index):
-    def post(self):
-        if self.form.validate_on_submit():
-            self.form.apply_to_model(self.band)
-            db.session.commit()
-            flash('Bandinformationen erfolgreich gespeichert.', 'info')
-        else:
-            flash('Beim Speichern der Bandinformationen sind Fehler aufgetreten. Die Informationen wurden noch nicht gespeichert.', 'error')
-        return self.render()
+class ProfileUpdate(RestrictedBandPage, AjaxForm):
+    def __init__(self):
+        super(RestrictedBandPage, self).__init__()
+        super(AjaxForm, self).__init__()
+        self.form = BandForm()
+
+    def on_submit(self):
+        self.form.apply_to_model(self.band)
+        db.session.commit()
+        return AJAX_SUCCESS
 
 
 profile = Blueprint('bands.profile', __name__, template_folder='../../client/views/bands')
