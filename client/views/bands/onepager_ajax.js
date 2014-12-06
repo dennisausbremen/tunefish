@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var upload = function (form, onSuccess, onFailure) {
+        clearMessages();
         $.ajax({
             url: form.action,
             type: 'POST',
@@ -21,6 +22,7 @@ $(document).ready(function() {
     };
 
     var submit = function (form, onSuccess, onFailure) {
+        clearMessages();
         $.post(form.action, $(form).serialize(), onSuccess).fail(function (data) {
             onFailure(data.responseJSON.errors);
         });
@@ -28,12 +30,29 @@ $(document).ready(function() {
 
     var linkAjaxPostHandler = function(onSuccess) {
         return function (e) {
+            clearMessages();
             e.preventDefault();
             var target = $(e.target);
             $.post(e.target.href, function(data) {
                 onSuccess(target, data);
             });
         };
+    };
+
+    var addMessage = function(type, message) {
+        $("#messages").append('<div class="' + type + '">' + message + '</div>');
+    };
+
+    var clearMessages = function() {
+        $("#messages").html('');
+    };
+
+    var createErrorMessages = function(errors) {
+        for (field in errors) {
+            errors[field].forEach(function (error) {
+                addMessage('error', 'Fehler im Feld ' + field + ': ' + error);
+            });
+        }
     };
 
     {% include "profile.js" %}
