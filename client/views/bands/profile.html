@@ -10,6 +10,7 @@
 
 <form method="POST" action="{{ url_for('bands.profile.update') }}">
     {{ bandForm.csrf_token }}
+    {{ renderDefault(bandForm.name) }}
     {{ renderDefault(bandForm.descp) }}
     {{ renderDefault(bandForm.amount_members) }}
     {{ bandForm.website.label }}

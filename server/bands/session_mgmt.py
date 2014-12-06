@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from flask import Blueprint, session, redirect, url_for, request, flash
+from flask import Blueprint, session, redirect, url_for, request, flash, jsonify
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
@@ -68,15 +68,17 @@ class Login(Index):
                 session['bandId'] = band.id
                 return redirect(url_for('bands.profile.index'))
             else:
-                self.login_form.login.errors.append("Unbekannter Login")
-                self.login_form.password.errors.append("")
+                self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
+                self.login_form.password.errors.append("Passwort eingeben")
         return self.render()
-
 
 class Logout(MethodView):
     def get(self):
-        del session['bandId']
-        return redirect(url_for('bands.session.index'))
+        try:
+            del session['bandId']
+        finally:
+            return redirect(url_for('bands.session.index'))
+
 
 
 session_mgmt = Blueprint('bands.session', __name__, template_folder='../../client/views/bands')
