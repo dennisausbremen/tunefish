@@ -1,4 +1,4 @@
-from flask import session, redirect, url_for, g, jsonify
+from flask import session, redirect, url_for, g, jsonify, Response
 from flask.views import MethodView
 from server.models import Band
 
@@ -24,14 +24,18 @@ class AjaxException(Exception):
         self.errors = args
 
 
-AJAX_SUCCESS = []
+AJAX_SUCCESS = Response(200)
 
 
 class AjaxForm(MethodView):
     def post(self):
         if self.form.validate_on_submit():
             try:
-                return jsonify(self.on_submit())
+                result = self.on_submit()
+                if type(result) is Response:
+                    return result
+                else:
+                    return jsonify(result)
             except AjaxException as e:
                 errors = self.form.errors
                 if len(e.errors) > 0:

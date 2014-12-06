@@ -7,7 +7,18 @@
 {% block inlinejs %}
 
 <script type="text/javascript">
+
     $(document).ready(function () {
+        var onTrackDeleteClick = function (e) {
+            e.preventDefault();
+            var li = $(e.target).parent();
+
+            $.post(e.target.href, function (data) {
+                li.fadeOut(500);
+            });
+        };
+
+
         $('#band_form').submit(function (e) {
             e.preventDefault();
 
@@ -31,12 +42,16 @@
                 dataType: 'json',
                 processData:false,
                 'success': function (data) {
-                    $("#track_list ul").append(data['track'])
+                    $("#track_list ul")
+                            .append(data['track'])
+                            .click(onTrackDeleteClick);
                 }
             }).fail(function (data) {
                 console.log("fail", data.responseJSON);
             });
         });
+
+        $('#track_list a').click(onTrackDeleteClick);
 
     });
 </script>
