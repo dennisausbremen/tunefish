@@ -1,8 +1,9 @@
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy_utils import URLType, PasswordType
 
 from server.app import app, trackPool, techriderPool, imagePool
+from server.bands.forms import BandForm
 
 
 db = SQLAlchemy(app)
@@ -33,6 +34,19 @@ class Band(db.Model):
 
     def __repr__(self):
         return '<Band %r>' % (self.name)
+
+    def is_tracks_valid(self):
+        return 2 < self.tracks.count < 6
+
+    def is_profile_valid(self):
+        bandForm = BandForm()
+        bandForm.set_from_model(self)
+
+        for name, field in iteritems(bandForm._fields):
+            if not field.validate(self, []):
+                return False
+        return True
+
 
     @property
     def techrider_url(self):
