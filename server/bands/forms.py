@@ -75,3 +75,6 @@ class TrackUploadForm(Form):
 
 class ImageUploadForm(Form):
     image_file = FileField('Bild', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
+
+class TechriderUploadForm(Form):
+    techriderFile = FileField('Techrider', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])

@@ -11,7 +11,12 @@ $(document).ready(function() {
             processData: false,
             'success': onSuccess
         }).fail(function (data) {
+            console.log(data);
+            if ( typeof data.responseJSON !== 'undefined' ) {
                 onFailure(data.responseJSON.errors);
+            } else {
+                onFailure([]);
+            }
             });
     };
 
@@ -34,4 +39,6 @@ $(document).ready(function() {
     {% include "profile.js" %}
     {% include "tracks.js" %}
     {% include "image.js" %}
+    {% include "techrider.js" %}
+    
 });
