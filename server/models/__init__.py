@@ -1,5 +1,5 @@
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
-from sqlalchemy import Integer, String, Boolean
+from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy_utils import URLType, PasswordType
 
 from server.app import app, trackPool, techriderPool, imagePool
@@ -25,6 +25,8 @@ class Band(db.Model):
     city = db.Column(String)
     image = db.Column(String)
     techrider = db.Column(String)
+    state = db.Column(Integer)
+    apply_timestamp = db.Column(DateTime)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
 
     def __init__(self, login, password):
@@ -57,7 +59,7 @@ class Band(db.Model):
     @property
     def techrider_path(self):
         return techriderPool.path(self.techrider)
-    
+
     @property
     def image_url(self):
         return imagePool.url(self.image)
@@ -65,8 +67,6 @@ class Band(db.Model):
     @property
     def image_path(self):
         return imagePool.path(self.image)
-    
-
 
 
 class Track(db.Model):
