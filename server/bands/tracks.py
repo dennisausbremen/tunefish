@@ -3,6 +3,7 @@ from os import unlink
 from uuid import uuid4
 
 from flask import Blueprint, request, jsonify
+from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
 from server.app import trackPool
 from server.bands import RestrictedBandPage, AjaxForm, AjaxException
@@ -22,8 +23,12 @@ class TrackUpload(RestrictedBandPage, AjaxForm):
         else:
             track = Track()
             track.band_id = self.band.id
-            trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.mp3'
-            track.filename = trackPool.save(request.files[self.form.audioFile.name], name=trackFilename)
+            trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.'
+            try:
+                track.filename = trackPool.save(request.files[self.form.audioFile.name], name=trackFilename)
+            except UploadNotAllowed:
+                raise AjaxException(u'Nur mp3s erlaubt')
+
             track.trackname = self.form.trackname.data
             db.session.add(track)
             db.session.commit()

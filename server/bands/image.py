@@ -4,9 +4,10 @@ from os import unlink
 from uuid import uuid4
 
 from flask import Blueprint, request
+from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
 from server.app import imagePool
-from server.bands import RestrictedBandPage, AjaxForm
+from server.bands import RestrictedBandPage, AjaxForm, AjaxException
 from server.bands.forms import ImageUploadForm
 from server.models import db
 
@@ -21,10 +22,11 @@ class ImageUpload(RestrictedBandPage, AjaxForm):
         oldfile = None
         if self.band.image:
             oldfile = self.band.image_path
-        mimetype = request.files[self.form.image_file.name].mimetype
-        ext = mimetypes.guess_extension(mimetype)
-        filename = str(self.band.id) + '_' + str(uuid4()) + ext
-        self.band.image = imagePool.save(request.files[self.form.image_file.name], name=filename)
+        filename = str(self.band.id) + '_' + str(uuid4()) + '.'
+        try:
+            self.band.image = imagePool.save(request.files[self.form.image_file.name], name=filename)
+        except UploadNotAllowed:
+            raise AjaxException(u'Nur jpg, png, gif erlaubt')
         db.session.commit()
         if oldfile:
             try:

@@ -3,9 +3,10 @@ from os import unlink
 from uuid import uuid4
 
 from flask import Blueprint, request, render_template
+from flask.ext.uploads import UploadNotAllowed
 
 from server.app import techriderPool
-from server.bands import RestrictedBandPage, AjaxForm
+from server.bands import RestrictedBandPage, AjaxForm, AjaxException
 from server.bands.forms import TechriderUploadForm
 from server.models import db
 
@@ -20,8 +21,11 @@ class TechriderUpload(RestrictedBandPage, AjaxForm):
         oldTechrider = None
         if self.band.techrider:
             oldTechrider = self.band.techrider_path
-        techriderFilename = str(self.band.id) + '_' + str(uuid4()) + '.pdf'
-        self.band.techrider = techriderPool.save(request.files[self.form.techriderFile.name], name=techriderFilename)
+        techriderFilename = str(self.band.id) + '_' + str(uuid4()) + '.'
+        try:
+            self.band.techrider = techriderPool.save(request.files[self.form.techriderFile.name], name=techriderFilename)
+        except UploadNotAllowed:
+            raise AjaxException(u'Nur pdfs erlaubt')
         db.session.commit()
         if oldTechrider:
             try:

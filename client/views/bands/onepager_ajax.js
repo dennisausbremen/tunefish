@@ -74,13 +74,15 @@ $(document).ready(function() {
     }
 
     $('.tabs>div').hide();
-    $('.tabs>div:nth-child(1)').show();
+    $('.tabs>div:nth-child(1)').show().addClass('active');
 
     $('.tabctrl a').click(function(e) {
         e.preventDefault();
 
         $('.tabs>div').hide();
-        $('.tabs>div:nth-child('+ $(this).data("index") + ')').show();
+        $('.tabctrl a').removeClass('active');
+        $('.tabs>div:nth-child('+ $(this).data("index") + ')').show().addClass('active');
+        $(this).addClass('active');
 
     });
 });
