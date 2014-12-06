@@ -3,10 +3,16 @@ from __builtin__ import super
 
 from flask import Blueprint, redirect, url_for
 from flask.templating import render_template
+from flask.views import MethodView
 from server.bands import RestrictedBandPage, AjaxForm, AJAX_SUCCESS
 from server.bands.forms import BandForm, TrackUploadForm
 
 from server.models import Band, db
+
+
+class JavaScript(MethodView):
+    def get(self):
+        return render_template('onepager_ajax.js')
 
 
 class Confirm(RestrictedBandPage):
@@ -24,7 +30,7 @@ class Index(RestrictedBandPage):
         self.track_form = TrackUploadForm()
 
     def render(self):
-        return render_template('profile.html', band_form=self.band_form, track_form=self.track_form)
+        return render_template('main.html', band_form=self.band_form, track_form=self.track_form)
 
     def get(self):
         self.band_form.set_from_model(self.band)
@@ -46,4 +52,5 @@ class ProfileUpdate(RestrictedBandPage, AjaxForm):
 profile = Blueprint('bands.profile', __name__, template_folder='../../client/views/bands')
 profile.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('confirm'))
 profile.add_url_rule('/profile', view_func=Index.as_view('index'), methods=['GET'])
+profile.add_url_rule('/profile/band.js', view_func=JavaScript.as_view('bandjs'), methods=['GET'])
 profile.add_url_rule('/profile', view_func=ProfileUpdate.as_view('update'), methods=['POST'])
