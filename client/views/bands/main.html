@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block inlinejs %}
+<script src="{{ url_for('bands.profile.bandjs') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+{{ renderMessages() }}
+
+{% include "profile.html" %}
+<hr/>
+{% include "tracks.html" %}
+
+{% endblock %}

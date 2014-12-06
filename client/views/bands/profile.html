@@ -1,84 +1,7 @@
-{% extends "layout.html" %}
 {% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import getField %}
 {% from "_formhelpers.html" import getErrors %}
 {% from "_formhelpers.html" import renderMessages %}
-
-{% block inlinejs %}
-
-<script type="text/javascript">
-    var upload = function (form, onSuccess, onFailure) {
-        $.ajax({
-            url: form.action,
-            type: 'POST',
-            data: new FormData(form),
-            mimeType: "multipart/form-data",
-            contentType: false,
-            cache: false,
-            dataType: 'json',
-            processData: false,
-            'success': onSuccess
-        }).fail(function (data) {
-                    onFailure(data.responseJSON.errors);
-                });
-    }
-
-    var submit = function (form, onSuccess, onFailure) {
-        $.post(form.action, $(form).serialize(), onSuccess).fail(function (data) {
-            onFailure(data.responseJSON.errors);
-        });
-    }
-
-    var linkAjaxPostHandler = function(onSuccess) {
-        return function (e) {
-            e.preventDefault();
-            var target = $(e.target);
-            $.post(e.target.href, function(data) {
-                onSuccess(target, data);
-            });
-        }
-    }
-
-
-    $(document).ready(function () {
-        var onTrackDeleteClick = linkAjaxPostHandler(function (target) {
-            target.parent().fadeOut(500);
-        });
-
-
-        $('#band_form').submit(function (e) {
-            e.preventDefault();
-
-            submit(this,
-                    function (result) { console.log("ok"); },
-                    function (errors) { console.log("errors", errors); }
-            );
-
-        });
-
-        $('#track_form').submit(function (e) {
-            e.preventDefault();
-
-            upload(this,
-                    function (result) {
-                        $("#track_list ul").append(result['track']).click(onTrackDeleteClick);
-                    },
-                    function (errors) {
-                        console.log("errors", errors);
-                    }
-                );
-
-        });
-
-        $('#track_list a').click(onTrackDeleteClick);
-
-    });
-</script>
-{% endblock %}
-
-{% block body %}
-{{ renderMessages() }}
-
 
 <h2>Tab 1: Allg Bandinfos</h2>
 
@@ -98,27 +21,3 @@
     {{ renderDefault(band_form.city) }}
     <input type="submit" value="Bandinformationen vervollständigt">
 </form>
-
-<hr/>
-<h2>Tab 2: Tracks</h2>
-
-<h3>Bisher hochgeladen</h3>
-<div id="track_list">
-    <ul>
-        {% for track in g.band.tracks %}
-        {% include "track_item.html" %}
-        {% endfor %}
-    </ul>
-</div>
-
-
-<form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data" id="track_form">
-    {{ track_form.csrf_token }}
-
-    {{ renderDefault(track_form.audioFile) }}
-    {{ renderDefault(track_form.trackname, 'Track') }}
-
-    <input type="submit" value="Song hochladen">
-</form>
-
-{% endblock %}
