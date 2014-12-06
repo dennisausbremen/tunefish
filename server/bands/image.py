@@ -4,9 +4,11 @@ from os import unlink
 from uuid import uuid4
 
 from flask import Blueprint, request
+from flask.templating import render_template
 from server.app import imagePool
-from server.bands import RestrictedBandPage, AjaxForm, AJAX_SUCCESS
+from server.bands import RestrictedBandPage, AjaxForm
 from server.bands.forms import ImageUploadForm
+from server.models import db
 
 
 class ImageUpload(RestrictedBandPage, AjaxForm):
@@ -23,9 +25,13 @@ class ImageUpload(RestrictedBandPage, AjaxForm):
         ext = mimetypes.guess_extension(mimetype)
         filename = str(self.band.id) + '_' + str(uuid4()) + ext
         self.band.image = imagePool.save(request.files[self.form.image_file.name], name=filename)
+        db.session.commit()
         if oldfile:
-            unlink(oldfile)
-        return AJAX_SUCCESS
+            try:
+                unlink(oldfile)
+            except:
+                pass
+        return {"image": render_template('image_preview.html')}
 
 
 images = Blueprint('bands.images', __name__, template_folder='../../client/views/bands')

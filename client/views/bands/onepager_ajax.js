@@ -33,4 +33,5 @@ $(document).ready(function() {
 
     {% include "profile.js" %}
     {% include "tracks.js" %}
+    {% include "image.js" %}
 });
