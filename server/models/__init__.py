@@ -2,7 +2,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy_utils import URLType, PasswordType
 
-from server.app import app, trackPool
+from server.app import app, trackPool, techriderPool, imagePool
 
 
 db = SQLAlchemy(app)
@@ -22,6 +22,8 @@ class Band(db.Model):
     facebook_page = db.Column(String)
     phone = db.Column(String)
     city = db.Column(String)
+    image = db.Column(String)
+    techrider = db.Column(String)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
 
     def __init__(self, login, password):
@@ -31,6 +33,24 @@ class Band(db.Model):
 
     def __repr__(self):
         return '<Band %r>' % (self.name)
+
+    @property
+    def techrider_url(self):
+        return techriderPool.url(self.techrider)
+
+    @property
+    def techrider_path(self):
+        return techriderPool.path(self.techrider)
+    
+    @property
+    def image_url(self):
+        return imagePool.url(self.image)
+
+    @property
+    def image_path(self):
+        return imagePool.path(self.image)
+    
+
 
 
 class Track(db.Model):

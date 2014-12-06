@@ -1,5 +1,5 @@
 from flask import Flask
-from flask.ext.uploads import UploadSet, configure_uploads
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 
 from flask_mail import Mail
 from settings import SETTINGS
@@ -11,5 +11,8 @@ app.config.update(SETTINGS)
 
 mailer = Mail(app)
 trackPool = UploadSet('trackPool', ('mp3',))
-configure_uploads(app, (trackPool,))
+imagePool = UploadSet('imagePool', IMAGES)
+techriderPool = UploadSet('techriderPool', ('pdf',))
+configure_uploads(app, (trackPool, imagePool, techriderPool,))
+
 
