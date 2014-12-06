@@ -5,7 +5,7 @@ from flask import Blueprint, redirect, url_for
 from flask.templating import render_template
 from flask.views import MethodView
 from server.bands import RestrictedBandPage, AjaxForm, AJAX_SUCCESS
-from server.bands.forms import BandForm, TrackUploadForm
+from server.bands.forms import BandForm, TrackUploadForm, ImageUploadForm
 
 from server.models import Band, db
 
@@ -28,9 +28,10 @@ class Index(RestrictedBandPage):
         super(Index, self).__init__()
         self.band_form = BandForm()
         self.track_form = TrackUploadForm()
+        self.image_form = ImageUploadForm()
 
     def render(self):
-        return render_template('main.html', band_form=self.band_form, track_form=self.track_form)
+        return render_template('main.html', band_form=self.band_form, track_form=self.track_form, image_form=self.image_form)
 
     def get(self):
         self.band_form.set_from_model(self.band)

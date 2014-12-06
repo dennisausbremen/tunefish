@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from flask.ext.wtf import Form
-from wtforms import PasswordField, validators, StringField, TextField, TextAreaField, FileField
+from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
 from wtforms.validators import InputRequired, Email
 from wtforms.fields.html5 import EmailField
 
@@ -71,3 +71,7 @@ class BandForm(Form):
 class TrackUploadForm(Form):
     audioFile = FileField('Audiodatei', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
     trackname = StringField('Trackname', [validators.Length(min=2, message=u'Bitte geben Sie dem Track einen Namen.')])
+
+
+class ImageUploadForm(Form):
+    image_file = FileField('Bild', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])

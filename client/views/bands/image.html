@@ -15,6 +15,6 @@
 
 <form method="POST" action="{{ url_for('bands.images.upload') }}" enctype="multipart/form-data" id="track_form">
     {{ image_form.csrf_token }}
-    {{ renderDefault(image_form.file) }}
+    {{ renderDefault(image_form.image_file) }}
     <input type="submit" value="Bild aktualisieren">
 </form>
