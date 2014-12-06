@@ -10,6 +10,7 @@ class RestrictedBandPage(MethodView):
         else:
             self.band = Band.query.get(session['bandId'])
             if not self.band:
+                del session['bandId']
                 return redirect(url_for('bands.session.index'))
             else:
                 g.band = self.band
