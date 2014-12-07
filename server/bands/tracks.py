@@ -1,15 +1,18 @@
 # coding=utf-8
+
 from os import unlink
 from uuid import uuid4
 
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
+from server.ajax import AjaxException, AjaxForm
 from server.app import trackPool
-from server.bands import RestrictedBandPage, AjaxForm, AjaxException
 from server.bands.forms import TrackUploadForm
+from server.bands.session_mgmt import RestrictedBandPage
 
 from server.models import db, Track
+
 
 class TrackUpload(RestrictedBandPage, AjaxForm):
     def __init__(self):
@@ -43,8 +46,3 @@ class TrackDelete(RestrictedBandPage):
         db.session.delete(track)
         db.session.commit()
         return jsonify({'check_tab': render_template('check.html')})
-
-
-tracks = Blueprint('bands.tracks', __name__, template_folder='../../client/views/bands')
-tracks.add_url_rule('/tracks', view_func=TrackUpload.as_view('upload'))
-tracks.add_url_rule('/tracks/delete/<int:track_id>', view_func=TrackDelete.as_view('delete'))

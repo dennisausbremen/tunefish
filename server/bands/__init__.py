@@ -1,46 +1,33 @@
-from flask import session, redirect, url_for, g, jsonify, Response
+# coding=utf-8
+
+from flask import Blueprint, render_template
 from flask.views import MethodView
-from server.models import Band
+from server.bands.image import ImageUpload
+from server.bands.profile import Confirm, ProfileUpdate, Onepager
+from server.bands.session_mgmt import LoginAndRegister, Login, Register, Logout
+from server.bands.techrider import TechriderUpload
+from server.bands.tracks import TrackUpload, TrackDelete
 
 
-class RestrictedBandPage(MethodView):
-    def dispatch_request(self, *args, **kwargs):
-        if not 'bandId' in session:
-            return redirect(url_for('bands.session.index'))
-        else:
-            self.band = Band.query.get(session['bandId'])
-            if not self.band:
-                del session['bandId']
-                return redirect(url_for('bands.session.index'))
-            else:
-                g.band = self.band
-                return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)
+class JavaScript(MethodView):
+    def get(self):
+        return render_template('onepager_ajax.js')
 
 
-class AjaxException(Exception):
-    errors = []
+band_blueprint = Blueprint('bands', __name__, template_folder='../../client/views/bands')
 
-    def __init__(self, *args):
-        super(Exception, self).__init__()
-        self.errors = args
+band_blueprint.add_url_rule('/', view_func=LoginAndRegister.as_view('session.index'), methods=['GET'])
+band_blueprint.add_url_rule('/', view_func=Login.as_view('session.login'), methods=['POST'])
+band_blueprint.add_url_rule('/register', view_func=Register.as_view('session.register'))
+band_blueprint.add_url_rule('/logout', view_func=Logout.as_view('session.logout'))
 
+band_blueprint.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('profile.confirm'))
+band_blueprint.add_url_rule('/profile', view_func=Onepager.as_view('profile.index'), methods=['GET'])
+band_blueprint.add_url_rule('/profile', view_func=ProfileUpdate.as_view('profile.update'), methods=['POST'])
+band_blueprint.add_url_rule('/profile.js', view_func=JavaScript.as_view('profile.bandjs'), methods=['GET'])
 
-AJAX_SUCCESS = Response(200)
+band_blueprint.add_url_rule('/images', view_func=ImageUpload.as_view('image.upload'))
+band_blueprint.add_url_rule('/techrider', view_func=TechriderUpload.as_view('techrider.upload'))
 
-
-class AjaxForm(MethodView):
-    def post(self):
-        if self.form.validate_on_submit():
-            try:
-                result = self.on_submit()
-                if type(result) is Response:
-                    return result
-                else:
-                    return jsonify(result)
-            except AjaxException as e:
-                errors = self.form.errors
-                if len(e.errors) > 0:
-                    errors['general'] = e.errors
-                return jsonify(errors=errors), 400
-        else:
-            return jsonify(errors=self.form.errors), 400
+band_blueprint.add_url_rule('/tracks', view_func=TrackUpload.as_view('tracks.upload'))
+band_blueprint.add_url_rule('/tracks/delete/<int:track_id>', view_func=TrackDelete.as_view('tracks.delete'))

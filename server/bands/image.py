@@ -1,14 +1,14 @@
 # coding=utf-8
-import mimetypes
 from os import unlink
 from uuid import uuid4
 
-from flask import Blueprint, request
+from flask import request
 from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
+from server.ajax import AjaxException, AjaxForm
 from server.app import imagePool
-from server.bands import RestrictedBandPage, AjaxForm, AjaxException
 from server.bands.forms import ImageUploadForm
+from server.bands.session_mgmt import RestrictedBandPage
 from server.models import db
 
 
@@ -35,7 +35,3 @@ class ImageUpload(RestrictedBandPage, AjaxForm):
                 pass
         return {"image": render_template('image_preview.html'),
                 'check_tab': render_template('check.html')}
-
-
-images = Blueprint('bands.images', __name__, template_folder='../../client/views/bands')
-images.add_url_rule('/images', view_func=ImageUpload.as_view('upload'))

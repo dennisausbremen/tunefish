@@ -1,15 +1,11 @@
-from server.app import app
-from server.bands.image import images
-from server.bands.techrider import techrider
-from server.bands.profile import profile
-from server.bands.session_mgmt import session_mgmt
-from server.bands.tracks import tracks
+# coding=utf-8
 
-app.register_blueprint(session_mgmt, url_prefix='/bands')
-app.register_blueprint(profile, url_prefix='/bands')
-app.register_blueprint(tracks, url_prefix='/bands')
-app.register_blueprint(images, url_prefix='/bands')
-app.register_blueprint(techrider, url_prefix='/bands')
+from server.app import app
+from server.bands import band_blueprint
+
+
+app.register_blueprint(band_blueprint, url_prefix='/bands')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from flask import Blueprint, session, redirect, url_for, request, flash, jsonify
+from flask import session, redirect, url_for, request, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
@@ -22,9 +22,9 @@ SoFe Orga '15
 """
 
 
-class Index(MethodView):
+class LoginAndRegister(MethodView):
     def __init__(self):
-        super(Index, self).__init__()
+        super(LoginAndRegister, self).__init__()
         self.login_form = LoginForm()
         self.registration_form = RegistrationForm()
 
@@ -38,7 +38,7 @@ class Index(MethodView):
             return self.render()
 
 
-class Register(Index):
+class Register(LoginAndRegister):
     def post(self):
         if self.registration_form.validate_on_submit():
             try:
@@ -54,13 +54,13 @@ class Register(Index):
                 session['bandId'] = band.id
                 flash('Willkommen Band "%s".' % band.login, 'info')
                 return redirect(url_for('bands.profile.index'))
-            except IntegrityError as e:
+            except IntegrityError:
                 self.registration_form.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render()
         return self.render()
 
 
-class Login(Index):
+class Login(LoginAndRegister):
     def post(self):
         if self.login_form.validate_on_submit():
             band = Band.query.filter(Band.login == self.login_form.login.data).first()
@@ -72,6 +72,7 @@ class Login(Index):
                 self.login_form.password.errors.append("Passwort eingeben")
         return self.render()
 
+
 class Logout(MethodView):
     def get(self):
         try:
@@ -80,9 +81,15 @@ class Logout(MethodView):
             return redirect(url_for('bands.session.index'))
 
 
-
-session_mgmt = Blueprint('bands.session', __name__, template_folder='../../client/views/bands')
-session_mgmt.add_url_rule('/', view_func=Index.as_view('index'), methods=['GET'])
-session_mgmt.add_url_rule('/', view_func=Login.as_view('login'), methods=['POST'])
-session_mgmt.add_url_rule('/register', view_func=Register.as_view('register'))
-session_mgmt.add_url_rule('/logout', view_func=Logout.as_view('logout'))
+class RestrictedBandPage(MethodView):
+    def dispatch_request(self, *args, **kwargs):
+        if not 'bandId' in session:
+            return redirect(url_for('bands.session.index'))
+        else:
+            self.band = Band.query.get(session['bandId'])
+            if not self.band:
+                del session['bandId']
+                return redirect(url_for('bands.session.index'))
+            else:
+                g.band = self.band
+                return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)

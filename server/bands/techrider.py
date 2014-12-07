@@ -1,13 +1,15 @@
 # coding=utf-8
+
 from os import unlink
 from uuid import uuid4
 
-from flask import Blueprint, request, render_template
+from flask import request, render_template
 from flask.ext.uploads import UploadNotAllowed
+from server.ajax import AjaxException, AjaxForm
 
 from server.app import techriderPool
-from server.bands import RestrictedBandPage, AjaxForm, AjaxException
 from server.bands.forms import TechriderUploadForm
+from server.bands.session_mgmt import RestrictedBandPage
 from server.models import db
 
 
@@ -34,7 +36,3 @@ class TechriderUpload(RestrictedBandPage, AjaxForm):
                 pass
         return {"techrider": render_template('techrider_link.html'),
                 'check_tab': render_template('check.html')}
-
-
-techrider = Blueprint('bands.techrider', __name__, template_folder='../../client/views/bands')
-techrider.add_url_rule('/techrider', view_func=TechriderUpload.as_view('upload'))
