@@ -1,11 +1,12 @@
 # coding=utf-8
+from uuid import uuid4
 
 from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
 from server.bands.forms import LoginForm, RegistrationForm
-from server.bands.mails import send_registration_mail, reset_mail
+from server.bands.mails import send_registration_mail
 
 from server.models import Band, db
 
@@ -32,9 +33,9 @@ class Register(LoginAndRegister):
             try:
                 band = Band(self.registration_form.login.data, self.registration_form.password.data)
                 band.email = self.registration_form.email.data
+                band.email_confirmation_token = str(uuid4())
                 db.session.add(band)
                 db.session.commit()
-                reset_mail(band)
                 send_registration_mail(band)
                 session['bandId'] = band.id
                 flash('Willkommen Band "%s".' % band.login, 'info')

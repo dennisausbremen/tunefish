@@ -16,6 +16,16 @@
         {% endif %}
     </tr>
     <tr>
+        <td>Kontaktemail</td>
+        {% if g.band.is_email_confirmed %}
+        <td class="info">bestätigt</td>
+        {% else %}
+        <td class="error">nicht bestätigt
+        <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a>
+        </td>
+        {% endif %}
+    </tr>
+    <tr>
         <td>Tracks</td>
         {% if g.band.is_tracks_valid %}
         <td class="info">{{ g.band.tracks.count() }} Tracks</td>

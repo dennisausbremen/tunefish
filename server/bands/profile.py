@@ -2,10 +2,11 @@
 
 from __builtin__ import super
 
-from flask import redirect, url_for, Response
+from flask import redirect, url_for, Response, flash
 from flask.templating import render_template
 from server.ajax import AjaxForm
 from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
+from server.bands.mails import send_registration_mail
 from server.bands.session_mgmt import RestrictedBandPage
 
 from server.models import Band, db
@@ -31,6 +32,14 @@ class Confirm(RestrictedBandPage):
             return redirect(url_for('bands.profile.index'))
         else:
             return Response(404)
+
+
+class ResendConfirmMail(RestrictedBandPage):
+    def get(self):
+        send_registration_mail(self.band)
+        flash(u'Bestätigungsemail wird versendet', 'info')
+        return redirect(url_for('bands.profile.index'))
+
 
 
 class ProfileUpdate(RestrictedBandPage, AjaxForm):
