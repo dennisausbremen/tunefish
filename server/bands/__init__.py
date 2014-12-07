@@ -21,7 +21,7 @@ band_blueprint.add_url_rule('/', view_func=Login.as_view('session.login'), metho
 band_blueprint.add_url_rule('/register', view_func=Register.as_view('session.register'))
 band_blueprint.add_url_rule('/logout', view_func=Logout.as_view('session.logout'))
 
-band_blueprint.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('profile.confirm'))
+band_blueprint.add_url_rule('/confirm/<string:token>', view_func=Confirm.as_view('profile.confirm'))
 band_blueprint.add_url_rule('/profile', view_func=Onepager.as_view('profile.index'), methods=['GET'])
 band_blueprint.add_url_rule('/profile', view_func=ProfileUpdate.as_view('profile.update'), methods=['POST'])
 band_blueprint.add_url_rule('/profile.js', view_func=JavaScript.as_view('profile.bandjs'), methods=['GET'])

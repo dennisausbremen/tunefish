@@ -1,25 +1,13 @@
 # coding=utf-8
 
-from flask import session, redirect, url_for, request, flash, g
+from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
-from flask_mail import Message
-from server.app import mailer
 from server.bands.forms import LoginForm, RegistrationForm
+from server.bands.mails import send_registration_mail, reset_mail
 
 from server.models import Band, db
-
-MAIL_BODY = u"""Hallo %s,
-
-
-willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
-bestätigen. Klick hierzu einfach auf folgenden Link: %sbands/confirm/%d
-
-
-Viele Grüße
-SoFe Orga '15
-"""
 
 
 class LoginAndRegister(MethodView):
@@ -46,11 +34,8 @@ class Register(LoginAndRegister):
                 band.email = self.registration_form.email.data
                 db.session.add(band)
                 db.session.commit()
-                msg = Message("Willkommen %s" % band.login,
-                              sender="noreply@vorstrasse-bremen.de",
-                              recipients=[band.email],
-                              body=MAIL_BODY % (band.login, request.url_root, band.id))
-                mailer.send(msg)
+                reset_mail(band)
+                send_registration_mail(band)
                 session['bandId'] = band.id
                 flash('Willkommen Band "%s".' % band.login, 'info')
                 return redirect(url_for('bands.profile.index'))

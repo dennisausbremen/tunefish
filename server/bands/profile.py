@@ -2,7 +2,7 @@
 
 from __builtin__ import super
 
-from flask import redirect, url_for
+from flask import redirect, url_for, Response
 from flask.templating import render_template
 from server.ajax import AjaxForm
 from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
@@ -23,11 +23,14 @@ class Onepager(RestrictedBandPage):
 
 
 class Confirm(RestrictedBandPage):
-    def get(self, band_id):
-        band = Band.query.get_or_404(band_id)
-        band.emailConfirmed = True
-        db.session.commit()
-        return redirect(url_for('bands.profile.index'))
+    def get(self, token):
+        band = Band.query.filter(Band.email_confirmation_token == token).first()
+        if band:
+            band.is_email_confirmed = True
+            db.session.commit()
+            return redirect(url_for('bands.profile.index'))
+        else:
+            return Response(404)
 
 
 class ProfileUpdate(RestrictedBandPage, AjaxForm):
