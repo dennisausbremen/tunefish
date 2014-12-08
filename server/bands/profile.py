@@ -4,10 +4,9 @@ from __builtin__ import super
 
 from flask import redirect, url_for, Response, flash
 from flask.templating import render_template
-from server.ajax import AjaxForm
 from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
 from server.bands.mails import send_registration_mail
-from server.bands.session_mgmt import RestrictedBandPage
+from server.bands.session_mgmt import RestrictedBandPage, RestrictedBandAjaxForm
 
 from server.models import Band, db
 
@@ -41,11 +40,9 @@ class ResendConfirmMail(RestrictedBandPage):
         return redirect(url_for('bands.profile.index'))
 
 
-
-class ProfileUpdate(RestrictedBandPage, AjaxForm):
+class ProfileUpdate(RestrictedBandAjaxForm):
     def __init__(self):
-        super(RestrictedBandPage, self).__init__()
-        super(AjaxForm, self).__init__()
+        super(RestrictedBandAjaxForm, self).__init__()
         self.form = BandForm()
 
     def on_submit(self):
