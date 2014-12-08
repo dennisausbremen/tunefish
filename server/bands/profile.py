@@ -8,7 +8,7 @@ from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, I
 from server.bands.mails import send_registration_mail
 from server.bands.session_mgmt import RestrictedBandPage, RestrictedBandAjaxForm
 
-from server.models import Band, db
+from server.models import Band, db, State
 
 
 class Onepager(RestrictedBandPage):
@@ -49,3 +49,14 @@ class ProfileUpdate(RestrictedBandAjaxForm):
         self.form.apply_to_model(self.band)
         db.session.commit()
         return {'check_tab': render_template('check.html')}
+
+
+class SubmitProfile(RestrictedBandPage):
+    def get(self):
+        if self.band.is_ready_for_submit:
+            self.band.state = State.READY_FOR_VOTE
+            db.session.commit()
+            flash(u'Anmeldung erfolgreich', 'info')
+        else:
+            flash(u'Die Daten für die Anmeldung sind unvollständig', 'error')
+        return redirect(url_for('bands.profile.index'))

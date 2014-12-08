@@ -77,6 +77,14 @@ class Band(db.Model):
     def image_path(self):
         return imagePool.path(self.image)
 
+    @property
+    def is_ready_for_submit(self):
+        return self.image and \
+            self.techrider and \
+            self.is_email_confirmed and \
+            self.is_profile_valid and \
+            self.is_tracks_valid
+
 
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
