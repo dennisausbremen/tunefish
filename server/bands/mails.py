@@ -1,43 +1,32 @@
 # coding=utf-8
+
 from email.header import Header
 from email.mime.text import MIMEText
 import smtplib
+from flask.templating import render_template
 
 from server.app import celery
-from server.models import Band
 
 SENDER = "noreply@vorstrasse-bremen.de"
-BASE_URL = "http://0.0.0.0:5000"
-REG_MAIL_BODY = u"""Hallo %s,
 
-
-willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
-bestätigen. Klick hierzu einfach auf folgenden Link: %s/bands/confirm/%s
-
-
-Viele Grüße
-SoFe Orga '15
-"""
-
-
-def sendmail(config, recepient, subject, message):
-    server = smtplib.SMTP(config['MAIL_SERVER'], config['MAIL_PORT'])
+@celery.task
+def __sendmail(message, app):
+    server = smtplib.SMTP(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
     server.starttls()
-    server.login(config['MAIL_USERNAME'], config['MAIL_PASSWORD'])
+    server.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
 
-    msg = MIMEText(message, _charset="UTF-8")
-    msg['Subject'] = Header(subject, "utf-8")
-    msg['From'] = SENDER
-    msg['To'] = recepient
-
-    server.sendmail(SENDER, [recepient], msg.as_string())
+    server.sendmail(SENDER, [message['To']], message.as_string())
     server.quit()
 
 
+def __prepare_mail(recipient, subject, message_template, *args, **kwargs):
+    msg = MIMEText(render_template(message_template, *args, **kwargs), _charset="UTF-8")
+    msg['Subject'] = Header(subject, "utf-8")
+    msg['From'] = SENDER
+    msg['To'] = recipient
+    return msg
 
-@celery.task
-def send_registration_mail(band_id, app):
-    band = Band.query.get(band_id)
-    if band:
-        sendmail(app.config, band.email, "Willkommen %s" % band.login, REG_MAIL_BODY % (band.login, BASE_URL, band.email_confirmation_token))
 
+def send_registration_mail(band):
+    msg = __prepare_mail(band.email, "Willkommen %s" % band.name, "mails/registration.txt", band=band)
+    __sendmail.delay(msg)

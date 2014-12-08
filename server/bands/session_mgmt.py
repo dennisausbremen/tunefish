@@ -36,7 +36,7 @@ class Register(LoginAndRegister):
                 band.email_confirmation_token = str(uuid4())
                 db.session.add(band)
                 db.session.commit()
-                send_registration_mail.delay(band.id)
+                send_registration_mail(band)
                 session['bandId'] = band.id
                 flash('Willkommen Band "%s".' % band.login, 'info')
                 return redirect(url_for('bands.profile.index'))

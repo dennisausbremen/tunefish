@@ -36,7 +36,7 @@ class Confirm(RestrictedBandPage):
 
 class ResendConfirmMail(RestrictedBandPage):
     def get(self):
-        send_registration_mail.delay(self.band.id)
+        send_registration_mail(self.band)
         flash(u'Bestätigungsemail wird versendet', 'info')
         return redirect(url_for('bands.profile.index'))
 
