@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+
+{% block body %}
+{{ renderMessages() }}
+
+<h1>Danke für's mitmachen</h1>
+<p>
+    Moin {{ g.band.name }}, vielen Dank für eure Bewerbung. <br><br>
+    <i>Wir melden uns. Rufen Sie uns nicht an! </i>
+</p>
+<p>
+    MfG<br>
+    SoFe '15
+</p>
+{% endblock %}

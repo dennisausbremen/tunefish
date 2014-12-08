@@ -5,10 +5,11 @@ from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
+from server.ajax import AjaxForm, AJAX_FAIL
 from server.bands.forms import LoginForm, RegistrationForm
 from server.bands.mails import send_registration_mail
 
-from server.models import Band, db
+from server.models import Band, db, State
 
 
 class LoginAndRegister(MethodView):
@@ -79,3 +80,15 @@ class RestrictedBandPage(MethodView):
             else:
                 g.band = self.band
                 return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)
+
+
+class RestrictedBandAjaxForm(RestrictedBandPage, AjaxForm):
+    def __init__(self):
+        super(RestrictedBandPage, self).__init__()
+        super(AjaxForm, self).__init__()
+
+    def post(self):
+        if self.band.state != State.NEW:
+            return AJAX_FAIL('Die Banddaten können nach dem Abschluss der Bewerbung nicht mehr geändert werden')
+        else:
+            return super(RestrictedBandAjaxForm, self).post()

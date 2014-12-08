@@ -5,17 +5,16 @@ from uuid import uuid4
 from flask import request
 from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
-from server.ajax import AjaxException, AjaxForm
+from server.ajax import AjaxException
 from server.app import imagePool
 from server.bands.forms import ImageUploadForm
-from server.bands.session_mgmt import RestrictedBandPage
+from server.bands.session_mgmt import RestrictedBandAjaxForm
 from server.models import db
 
 
-class ImageUpload(RestrictedBandPage, AjaxForm):
+class ImageUpload(RestrictedBandAjaxForm):
     def __init__(self):
-        super(RestrictedBandPage, self).__init__()
-        super(AjaxForm, self).__init__()
+        super(RestrictedBandAjaxForm, self).__init__()
         self.form = ImageUploadForm()
 
     def on_submit(self):

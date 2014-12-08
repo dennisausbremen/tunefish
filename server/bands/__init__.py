@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template
 from flask.views import MethodView
 from server.bands.image import ImageUpload
-from server.bands.profile import Confirm, ProfileUpdate, Onepager, ResendConfirmMail
+from server.bands.profile import Confirm, ProfileUpdate, Onepager, ResendConfirmMail, SubmitProfile
 from server.bands.session_mgmt import LoginAndRegister, Login, Register, Logout
 from server.bands.techrider import TechriderUpload
 from server.bands.tracks import TrackUpload, TrackDelete
@@ -22,6 +22,7 @@ band_blueprint.add_url_rule('/register', view_func=Register.as_view('session.reg
 band_blueprint.add_url_rule('/logout', view_func=Logout.as_view('session.logout'))
 
 band_blueprint.add_url_rule('/confirm/<string:token>', view_func=Confirm.as_view('profile.confirm'))
+band_blueprint.add_url_rule('/submit', view_func=SubmitProfile.as_view('profile.submit'))
 band_blueprint.add_url_rule('/resend-confirm', view_func=ResendConfirmMail.as_view('profile.resend'))
 band_blueprint.add_url_rule('/profile', view_func=Onepager.as_view('profile.index'), methods=['GET'])
 band_blueprint.add_url_rule('/profile', view_func=ProfileUpdate.as_view('profile.update'), methods=['POST'])

@@ -5,18 +5,17 @@ from uuid import uuid4
 
 from flask import request, render_template
 from flask.ext.uploads import UploadNotAllowed
-from server.ajax import AjaxException, AjaxForm
+from server.ajax import AjaxException
 
 from server.app import techriderPool
 from server.bands.forms import TechriderUploadForm
-from server.bands.session_mgmt import RestrictedBandPage
+from server.bands.session_mgmt import RestrictedBandAjaxForm
 from server.models import db
 
 
-class TechriderUpload(RestrictedBandPage, AjaxForm):
+class TechriderUpload(RestrictedBandAjaxForm):
     def __init__(self):
-        super(RestrictedBandPage, self).__init__()
-        super(AjaxForm, self).__init__()
+        super(RestrictedBandAjaxForm, self).__init__()
         self.form = TechriderUploadForm()
 
     def on_submit(self):

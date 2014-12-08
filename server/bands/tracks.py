@@ -6,18 +6,17 @@ from uuid import uuid4
 from flask import request, jsonify
 from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
-from server.ajax import AjaxException, AjaxForm
+from server.ajax import AjaxException, AJAX_FAIL
 from server.app import trackPool
 from server.bands.forms import TrackUploadForm
-from server.bands.session_mgmt import RestrictedBandPage
+from server.bands.session_mgmt import RestrictedBandPage, RestrictedBandAjaxForm
 
-from server.models import db, Track
+from server.models import db, Track, State
 
 
-class TrackUpload(RestrictedBandPage, AjaxForm):
+class TrackUpload(RestrictedBandAjaxForm):
     def __init__(self):
-        super(RestrictedBandPage, self).__init__()
-        super(AjaxForm, self).__init__()
+        super(RestrictedBandAjaxForm, self).__init__()
         self.form = TrackUploadForm()
 
     def on_submit(self):
@@ -41,8 +40,11 @@ class TrackUpload(RestrictedBandPage, AjaxForm):
 
 class TrackDelete(RestrictedBandPage):
     def post(self, track_id):
-        track = Track.query.get_or_404(track_id)
-        unlink(track.path)
-        db.session.delete(track)
-        db.session.commit()
-        return jsonify({'check_tab': render_template('check.html')})
+        if self.band.state != State.NEW:
+            return AJAX_FAIL('Die Banddaten können nach dem Abschluss der Bewerbung nicht mehr geändert werden')
+        else:
+            track = Track.query.get_or_404(track_id)
+            unlink(track.path)
+            db.session.delete(track)
+            db.session.commit()
+            return jsonify({'check_tab': render_template('check.html')})

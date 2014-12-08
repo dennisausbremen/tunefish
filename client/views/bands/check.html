@@ -50,3 +50,9 @@
         {% endif %}
     </tr>
 </table>
+
+{% if g.band.is_ready_for_submit %}
+<a href="{{ url_for('bands.profile.submit') }}" class="info">Abschließen</a>
+{% else %}
+<div class="error">Du kommst hier nicht rein</div>
+{% endif %}

@@ -4,23 +4,25 @@ from __builtin__ import super
 
 from flask import redirect, url_for, Response, flash
 from flask.templating import render_template
-from server.ajax import AjaxForm
 from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
 from server.bands.mails import send_registration_mail
-from server.bands.session_mgmt import RestrictedBandPage
+from server.bands.session_mgmt import RestrictedBandPage, RestrictedBandAjaxForm
 
-from server.models import Band, db
+from server.models import Band, db, State
 
 
 class Onepager(RestrictedBandPage):
     def get(self):
-        band_form = BandForm()
-        band_form.set_from_model(self.band)
-        return render_template('main.html',
-                               band_form=band_form,
-                               track_form=TrackUploadForm(),
-                               image_form=ImageUploadForm(),
-                               techrider_form=TechriderUploadForm())
+        if self.band.state == State.NEW:
+            band_form = BandForm()
+            band_form.set_from_model(self.band)
+            return render_template('main.html',
+                                   band_form=band_form,
+                                   track_form=TrackUploadForm(),
+                                   image_form=ImageUploadForm(),
+                                   techrider_form=TechriderUploadForm())
+        else:
+            return render_template('main_after_submit.html')
 
 
 class Confirm(RestrictedBandPage):
@@ -41,14 +43,23 @@ class ResendConfirmMail(RestrictedBandPage):
         return redirect(url_for('bands.profile.index'))
 
 
-
-class ProfileUpdate(RestrictedBandPage, AjaxForm):
+class ProfileUpdate(RestrictedBandAjaxForm):
     def __init__(self):
-        super(RestrictedBandPage, self).__init__()
-        super(AjaxForm, self).__init__()
+        super(RestrictedBandAjaxForm, self).__init__()
         self.form = BandForm()
 
     def on_submit(self):
         self.form.apply_to_model(self.band)
         db.session.commit()
         return {'check_tab': render_template('check.html')}
+
+
+class SubmitProfile(RestrictedBandPage):
+    def get(self):
+        if self.band.is_ready_for_submit:
+            self.band.state = State.READY_FOR_VOTE
+            db.session.commit()
+            flash(u'Anmeldung erfolgreich', 'info')
+        else:
+            flash(u'Die Daten für die Anmeldung sind unvollständig', 'error')
+        return redirect(url_for('bands.profile.index'))
