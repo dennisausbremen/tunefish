@@ -7,6 +7,11 @@ from flask.views import MethodView
 AJAX_SUCCESS = Response(200)
 
 
+def AJAX_FAIL(errors):
+    if type(errors) is str:
+        errors = {'general': [errors]}
+    return jsonify(errors=errors), 400
+
 class AjaxException(Exception):
     def __init__(self, *args):
         super(Exception, self).__init__()
@@ -29,6 +34,6 @@ class AjaxForm(MethodView):
                 errors = self.form.errors
                 if len(e.errors) > 0:
                     errors['general'] = e.errors
-                return jsonify(errors=errors), 400
+                return AJAX_FAIL(errors)
         else:
-            return jsonify(errors=self.form.errors), 400
+            return AJAX_FAIL(self.form.errors)

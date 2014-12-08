@@ -9,6 +9,14 @@ from server.bands.forms import BandForm
 db = SQLAlchemy(app)
 
 
+class State:
+    NEW = 0
+    READY_FOR_VOTE = 1
+    IN_VOTE = 2
+    DECLINED = 3
+    ACCEPTED = 4
+
+
 class Band(db.Model):
     id = db.Column(Integer, primary_key=True)
     login = db.Column(String, unique=True)
@@ -26,7 +34,7 @@ class Band(db.Model):
     city = db.Column(String)
     image = db.Column(String)
     techrider = db.Column(String)
-    state = db.Column(Integer)
+    state = db.Column(Integer, default=State.NEW)
     apply_timestamp = db.Column(DateTime)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
 
