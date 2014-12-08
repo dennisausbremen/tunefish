@@ -13,13 +13,16 @@ from server.models import Band, db, State
 
 class Onepager(RestrictedBandPage):
     def get(self):
-        band_form = BandForm()
-        band_form.set_from_model(self.band)
-        return render_template('main.html',
-                               band_form=band_form,
-                               track_form=TrackUploadForm(),
-                               image_form=ImageUploadForm(),
-                               techrider_form=TechriderUploadForm())
+        if self.band.state == State.NEW:
+            band_form = BandForm()
+            band_form.set_from_model(self.band)
+            return render_template('main.html',
+                                   band_form=band_form,
+                                   track_form=TrackUploadForm(),
+                                   image_form=ImageUploadForm(),
+                                   techrider_form=TechriderUploadForm())
+        else:
+            return render_template('main_after_submit.html')
 
 
 class Confirm(RestrictedBandPage):
