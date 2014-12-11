@@ -8,4 +8,4 @@ app.register_blueprint(band_blueprint, url_prefix='/bands')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(threaded=True, host='0.0.0.0')

@@ -3,7 +3,7 @@
 from os import unlink
 from uuid import uuid4
 
-from flask import request, jsonify
+from flask import request, jsonify, flash
 from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
 from server.ajax import AjaxException, AJAX_FAIL
@@ -44,7 +44,11 @@ class TrackDelete(RestrictedBandPage):
             return AJAX_FAIL('Die Banddaten können nach dem Abschluss der Bewerbung nicht mehr geändert werden')
         else:
             track = Track.query.get_or_404(track_id)
-            unlink(track.path)
+            try:
+                unlink(track.path)
+            except Exception:
+                # TODO handle file unlink (use celery task?)
+                flash('Fehler beim loeschen')
             db.session.delete(track)
             db.session.commit()
             return jsonify({'check_tab': render_template('check.html')})
