@@ -1,0 +1,14 @@
+.profile-form-wrapper {
+    padding: $space 0 0;
+
+    @include breakpoint(m) {
+        padding: $space * 2 0 0;
+    }
+
+    .form-action {
+//        width: 95%;
+        margin: 0 0.3125rem;
+        min-height: 500px;
+        background-color: rgba($border-light,0.8);
+    }
+}

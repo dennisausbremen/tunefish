@@ -15,9 +15,11 @@
 }
 
 @mixin clearfix() {
-    &:after {
-        content: "";
+    &:before, &:after {
+        content: " ";
         display: table;
+    }
+    &:after {
         clear: both;
     }
 }

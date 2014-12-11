@@ -5,10 +5,63 @@ header {
     padding: 0 $pad;
     border-bottom: 1px solid $border-light;
 
+    font-weight: 200;
+
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
 //
 //    box-shadow: 0 0 5px 5px rgba($shadow-dark, 0.5);
+
+    > * {
+        height: $base-line-height * 2;
+    }
+}
+
+.account {
+    float: right;
+    padding: $pad-half $pad-half $pad-half $pad-and-half;
+
+    @include breakpoint(m) {
+        border-left: 1px solid $border-light;
+    }
+
+    img,
+    span {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    img {
+        border-radius: 50%;
+        height: 100%;
+        margin-right: $pad-half;
+    }
+
+    span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+        max-width: 205px;
+
+        @include breakpoint(m) {
+            display: inline-block;
+        }
+    }
+}
+
+.logout {
+    font-size: $h3-font-size;
+    text-decoration: none;
+    color: $text-muted;
+
+    height: $base-line-height;
+    display: inline-block;
+    vertical-align: middle;
+
+    @include breakpoint(m) {
+        padding-left: $pad-half;
+    }
 }

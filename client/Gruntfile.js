@@ -39,7 +39,7 @@ module.exports = function (grunt) {
                 tasks: ['copy:views']
             },
             html: {
-                files: ['<%= cfg.src %>/index.html'],
+                files: ['<%= cfg.src %>/*.html'],
                 tasks: ['copy:html']
             }
         },
@@ -130,7 +130,8 @@ module.exports = function (grunt) {
                     destPrefix: '<%= cfg.src %>/js/vendor/'
                 },
                 files: {
-                    'jquery.min.js': 'jquery/dist/jquery.min.js'
+                    'jquery.min.js': 'jquery/dist/jquery.min.js',
+                    'slick.min.js': 'slick.js/slick/slick.min.js'
                 }
             },
             dist: {
@@ -140,7 +141,8 @@ module.exports = function (grunt) {
                     destPrefix: '<%= cfg.src %>/js/vendor/'
                 },
                 files: {
-                    'jquery.min.js': 'jquery/dist/jquery.min.js'
+                    'jquery.min.js': 'jquery/dist/jquery.min.js',
+                    'slick.min.js': 'slick.js/slick.min.js'
                 }
             }
         },

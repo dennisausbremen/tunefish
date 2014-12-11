@@ -3,14 +3,6 @@
         transform: /*scale3d(1, 1, 1)*/ translateY(0);
     }
 
-//    20% {
-//        transform: /*scale3d(0.98, 1.01, 1)*/ translateY(-2px);
-//    }
-//
-//    45% {
-//      transform: /*scale3d(1, 1, 1)*/ translateY(-5px);
-//    }
-
     25% {
         transform: /*scale3d(1, 1, 1)*/ translateY(0);
     }
@@ -36,8 +28,10 @@
 
 .logo {
     float: left;
-    border-right: 1px solid #efefef;
-    font-weight: 200;
+
+    @include breakpoint(m) {
+        border-right: 1px solid $border-light;
+    }
 
     > * {
         display: inline-block;

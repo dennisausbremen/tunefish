@@ -4,12 +4,16 @@ var helper = (function ($) {
     /*
      PRIVATE FUNCTIONS
      */
+
+    /**
+     * Login Page
+     */
     var setActivePanel = function setActiveTab(target) {
         var tabs = $('.tabs'),
             children = tabs.children().length,
             steps = 100/children,
             tab = tabs.find('a'),
-            idx = $(target).index(),
+            idx = target.parent().index(),
             content = $('.form-action-wrapper');
 
         tab.removeClass('active');
@@ -39,19 +43,60 @@ var helper = (function ($) {
             var el = $(this),
                 target = el.attr('href');
 
-            setActivePanel(target);
+            setActivePanel($('[href='+target+']'));
             setLoginContainerHeight();
             return false;
         });
     };
 
+
+    /**
+     * Profile Page
+     */
+    var initCards = function initCards() {
+        $('.profile-form-wrapper').slick({
+            centerMode: true,
+            centerPadding: '20%',
+            infinite: false,
+            slidesToShow: 1,
+            arrows: false,
+            dots: true,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        centerPadding: '15%'
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        centerPadding: '10%'
+                    }
+                },
+                {
+                    breakpoint: 320,
+                    settings: {
+                        centerPadding: '30px'
+                    }
+                }
+            ]
+        });
+    };
+
     /*
-    PAGE SPECIFIC PRIVATE FUNCTIONS
+     PAGE SPECIFIC PRIVATE FUNCTIONS
      */
     var Login = {
         init: function initLoginPage() {
             checkInvalidLogin();
             initTabs();
+        }
+    };
+
+    var Profile = {
+        init: function initProfilePage() {
+            initCards();
         }
     };
 
@@ -61,9 +106,10 @@ var helper = (function ($) {
      */
     return {
         /*
-        PUBLIC FUNCTIONS HERE
+         PUBLIC FUNCTIONS HERE
          */
-        Login: Login
+        Login: Login,
+        Profile: Profile
     };
 
 })(jQuery, window);

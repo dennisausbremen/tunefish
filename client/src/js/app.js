@@ -9,8 +9,12 @@ var tf = (function ($) {
      */
     var _init = function _init() {
 
-        if($('.login').length){
+        if ($('.login').length) {
            tf.helper.Login.init();
+        }
+
+        if ($('.profile').length) {
+            tf.helper.Profile.init();
         }
 
     };

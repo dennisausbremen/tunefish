@@ -1,0 +1,29 @@
+i {
+    font-family: 'tunefish';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.i-done:before {
+    content: "\e600";
+}
+.i-logout:before {
+    content: "\e601";
+}
+.i-close:before {
+    content: "\e602";
+}
+.i-more:before {
+    content: "\e603";
+}
+.i-menu:before {
+    content: "\e604";
+}

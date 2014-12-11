@@ -6,18 +6,21 @@
 
 @import "base/normalize";
 @import "base/grid";
+@import "base/icons";
 
 @import "base/main";
 @import "base/typography";
 @import "base/lists";
 @import "base/tabs";
 
+@import "base/slider";
 
 @import "base/header";
 @import "base/footer";
 
 @import "components/logo";
 @import "components/forms";
+@import "components/profile-page";
 
 @import "page/login";
 @import "page/errors";
