@@ -5,5 +5,8 @@ SETTINGS = {
     'MAIL_USE_TLS': True,
     'MAIL_USERNAME': '',
     'MAIL_PASSWORD': '',
-    'UPLOADED_TRACKPOOL_DEST': 'uploads/tracks'
+    'UPLOADED_TRACKPOOL_DEST': 'uploads/tracks',
+    'UPLOADED_IMAGEPOOL_DEST': 'uploads/images',
+    'UPLOADED_TECHRIDERPOOL_DEST': 'uploads/techrider',
+    'CELERY_BROKER_URL' : 'sqla+sqlite:///celerydb.db'
 }

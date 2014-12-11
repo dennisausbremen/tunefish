@@ -1,30 +1,20 @@
 # coding=utf-8
+from uuid import uuid4
 
-from flask import Blueprint, session, redirect, url_for, request, flash, jsonify
+from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
-from flask_mail import Message
-from server.app import mailer
+from server.ajax import AjaxForm, AJAX_FAIL
 from server.bands.forms import LoginForm, RegistrationForm
+from server.bands.mails import send_registration_mail
 
-from server.models import Band, db
-
-MAIL_BODY = u"""Hallo %s,
-
-
-willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
-bestätigen. Klick hierzu einfach auf folgenden Link: %sbands/confirm/%d
+from server.models import Band, db, State
 
 
-Viele Grüße
-SoFe Orga '15
-"""
-
-
-class Index(MethodView):
+class LoginAndRegister(MethodView):
     def __init__(self):
-        super(Index, self).__init__()
+        super(LoginAndRegister, self).__init__()
         self.login_form = LoginForm()
         self.registration_form = RegistrationForm()
 
@@ -38,43 +28,37 @@ class Index(MethodView):
             return self.render()
 
 
-class Register(Index):
+class Register(LoginAndRegister):
     def post(self):
         if self.registration_form.validate_on_submit():
             try:
                 band = Band(self.registration_form.login.data, self.registration_form.password.data)
                 band.email = self.registration_form.email.data
+                band.email_confirmation_token = str(uuid4())
                 db.session.add(band)
                 db.session.commit()
-                msg = Message("Willkommen %s" % band.login,
-                              sender="noreply@vorstrasse-bremen.de",
-                              recipients=[band.email],
-                              body=MAIL_BODY % (band.login, request.url_root, band.id))
-                mailer.send(msg)
+                send_registration_mail(band)
                 session['bandId'] = band.id
                 flash('Willkommen Band "%s".' % band.login, 'info')
                 return redirect(url_for('bands.profile.index'))
-            except IntegrityError as e:
+            except IntegrityError:
                 self.registration_form.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render()
         return self.render()
 
 
-class Login(Index):
+class Login(LoginAndRegister):
     def post(self):
         if self.login_form.validate_on_submit():
             band = Band.query.filter(Band.login == self.login_form.login.data).first()
             if band and band.password == self.login_form.password.data:
                 session['bandId'] = band.id
-                return jsonify(login=band.login, name=band.name)
-                # return redirect(url_for('bands.profile.index'))
+                return redirect(url_for('bands.profile.index'))
             else:
-                self.login_form.login.errors.append("Unbekannter Login")
-                self.login_form.password.errors.append("")
-        return jsonify(errors=self.login_form.getErrors()), 400
-        #     self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
-        #     self.login_form.password.errors.append("Passwort eingeben")
-        # return self.render()
+                self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
+                self.login_form.password.errors.append("Passwort eingeben")
+        return self.render()
+
 
 class Logout(MethodView):
     def get(self):
@@ -83,12 +67,28 @@ class Logout(MethodView):
         finally:
             return redirect(url_for('bands.session.index'))
 
-        # del session['bandId']
-        # return redirect(url_for('bands.session.index'))
+
+class RestrictedBandPage(MethodView):
+    def dispatch_request(self, *args, **kwargs):
+        if not 'bandId' in session:
+            return redirect(url_for('bands.session.index'))
+        else:
+            self.band = Band.query.get(session['bandId'])
+            if not self.band:
+                del session['bandId']
+                return redirect(url_for('bands.session.index'))
+            else:
+                g.band = self.band
+                return super(RestrictedBandPage, self).dispatch_request(*args, **kwargs)
 
 
-session_mgmt = Blueprint('bands.session', __name__, template_folder='../../client/views/bands')
-session_mgmt.add_url_rule('/', view_func=Index.as_view('index'), methods=['GET'])
-session_mgmt.add_url_rule('/', view_func=Login.as_view('login'), methods=['POST'])
-session_mgmt.add_url_rule('/register', view_func=Register.as_view('register'))
-session_mgmt.add_url_rule('/logout', view_func=Logout.as_view('logout'))
+class RestrictedBandAjaxForm(RestrictedBandPage, AjaxForm):
+    def __init__(self):
+        super(RestrictedBandPage, self).__init__()
+        super(AjaxForm, self).__init__()
+
+    def post(self):
+        if self.band.state != State.NEW:
+            return AJAX_FAIL('Die Banddaten können nach dem Abschluss der Bewerbung nicht mehr geändert werden')
+        else:
+            return super(RestrictedBandAjaxForm, self).post()

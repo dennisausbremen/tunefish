@@ -1,0 +1,58 @@
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+
+<h2>Tab 5: Übersicht und Check</h2>
+
+<table>
+    <tr>
+        <td>Profil</td>
+        {% if g.band.is_profile_valid %}
+        <td class="info">Geile Band</td>
+        {% else %}
+        <td class="error">Ne Junge, voll nich</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td>Kontaktemail</td>
+        {% if g.band.is_email_confirmed %}
+        <td class="info">bestätigt</td>
+        {% else %}
+        <td class="error">nicht bestätigt
+        <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a>
+        </td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td>Tracks</td>
+        {% if g.band.is_tracks_valid %}
+        <td class="info">{{ g.band.tracks.count() }} Tracks</td>
+        {% else %}
+        <td class="error">Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td>Bild</td>
+        {% if g.band.image %}
+        <td class="info">wunderschön</td>
+        {% else %}
+            <td class="error">fehlt</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td>Techrider</td>
+        {% if g.band.techrider %}
+        <td class="info">wunderschön</td>
+        {% else %}
+        <td class="error">fehlt</td>
+        {% endif %}
+    </tr>
+</table>
+
+{% if g.band.is_ready_for_submit %}
+<a href="{{ url_for('bands.profile.submit') }}" class="info">Abschließen</a>
+{% else %}
+<div class="error">Du kommst hier nicht rein</div>
+{% endif %}

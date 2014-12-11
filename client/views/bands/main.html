@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block inlinejs %}
+<script src="{{ url_for('bands.profile.bandjs') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+{{ renderMessages() }}
+
+
+<div id="messages">
+
+</div>
+
+<br />
+
+<div class="tabctrl">
+    <ul class="tabs">
+        <li><a href="#" data-index="1" class="active">Allgemein</a></li>
+        <li><a href="#" data-index="2">Tracks</a></li>
+        <li><a href="#" data-index="3">Image</a></li>
+        <li><a href="#" data-index="4">Tech</a></li>
+        <li><a href="#" data-index="5">Summary and submit</a></li>
+    </ul>
+</div>
+<div class="tabs active">
+    <div>{% include "profile.html" %}</div>
+    <div>{% include "tracks.html" %}</div>
+    <div>{% include "image.html" %}</div>
+    <div>{% include "techrider.html" %}</div>
+    <div id="summary">{% include "check.html" %}</div>
+</div>
+{% endblock %}

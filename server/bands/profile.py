@@ -1,47 +1,65 @@
 # coding=utf-8
+
 from __builtin__ import super
 
-from flask import Blueprint, redirect, url_for, flash
+from flask import redirect, url_for, Response, flash
 from flask.templating import render_template
-from server.bands import RestrictedBandPage
-from server.bands.forms import BandForm
+from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
+from server.bands.mails import send_registration_mail
+from server.bands.session_mgmt import RestrictedBandPage, RestrictedBandAjaxForm
 
-from server.models import Band, db
+from server.models import Band, db, State
+
+
+class Onepager(RestrictedBandPage):
+    def get(self):
+        if self.band.state == State.NEW:
+            band_form = BandForm()
+            band_form.set_from_model(self.band)
+            return render_template('main.html',
+                                   band_form=band_form,
+                                   track_form=TrackUploadForm(),
+                                   image_form=ImageUploadForm(),
+                                   techrider_form=TechriderUploadForm())
+        else:
+            return render_template('main_after_submit.html')
 
 
 class Confirm(RestrictedBandPage):
-    def get(self, band_id):
-        band = Band.query.get_or_404(band_id)
-        band.emailConfirmed = True
-        db.session.commit()
+    def get(self, token):
+        band = Band.query.filter(Band.email_confirmation_token == token).first()
+        if band:
+            band.is_email_confirmed = True
+            db.session.commit()
+            return redirect(url_for('bands.profile.index'))
+        else:
+            return Response(404)
+
+
+class ResendConfirmMail(RestrictedBandPage):
+    def get(self):
+        send_registration_mail(self.band)
+        flash(u'Bestätigungsemail wird versendet', 'info')
         return redirect(url_for('bands.profile.index'))
 
 
-class Index(RestrictedBandPage):
+class ProfileUpdate(RestrictedBandAjaxForm):
     def __init__(self):
-        super(Index, self).__init__()
+        super(RestrictedBandAjaxForm, self).__init__()
         self.form = BandForm()
 
-    def render(self):
-        return render_template('profile.html', bandForm=self.form)
+    def on_submit(self):
+        self.form.apply_to_model(self.band)
+        db.session.commit()
+        return {'check_tab': render_template('check.html')}
 
+
+class SubmitProfile(RestrictedBandPage):
     def get(self):
-        self.form.set_from_model(self.band)
-        return self.render()
-
-
-class ProfileUpdate(Index):
-    def post(self):
-        if self.form.validate_on_submit():
-            self.form.apply_to_model(self.band)
+        if self.band.is_ready_for_submit:
+            self.band.state = State.READY_FOR_VOTE
             db.session.commit()
-            flash('Bandinformationen erfolgreich gespeichert.', 'info')
+            flash(u'Anmeldung erfolgreich', 'info')
         else:
-            flash('Beim Speichern der Bandinformationen sind Fehler aufgetreten. Die Informationen wurden noch nicht gespeichert.', 'error')
-        return self.render()
-
-
-profile = Blueprint('bands.profile', __name__, template_folder='../../client/views/bands')
-profile.add_url_rule('/confirm/<int:band_id>', view_func=Confirm.as_view('confirm'))
-profile.add_url_rule('/profile', view_func=Index.as_view('index'), methods=['GET'])
-profile.add_url_rule('/profile', view_func=ProfileUpdate.as_view('update'), methods=['POST'])
+            flash(u'Die Daten für die Anmeldung sind unvollständig', 'error')
+        return redirect(url_for('bands.profile.index'))

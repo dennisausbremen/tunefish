@@ -1,0 +1,20 @@
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+
+<h2>Tab 3: Image</h2>
+
+<h3>Aktuelles Bild</h3>
+<div id="image">
+    {% if g.band.image %}
+    {% include "image_preview.html" %}
+    {% endif %}
+</div>
+
+<form method="POST" action="{{ url_for('bands.image.upload') }}" enctype="multipart/form-data" id="image_form">
+    {{ image_form.csrf_token }}
+    {{ renderDefault(image_form.image_file) }}
+    <input type="submit" value="Bild aktualisieren">
+</form>

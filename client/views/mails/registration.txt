@@ -1,0 +1,9 @@
+Hallo {{ band.name }},
+
+
+willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
+bestätigen. Klick hierzu einfach auf folgenden Link: {{ url_for('bands.profile.confirm', token=band.email_confirmation_token, _external=True) }}
+
+
+Viele Grüße
+SoFe Orga '15

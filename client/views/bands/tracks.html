@@ -1,35 +1,25 @@
-{% extends "layout.html" %}
 {% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import getField %}
 {% from "_formhelpers.html" import getErrors %}
 {% from "_formhelpers.html" import renderMessages %}
 
-{% block body %}
-<h2>Demo-Songs hochladen</h2>
 
-{{ renderMessages() }}
+<h2>Tab 2: Tracks</h2>
 
 <h3>Bisher hochgeladen</h3>
-{% if tracks %}
-<ul>
-    {% for track in tracks %}
-    <li>
-        {{track.trackname}}
-        <a href="{{ url_for('bands.tracks.delete', track_id=track.id) }}">[x]</a>
-        <audio src="{{track.url}}" controls></audio>
+<div id="track_list">
+    <ul>
+        {% for track in g.band.tracks %}
+        {% include "track_item.html" %}
+        {% endfor %}
+    </ul>
+</div>
 
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
+<form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data" id="track_form">
+    {{ track_form.csrf_token }}
 
-
-<form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data">
-    {{ uploadForm.csrf_token }}
-
-    {{ renderDefault(uploadForm.audioFile) }}
-    {{ renderDefault(uploadForm.trackname, 'Track') }}
+    {{ renderDefault(track_form.audioFile) }}
+    {{ renderDefault(track_form.trackname, 'Track') }}
 
     <input type="submit" value="Song hochladen">
 </form>
-{% endblock %}
