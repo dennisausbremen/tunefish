@@ -16,7 +16,10 @@
 <form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data" id="track_form">
     {{ track_form.csrf_token }}
 
-      <input type="file" id="audioFile" name="audioFile[]" multiple="">
+    <input type="file" id="audioFile" name="audioFile[]" multiple="">
+    <ul id="selected-tracks">
+
+    </ul>
 
     <input type="submit" value="Song hochladen">
 </form>

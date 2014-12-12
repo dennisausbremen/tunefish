@@ -26,6 +26,9 @@ class TrackUpload(RestrictedBandAjaxForm):
         else:
             uploaded_files = flask.request.files.getlist("audioFile[]")
             for uploaded_file in uploaded_files:
+                if self.band.tracks.count() == 5:
+                    # TODO give some information about that too much files were uploaded
+                    break
                 track = Track()
                 track.trackname = uploaded_file.filename
                 track.band_id = self.band.id

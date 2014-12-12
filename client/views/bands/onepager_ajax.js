@@ -1,21 +1,11 @@
 $(document).ready(function() {
-    var upload = function (form, onSuccess, onFailure) {
+    var upload = function (form, formData, onSuccess, onFailure) {
         clearMessages();
-
-        var audio  = $('#audioFile', form);
-        var formdata = new FormData(form);
-
-        var files = audio.get(0).files;
-
-        for (var i= 0, len = files.length; i < len; ++i) {
-            var file = files[i];
-            formdata.append('audioFile', file);
-        }
 
         $.ajax({
             url: form.action,
             type: 'POST',
-            data: formdata,
+            data: formData,
             mimeType: 'multipart/form-data',
             contentType: false,
             cache: false,
@@ -32,7 +22,7 @@ $(document).ready(function() {
             } else {
                 onFailure([]);
             }
-            });
+        });
     };
 
     var submit = function (form, onSuccess, onFailure) {
