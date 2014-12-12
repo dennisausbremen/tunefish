@@ -8,7 +8,7 @@ $('#track_form').submit(function (e) {
 
     upload(this,
         function (result) {
-            $("#track_list ul").append(result['track']).click(onTrackDeleteClick);
+            $("#track_list").html(result['track']);
              addMessage('info', 'Track erfolgreich hochgeladen');
         },
         function (errors) {
@@ -19,4 +19,4 @@ $('#track_form').submit(function (e) {
 
 });
 
-$('#track_list a').click(onTrackDeleteClick);
+$(document).on('click', '#track_list a', onTrackDeleteClick);

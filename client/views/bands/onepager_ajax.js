@@ -1,10 +1,21 @@
 $(document).ready(function() {
     var upload = function (form, onSuccess, onFailure) {
         clearMessages();
+
+        var audio  = $('#audioFile', form);
+        var formdata = new FormData(form);
+
+        var files = audio.get(0).files;
+
+        for (var i= 0, len = files.length; i < len; ++i) {
+            var file = files[i];
+            formdata.append('audioFile', file);
+        }
+
         $.ajax({
             url: form.action,
             type: 'POST',
-            data: new FormData(form),
+            data: formdata,
             mimeType: 'multipart/form-data',
             contentType: false,
             cache: false,

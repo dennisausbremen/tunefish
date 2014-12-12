@@ -4,6 +4,7 @@ from os import unlink
 from uuid import uuid4
 
 from flask import request, jsonify, flash
+import flask
 from flask.ext.uploads import UploadNotAllowed
 from flask.templating import render_template
 from server.ajax import AjaxException, AJAX_FAIL
@@ -23,18 +24,20 @@ class TrackUpload(RestrictedBandAjaxForm):
         if self.band.tracks.count() == 5:
             raise AjaxException(u'Es dürfen nur maximal 5 Demo-Songs hochgeladen werden.')
         else:
-            track = Track()
-            track.band_id = self.band.id
-            trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.'
-            try:
-                track.filename = trackPool.save(request.files[self.form.audioFile.name], name=trackFilename)
-            except UploadNotAllowed:
-                raise AjaxException(u'Nur mp3s erlaubt')
-
-            track.trackname = self.form.trackname.data
-            db.session.add(track)
-            db.session.commit()
-            return {'track': render_template("track_item.html", track=track),
+            uploaded_files = flask.request.files.getlist("audioFile[]")
+            for uploaded_file in uploaded_files:
+                track = Track()
+                track.trackname = uploaded_file.filename
+                track.band_id = self.band.id
+                trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.'
+                try:
+                    track.filename = trackPool.save(uploaded_file, name=trackFilename)
+                except UploadNotAllowed:
+                    # TODO better error handling
+                    flash('Fehler beim Upload von Datei ' + uploaded_file.filename)
+                db.session.add(track)
+                db.session.commit()
+            return {'track': render_template("track_item.html"),
                     'check_tab': render_template('check.html')}
 
 
