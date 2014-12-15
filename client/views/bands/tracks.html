@@ -9,17 +9,17 @@
 <h3>Bisher hochgeladen</h3>
 <div id="track_list">
     <ul>
-        {% for track in g.band.tracks %}
         {% include "track_item.html" %}
-        {% endfor %}
     </ul>
 </div>
 
 <form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data" id="track_form">
     {{ track_form.csrf_token }}
 
-    {{ renderDefault(track_form.audioFile) }}
-    {{ renderDefault(track_form.trackname, 'Track') }}
+    <input type="file" id="audioFile" name="audioFile[]" multiple="">
+    <ul id="selected-tracks">
+
+    </ul>
 
     <input type="submit" value="Song hochladen">
 </form>

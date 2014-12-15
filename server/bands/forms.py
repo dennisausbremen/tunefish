@@ -70,7 +70,6 @@ class BandForm(Form):
 
 class TrackUploadForm(Form):
     audioFile = FileField('Audiodatei', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
-    trackname = StringField('Trackname', [validators.Length(min=2, message=u'Bitte geben Sie dem Track einen Namen.')])
 
 
 class ImageUploadForm(Form):

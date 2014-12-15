@@ -1,10 +1,11 @@
 $(document).ready(function() {
-    var upload = function (form, onSuccess, onFailure) {
+    var upload = function (form, formData, onSuccess, onFailure) {
         clearMessages();
+
         $.ajax({
             url: form.action,
             type: 'POST',
-            data: new FormData(form),
+            data: formData,
             mimeType: 'multipart/form-data',
             contentType: false,
             cache: false,
@@ -21,7 +22,7 @@ $(document).ready(function() {
             } else {
                 onFailure([]);
             }
-            });
+        });
     };
 
     var submit = function (form, onSuccess, onFailure) {
