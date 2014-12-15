@@ -1,7 +1,7 @@
 $('#image_form').submit(function (e) {
     e.preventDefault();
 
-    upload(this,
+    upload(this, new FormData(this),
         function (result) {
             console.log("result", result);
             $("#image").html(result['image']);
