@@ -71,7 +71,10 @@ class Band(db.Model):
 
     @property
     def image_url(self):
-        return imagePool.url(self.image)
+        if self.image:
+            return imagePool.url(self.image)
+        else:
+            return False
 
     @property
     def image_path(self):
