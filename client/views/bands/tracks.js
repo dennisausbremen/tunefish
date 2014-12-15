@@ -22,7 +22,8 @@ function updateSelectedTracksStatus(color, symbol) {
 }
 
 var onTrackDeleteClick = linkAjaxPostHandler(function (target) {
-    target.parent().fadeOut(500);
+    var el = target.parent();
+    el.fadeOut(500, removeTrackElement(el));
 });
 
 $('#track_form').submit(function (e) {

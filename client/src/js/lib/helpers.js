@@ -16,10 +16,12 @@ var helper = (function ($) {
             idx = target.parent().index(),
             content = $('.form-action-wrapper');
 
+        console.log(idx);
+
         tab.removeClass('active');
         tab.eq(idx).addClass('active');
 
-        content.css('transform','translate3d('+ (steps * idx)*-1 +'%,0,0)');
+        content.css('transform','translate3d(-'+ (steps * idx) +'%,0,0)');
     };
 
     var setLoginContainerHeight = function setLoginContainerHeight() {
@@ -32,8 +34,10 @@ var helper = (function ($) {
     var checkInvalidLogin = function checkInvalidLogin() {
         var target = $('.fail').parents('.form-action').attr('id');
 
+
         if (target) {
-            setActivePanel('#'+target);
+            console.log(target);
+            setActivePanel($('[href=#'+target+']'));
         }
         setLoginContainerHeight();
     };
@@ -65,7 +69,13 @@ var helper = (function ($) {
                 {
                     breakpoint: 1024,
                     settings: {
-                        centerPadding: '15%'
+                        centerPadding: '10%'
+                    }
+                },
+                {
+                    breakpoint: 769,
+                    settings: {
+                        centerPadding: '5%'
                     }
                 },
                 {

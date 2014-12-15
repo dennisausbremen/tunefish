@@ -281,7 +281,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('dev', [
         'clean:dist',
-        // 'imagemin:dist',
+        'imagemin:dist',
         'sass:dev',
         'autoprefixer:dist',
         'cssmin:dist',

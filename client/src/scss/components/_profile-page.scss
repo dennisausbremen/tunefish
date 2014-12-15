@@ -6,9 +6,17 @@
     }
 
     .form-action {
-//        width: 95%;
+
         margin: 0 0.3125rem;
         min-height: 500px;
         background-color: rgba($border-light,0.8);
+
+        opacity: 0.9;
+
+        transition: opacity 0.4s ease;
+
+        &.slick-center {
+            opacity: 1;
+        }
     }
 }

@@ -16,22 +16,32 @@
 
 </div>
 
-<br />
 
-<div class="tabctrl">
-    <ul class="tabs">
-        <li><a href="#" data-index="1" class="active">Allgemein</a></li>
-        <li><a href="#" data-index="2">Tracks</a></li>
-        <li><a href="#" data-index="3">Image</a></li>
-        <li><a href="#" data-index="4">Tech</a></li>
-        <li><a href="#" data-index="5">Summary and submit</a></li>
-    </ul>
-</div>
-<div class="tabs active">
-    <div>{% include "profile.html" %}</div>
-    <div>{% include "tracks.html" %}</div>
-    <div>{% include "image.html" %}</div>
-    <div>{% include "techrider.html" %}</div>
-    <div id="summary">{% include "check.html" %}</div>
-</div>
+<section class="main-content profile">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action">
+                {% include "profile.html" %}
+            </div>
+
+            <div class="form-action">
+                {% include "tracks.html" %}
+            </div>
+
+            <div class="form-action">
+                {% include "image.html" %}
+            </div>
+
+            <div class="form-action">
+                {% include "techrider.html" %}
+            </div>
+
+            <div class="form-action" id="summary">
+                {% include "check.html" %}
+            </div>
+        </div>
+    </div>
+    <div class="footer-push"></div>
+</section>
+
 {% endblock %}

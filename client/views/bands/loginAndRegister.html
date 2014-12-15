@@ -15,16 +15,21 @@
             </h1>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-6">
+
             <div class="login-container">
 
                 {{ renderMessages() }}
 
                 <ul class="tabs">
-                    <li><a href="#login" title="Login" class="active">Login</a></li>
-                    <li><a href="#register" title="Registrieren">Registrieren</a></li>
+                    <li><a href="#login-toggle" title="Login" class="active">Login</a></li>
+                    <li><a href="#register-toggle" title="Registrieren">Registrieren</a></li>
                 </ul>
+
+
+
                 <div class="form-action-wrapper">
-                    <div id="login" class="form-action">
+
+                    <div id="login-toggle" class="form-action">
                         <h2>Login</h2>
                        <form method="POST" action="{{ url_for('bands.session.login') }}">
                             {{ loginForm.csrf_token }}
@@ -33,7 +38,8 @@
                             <input type="submit" value="Login">
                         </form>
                     </div>
-                    <div id="register" class="form-action">
+
+                    <div id="register-toggle" class="form-action">
                         <h2>Registrieren</h2>
                         <form method="POST" action="{{ url_for('bands.session.register') }}">
                             {{ registerForm.csrf_token }}
@@ -44,8 +50,11 @@
                             <input type="submit" value="Band registrieren">
                         </form>
                     </div>
+
                 </div>
+
             </div>
+
         </div>
     </div>
 </section>
