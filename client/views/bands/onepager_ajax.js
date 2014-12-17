@@ -39,8 +39,8 @@ $(document).ready(function() {
         return function (e) {
             clearMessages();
             e.preventDefault();
-            var target = $(e.target);
-            $.post(e.target.href, function(data) {
+            var target = $(e.currentTarget);
+            $.post(target.context.href, function(data) {
                 updateCheckTab(data);
                 onSuccess(target, data);
             });
