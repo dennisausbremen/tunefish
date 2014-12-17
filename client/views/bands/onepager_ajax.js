@@ -63,6 +63,10 @@ $(document).ready(function() {
         }
     };
 
+    var setEqualHeightCards = function setEqualHeightCards() {
+        $('.slick-slide').css('height','auto').setAllToMaxHeight();
+    };
+
     {% include "profile.js" %}
     {% include "tracks.js" %}
     {% include "image.js" %}
@@ -87,3 +91,7 @@ $(document).ready(function() {
 
     });
 });
+
+$.fn.setAllToMaxHeight = function(){
+    return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height() }) ) );
+}

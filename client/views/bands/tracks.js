@@ -1,5 +1,6 @@
 var updateSelectedTracksList = function(field, spinner) {
     var selectedTracksList = $('#selected-tracks');
+
     // clear the list of selected files
     selectedTracksList.html('');
 
@@ -12,8 +13,14 @@ var updateSelectedTracksList = function(field, spinner) {
             selectedTracksList.append('<li>' + filename + '</li>');
         }
 
+        setEqualHeightCards();
     }
 };
+
+var removeTrackElement = function removeTrackElement(el){
+    $('audio', el).remove();
+    el.remove();
+}
 
 function updateSelectedTracksStatus(color, symbol) {
     var selectedTracksList = $('span', '#selected-tracks');

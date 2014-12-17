@@ -3,8 +3,10 @@ form {
     padding-bottom: $space-half;
 }
 
-input {
+input,
+textarea {
     display: block;
+    width: 100%;
     height: $space-and-half;
     padding: $pad-half;
     margin-bottom: $space-half;
@@ -20,6 +22,76 @@ input {
     }
 }
 
+textarea {
+    height: $space*4;
+}
+
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+legend {
+    display: none;
+}
+
+input[type=submit] {
+    width: auto;
+    background-color: $bg-ter;
+    color: #ffffff;
+    margin-bottom: 0;
+
+    &:hover {
+        background-color: lighten($bg-ter,25%);
+    }
+}
+
+input[type=file] {
+    display: none !important;
+}
+
+.field-group {
+    display: table;
+    width: 100%;
+    margin-bottom: $space-half;
+
+    @include breakpoint(m) {
+        display: inline-table;
+    }
+
+    .input-prefix,
+    input {
+        display: table-cell;
+    }
+
+    > input {
+        width: 100%;
+        margin-bottom: 0;
+    }
+}
+
+.fg-upload {
+    cursor: pointer;
+}
+
+.input-prefix {
+    width: 39px;
+    line-height: 39px;
+    text-align: center;
+    background: $bg-ter;
+    padding: 0 10px;
+    color: #fff;
+
+    i {
+        display: inline-block;
+        vertical-align: top;
+        line-height: 39px;
+    }
+}
+
+
+//Error Fields
 .fail[placeholder]{
     color: $error;
 }
@@ -40,11 +112,4 @@ input {
     color: $error;
 }
 
-input[type=submit] {
-    background-color: #000;
-    color: #ffffff;
 
-    &:hover {
-        background-color: lighten(#000,25%);
-    }
-}

@@ -16,8 +16,6 @@ var helper = (function ($) {
             idx = target.parent().index(),
             content = $('.form-action-wrapper');
 
-        console.log(idx);
-
         tab.removeClass('active');
         tab.eq(idx).addClass('active');
 
@@ -36,7 +34,6 @@ var helper = (function ($) {
 
 
         if (target) {
-            console.log(target);
             setActivePanel($('[href=#'+target+']'));
         }
         setLoginContainerHeight();
@@ -57,41 +54,74 @@ var helper = (function ($) {
     /**
      * Profile Page
      */
+    var setEqualHeightCards = function setEqualHeightCards() {
+        $('.slick-slide').css('height','auto').setAllToMaxHeight();
+    };
+
+    var setArrowTexts = function setArrowTexts() {
+        var next = $('.slick-center').next().find('h2').text();
+        var prev = $('.slick-center').prev().find('h2').text();
+
+        var nextLabel = $('.slick-next .arrow-label');
+        var prevLabel = $('.slick-prev .arrow-label');
+
+        if (next) {
+            nextLabel.text(next);
+            $('.slick-next').removeClass('slick-disabled');
+        } else {
+            $('.slick-next').addClass('slick-disabled');
+        }
+
+        if (prev) {
+            prevLabel.text(prev);
+        }
+
+    };
+
+    var triggerFileUploadDialogue = function triggerFileUploadDialogue(e) {
+        var el = $(e.target);
+        el.next('input[type=file]').trigger('click');
+    };
+
     var initCards = function initCards() {
         $('.profile-form-wrapper').slick({
-            centerMode: true,
-            centerPadding: '20%',
             infinite: false,
             slidesToShow: 1,
-            arrows: false,
+            centerMode: true,
+            arrows: true,
+            prevArrow: '<button type="button" class="slick-prev"><span class="arrow-label">Zurück</span></button>',
+            nextArrow: '<button type="button" class="slick-next"><span class="arrow-label">Vor</span></button>',
             dots: true,
             responsive: [
                 {
-                    breakpoint: 1024,
+                    breakpoint: 767,
                     settings: {
-                        centerPadding: '10%'
+                        arrows: false,
                     }
                 },
                 {
-                    breakpoint: 769,
+                    breakpoint: 481,
                     settings: {
-                        centerPadding: '5%'
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        centerPadding: '10%'
-                    }
-                },
-                {
-                    breakpoint: 320,
-                    settings: {
-                        centerPadding: '30px'
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '40px',
+                        slidesToShow: 1
                     }
                 }
-            ]
+            ],
+            onInit: function(){
+                setArrowTexts();
+            },
+            onAfterChange: function(){
+                setArrowTexts();
+            }
         });
+
+        setEqualHeightCards();
+
+        $(document).on('click','.fg-upload',triggerFileUploadDialogue);
+
+        $(window).on('resize',setEqualHeightCards);
     };
 
     /*
@@ -123,3 +153,8 @@ var helper = (function ($) {
     };
 
 })(jQuery, window);
+
+
+$.fn.setAllToMaxHeight = function(){
+    return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height() }) ) );
+}

@@ -4,7 +4,7 @@
 {% from "_formhelpers.html" import renderMessages %}
 
 
-<h2>Tab 4: Techrider</h2>
+<h2>Techrider</h2>
 
 <div id="techrider">
     {% include "techrider_link.html" %}
@@ -13,7 +13,10 @@
 <form method="POST" action="{{ url_for('bands.techrider.upload') }}" enctype="multipart/form-data" id="techrider_form">
     {{ techrider_form.csrf_token }}
 
-    {{ renderDefault(techrider_form.techriderFile) }}
+    <div class="field-group fg-upload">
+        <div class="input-prefix"><i class="i-upload"></i> Datei auswählen...</div>
+        <input type="file" id="techriderFile" name="techriderFile">
+    </div>
 
-    <input type="submit" value="Techrider hochladen">
+    <input type="submit" value="Techrider senden">
 </form>

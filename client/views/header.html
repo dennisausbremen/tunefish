@@ -6,14 +6,16 @@
 
     {% if g.band %}
         <div class="account">
-            {% if g.band.image_url %}
-            <img src="{{ g.band.image_url }}" alt="{{ g.band.name }}"/>
-            {% else %}
-            <img src="{{ url_for('static', filename='img/ph_avatar.png') }}" alt="{{ g.band.name }}"/>
-            {% endif %}
+            <div class="account-image">
+                {% if g.band.image_url %}
+                <img src="{{ g.band.image_url }}" alt="{{ g.band.name }}"/>
+                {% else %}
+                <img src="{{ url_for('static', filename='img/ph_avatar.png') }}" alt="{{ g.band.name }}"/>
+                {% endif %}
+            </div>
 
             <span>{{ g.band.name }}</span>
-            <a class="logout" href="{{ url_for('bands.session.logout') }}"><i class="i-more"></i></a>
+            <a class="logout" href="{{ url_for('bands.session.logout') }}"><i class="i-logout"></i></a>
         </div>
     {% endif %}
 

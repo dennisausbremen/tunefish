@@ -27,16 +27,32 @@ header {
         border-left: 1px solid $border-light;
     }
 
-    img,
+    .account-image,
     span {
         display: inline-block;
         vertical-align: middle;
     }
 
+   .account-image {
+       width: 32px;
+       height: 32px;
+       border-radius: 50%;
+       margin-right: $pad-half;
+       position: relative;
+
+       overflow: hidden;
+   }
+
     img {
-        border-radius: 50%;
+        width: auto;
         height: 100%;
-        margin-right: $pad-half;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%,-50%);
+
     }
 
     span {
@@ -55,7 +71,7 @@ header {
 .logout {
     font-size: $h3-font-size;
     text-decoration: none;
-    color: $text-muted;
+    color: $text-action;
 
     height: $base-line-height;
     display: inline-block;

@@ -4,22 +4,35 @@
 {% from "_formhelpers.html" import renderMessages %}
 
 
-<h2>Tab 2: Tracks</h2>
-
-<h3>Bisher hochgeladen</h3>
+<h2>Musik</h2>
+{% if g.band.tracks.count() > 0 %}
+<h3>Deine Uploads</h3>
 <div id="track_list">
     <ul>
         {% include "track_item.html" %}
     </ul>
 </div>
+{% else %}
+0
+{% endif %}
+
 
 <form method="POST" action="{{ url_for('bands.tracks.upload') }}" enctype="multipart/form-data" id="track_form">
     {{ track_form.csrf_token }}
 
-    <input type="file" id="audioFile" name="audioFile[]" multiple="">
-    <ul id="selected-tracks">
 
+    <div class="field-group fg-upload">
+        <div class="input-prefix"><i class="i-upload"></i> Dateien auswählen...</div>
+        <input type="file" id="audioFile" name="audioFile[]" multiple>
+    </div>
+
+    <ul id="selected-tracks" class="audio-track--uploads">
+        <li><span class="spinner"></span>foo</li>
+        <li><span><i class="i-done"></i></span>bar</li>
+        <li><span><i class="i-close"></i></span>baz</li>
     </ul>
 
-    <input type="submit" value="Song hochladen">
+
+
+    <input type="submit" value="Musikupload senden">
 </form>

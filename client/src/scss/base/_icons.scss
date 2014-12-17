@@ -12,18 +12,39 @@ i {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.i-done:before {
+
+.i-link:before {
     content: "\e600";
 }
-.i-logout:before {
+.i-facebook:before {
     content: "\e601";
 }
-.i-close:before {
+.i-youtube:before {
     content: "\e602";
 }
-.i-more:before {
+.i-done:before {
     content: "\e603";
 }
-.i-menu:before {
+.i-logout:before {
     content: "\e604";
 }
+.i-upload:before {
+    content: "\e608";
+}
+.i-left:before {
+    content: "\e609";
+}
+.i-right:before {
+    content: "\e60a";
+}
+.i-close:before {
+    content: "\e605";
+}
+.i-more:before {
+    content: "\e606";
+}
+.i-menu:before {
+    content: "\e607";
+}
+
+

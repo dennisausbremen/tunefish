@@ -3,7 +3,7 @@
 from flask.ext.wtf import Form
 from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
 from wtforms.validators import InputRequired, Email
-from wtforms.fields.html5 import EmailField
+from wtforms.fields.html5 import EmailField, TelField, IntegerField, URLField
 
 
 class TunefishForm(Form):
@@ -38,14 +38,14 @@ class RegistrationForm(Form):
 
 
 class BandForm(Form):
-    name = StringField('BandName', [validators.Length(min=2, max=60)])
-    descp = TextAreaField('Band-Beschreibung', [validators.Length(min=30)])
-    amount_members = StringField('Anzahl Bandmitglieder', [validators.Length(min=1, max=10)])
-    website = StringField('Webseite', [validators.Length(min=6)])
-    youtube_id = StringField('Youtube VideoID', [validators.Length(min=6)])
-    facebook_page = StringField('facebook Seite')
-    phone = StringField('Telefon', [validators.Length(min=6)])
-    city = StringField('Stadt', [validators.Length(min=3)])
+    name = StringField('Name', [InputRequired("Bitte Bandnamen eintragen"), validators.Length(min=2, max=60)])
+    descp = TextAreaField('Beschreibung', [InputRequired("Bitte Bandbeschreibungstext eintragen"), validators.Length(min=30)])
+    amount_members = IntegerField('Mitglieder', [InputRequired("Bitte Mitgliederanzahl eintragen"), validators.Length(min=1, max=10)])
+    website = URLField('Website URL', [InputRequired("Bitte Webseite eintragen"), validators.Length(min=6)])
+    youtube_id = StringField('YouTube Video ID')
+    facebook_page = StringField('facebook')
+    phone = TelField('Telefon', [InputRequired("Bitte Telefonnummer eintragen"), validators.Length(min=6)])
+    city = StringField('Stadt', [InputRequired("Bitte Stadt eintragen"), validators.Length(min=3)])
 
     def set_from_model(self, band):
         self.name.data = band.name

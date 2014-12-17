@@ -1,18 +1,24 @@
 /* COLORS */
 $bg-primary: #fff;
-$bg-sec: #34495E;
+$bg-sec: #f0f4f5;
+$bg-ter: #363b4a;
 
-$text-light: $bg-sec;
-$text-dark: #333;
-$text-muted: #a9a9a9;
+$dark: #545a6a;
+$light: #d4d4db;
+
+$text-light: $bg-primary;
+$text-dark: #545a6a;
+$text-action: $bg-ter;
+$text-muted: $light;
 
 $error: #E74C3C;
+$success: #50b87f;
 
-$border-light: #efefef;
+$border-light: $bg-sec;
 
 /* GRID */
 $grid-padding: 1.5rem;
-$grid-gutter: 2rem;
+$grid-gutter: 0.5rem;
 
 /* PADDINGS */
 $pad: 1.25rem;

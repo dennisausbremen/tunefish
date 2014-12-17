@@ -1,22 +1,27 @@
 .profile-form-wrapper {
     padding: $space 0 0;
 
+    h2 {
+        margin-top: 0;
+    }
+
     @include breakpoint(m) {
         padding: $space * 2 0 0;
     }
 
     .form-action {
 
-        margin: 0 0.3125rem;
+        margin: 0.3125rem;
         min-height: 500px;
-        background-color: rgba($border-light,0.8);
+        background-color: $bg-sec;
+        padding: $space-half;
 
-        opacity: 0.9;
+        @include breakpoint(m) {
+            padding: 2rem;
+            margin: $space-double;
+        }
 
         transition: opacity 0.4s ease;
 
-        &.slick-center {
-            opacity: 1;
-        }
     }
 }

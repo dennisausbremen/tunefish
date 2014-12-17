@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>tunefish-login</title>
+    <title>tunefish</title>
 
     <link href="{{ url_for('static', filename='css/app.min.css') }}" type="text/css" rel="stylesheet"/>
 
@@ -20,7 +20,7 @@
             }
 
             try {
-//                window.localStorage.clear();
+                window.localStorage.clear();
                 if (localStorage.sourceSansPro) {
                     // The font is in localStorage, we can load it directly
                     addFont();

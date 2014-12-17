@@ -4,23 +4,23 @@
 {% from "_formhelpers.html" import renderMessages %}
 
 
-<h2>Tab 5: Übersicht und Check</h2>
+<h2>Übersicht</h2>
 
 <table>
     <tr>
         <td>Profil</td>
         {% if g.band.is_profile_valid %}
-        <td class="info">Geile Band</td>
+        <td id="profile-info" class="info">Geile Band</td>
         {% else %}
-        <td class="error">Ne Junge, voll nich</td>
+        <td id="profile-info" class="error">Ne Junge, voll nich</td>
         {% endif %}
     </tr>
     <tr>
         <td>Kontaktemail</td>
         {% if g.band.is_email_confirmed %}
-        <td class="info">bestätigt</td>
+        <td id="profile-email" class="info">bestätigt</td>
         {% else %}
-        <td class="error">nicht bestätigt
+        <td id="profile-email" class="error">nicht bestätigt
         <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a>
         </td>
         {% endif %}
@@ -28,25 +28,25 @@
     <tr>
         <td>Tracks</td>
         {% if g.band.is_tracks_valid %}
-        <td class="info">{{ g.band.tracks.count() }} Tracks</td>
+        <td id="profile-tracks" class="info">{{ g.band.tracks.count() }} Tracks</td>
         {% else %}
-        <td class="error">Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</td>
+        <td id="profile-tracks" class="error">Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</td>
         {% endif %}
     </tr>
     <tr>
         <td>Bild</td>
         {% if g.band.image %}
-        <td class="info">wunderschön</td>
+        <td id="profile-image" class="info">wunderschön</td>
         {% else %}
-            <td class="error">fehlt</td>
+        <td  id="profile-image" class="error">fehlt</td>
         {% endif %}
     </tr>
     <tr>
         <td>Techrider</td>
         {% if g.band.techrider %}
-        <td class="info">wunderschön</td>
+        <td id="profile-techrider" class="info">wunderschön</td>
         {% else %}
-        <td class="error">fehlt</td>
+        <td id="profile-techrider" class="error">fehlt</td>
         {% endif %}
     </tr>
 </table>

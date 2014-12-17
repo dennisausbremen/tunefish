@@ -3,21 +3,78 @@
 {% from "_formhelpers.html" import getErrors %}
 {% from "_formhelpers.html" import renderMessages %}
 
-<h2>Tab 1: Allg Bandinfos</h2>
+<h2>Infos</h2>
 
 <form method="POST" action="{{ url_for('bands.profile.update') }}" id="band_form">
     {{ band_form.csrf_token }}
-    {{ renderDefault(band_form.name) }}
-    {{ renderDefault(band_form.descp) }}
-    {{ renderDefault(band_form.amount_members) }}
-    {{ band_form.website.label }}
-    http://{{ getField(band_form.website) }}{{ getErrors(band_form.website) }}
-    {{ band_form.youtube_id.label }} http://www.youtube.com/{{ getField(band_form.youtube_id) }}{{
-    getErrors(band_form.youtube_id) }}
-    {{ band_form.facebook_page.label }} http://www.facebook.com/{{ getField(band_form.facebook_page) }}{{
-    getErrors(band_form.facebook_page) }}
 
-    {{ renderDefault(band_form.phone) }}
-    {{ renderDefault(band_form.city) }}
-    <input type="submit" value="Bandinformationen vervollständigt">
+    <fieldset>
+        <legend>Basics</legend>
+
+        <div class="row">
+            <div class="col-xs-12">
+                {{ renderDefault(band_form.name) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                {{ renderDefault(band_form.amount_members) }}
+            </div>
+            <div class= "col-xs-12 col-sm-5">
+                {{ renderDefault(band_form.phone) }}
+            </div>
+            <div class="col-xs-12 col-sm-5">
+                {{ renderDefault(band_form.city) }}
+            </div>
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Links</legend>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                {{ band_form.website.label }}
+                <div class="field-group">
+                    <div class="input-prefix"><i class="i-link"></i></div>
+                    {{ getField(band_form.website, "vorstrasse-bremen.de") }}{{ getErrors(band_form.website) }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                {{ band_form.youtube_id.label }}
+                <div class="field-group">
+                    <div class="input-prefix"><i class="i-youtube"></i></div>
+                    {{ getField(band_form.youtube_id, "9vy5g9rz-jU") }}{{getErrors(band_form.youtube_id) }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                {{ band_form.facebook_page.label }}
+                <div class="field-group">
+                    <div class="input-prefix"><i class="i-facebook"></i></div>
+                    {{ getField(band_form.facebook_page, "sommerfest.vorstrasse") }}{{ getErrors(band_form.facebook_page) }}
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Beschreibung</legend>
+
+        <div class="row">
+            <div class="col-xs-12">
+                {{ renderDefault(band_form.descp) }}
+            </div>
+        </div>
+
+    </fieldset>
+
+
+
+
+    <input type="submit" value="Bandinfos senden">
 </form>
