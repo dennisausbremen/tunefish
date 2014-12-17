@@ -26,7 +26,7 @@ class Band(db.Model):
     is_email_confirmed = db.Column(Boolean, default=False)
     email_confirmation_token = db.Column(String)
     descp = db.Column(String)
-    amount_members = db.Column(String)
+    amount_members = db.Column(Integer)
     website = db.Column(URLType)
     youtube_id = db.Column(String)
     facebook_page = db.Column(String)
@@ -57,7 +57,7 @@ class Band(db.Model):
 
         for name, field in iteritems(bandForm._fields):
             if not field.validate(self, []):
-                return False
+                return field.name #False
         return True
 
 

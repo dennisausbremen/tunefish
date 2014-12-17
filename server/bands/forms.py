@@ -6,17 +6,6 @@ from wtforms.validators import InputRequired, Email
 from wtforms.fields.html5 import EmailField, TelField, IntegerField, URLField
 
 
-class TunefishForm(Form):
-    errors = []
-
-    def getErrors(self):
-        return self.errors
-
-    def addError(self, field):
-        for error in field.errors:
-            self.errors.append([error, field.name])
-
-    
 class LoginForm(Form):
 
     login = StringField('Login', [InputRequired('Bitte Login eintragen')])
@@ -25,7 +14,7 @@ class LoginForm(Form):
 
 class RegistrationForm(Form):
     login = StringField('Login',
-                        [InputRequired("Bitte Login eintragen"), validators.Length(min=4, max=25, message=u'Bitte überprüfe deinen Login (4-26 Zeichen)')])
+                        [InputRequired("Bitte Login eintragen"), validators.Length(min=4, max=25, message=u'Bitte überprüfe deinen Login (4-25 Zeichen)')])
     email = EmailField("Email", [InputRequired("Bitte E-Mail Adresse eintragen"), Email("Bitte überprüfe deine E-Mail Adresse")])
     password = PasswordField('Passwort', [
         InputRequired('Bitte Passwort eintragen'),
@@ -40,7 +29,7 @@ class RegistrationForm(Form):
 class BandForm(Form):
     name = StringField('Name', [InputRequired("Bitte Bandnamen eintragen"), validators.Length(min=2, max=60)])
     descp = TextAreaField('Beschreibung', [InputRequired("Bitte Bandbeschreibungstext eintragen"), validators.Length(min=30)])
-    amount_members = IntegerField('Mitglieder', [InputRequired("Bitte Mitgliederanzahl eintragen"), validators.Length(min=1, max=10)])
+    amount_members = IntegerField('Mitglieder', [InputRequired("Bitte Mitgliederanzahl eintragen"), validators.NumberRange(min=1, max=30, message=u"Anzahl der Bandmitglieder muss zwischen %(min)s und %(max)s liegen.")])
     website = URLField('Website URL', [InputRequired("Bitte Webseite eintragen"), validators.Length(min=6)])
     youtube_id = StringField('YouTube Video ID')
     facebook_page = StringField('facebook')
