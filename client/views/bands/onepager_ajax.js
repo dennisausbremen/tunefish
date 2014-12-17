@@ -78,18 +78,6 @@ $(document).ready(function() {
             $('#summary').html(data['check_tab']);
     }
 
-    $('.tabs>div').hide();
-    $('.tabs>div:nth-child(1)').show().addClass('active');
-
-    $('.tabctrl a').click(function(e) {
-        e.preventDefault();
-
-        $('.tabs>div').hide();
-        $('.tabctrl a').removeClass('active');
-        $('.tabs>div:nth-child('+ $(this).data("index") + ')').show().addClass('active');
-        $(this).addClass('active');
-
-    });
 });
 
 $.fn.setAllToMaxHeight = function(){
