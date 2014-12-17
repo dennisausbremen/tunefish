@@ -30,7 +30,7 @@ function updateSelectedTracksStatus(color, symbol) {
 
 var onTrackDeleteClick = linkAjaxPostHandler(function (target) {
     var el = target.parent();
-    el.fadeOut(500, removeTrackElement(el));
+    el.fadeOut(500, function(){ el.remove()});
 });
 
 $('#track_form').submit(function (e) {
