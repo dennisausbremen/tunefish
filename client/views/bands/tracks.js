@@ -8,7 +8,7 @@ var updateSelectedTracksList = function(field, spinner) {
     for (var i = 0, len = files.length; i < len; ++i) {
         var filename = files[i].name;
         if (spinner) {
-            selectedTracksList.append('<li><span><img src="{{ url_for('static', filename='img/spinner.gif') }}" alt="please wait ..." /></span> &nbsp;' + filename + '</li>');
+            selectedTracksList.append('<li><span class="spinner"></span>' + filename + '</li>');
         } else {
             selectedTracksList.append('<li>' + filename + '</li>');
         }
@@ -22,15 +22,20 @@ var removeTrackElement = function removeTrackElement(el){
     el.remove();
 }
 
-function updateSelectedTracksStatus(color, symbol) {
+function updateSelectedTracksStatus(done) {
     var selectedTracksList = $('span', '#selected-tracks');
-    selectedTracksList.css('color', color);
-    selectedTracksList.html(' &nbsp;&#' + symbol + ';');
+
+    selectedTracksList.removeClass('spinner');
+    if (done) {
+        selectedTracksList.html('<i class="i-done"></i>');
+    } else {
+        selectedTracksList.html('<i class="i-close"></i>');
+    }
 }
 
 var onTrackDeleteClick = linkAjaxPostHandler(function (target) {
     var el = target.parent();
-    el.fadeOut(500, function(){ el.remove()});
+    el.fadeOut(500, removeTrackElement);
 });
 
 $('#track_form').submit(function (e) {
@@ -55,13 +60,13 @@ $('#track_form').submit(function (e) {
 
     upload(this, formdata,
         function (result) {
-            updateSelectedTracksStatus('green', '10004');
+            updateSelectedTracksStatus(true);
             $("#track_list").html(result['track']);
              addMessage('info', 'Track erfolgreich hochgeladen');
             $("input[type=submit]").removeAttr('disabled').css('opacity', '1.0');
         },
         function (errors) {
-            updateSelectedTracksStatus('red', '10008');
+            updateSelectedTracksStatus(false);
             console.log("errors", errors);
             $("input[type=submit]").removeAttr('disabled').css('opacity', '1.0');
             createErrorMessages(errors);
