@@ -1,5 +1,5 @@
 {% for track in g.band.tracks %}
-    <li>
+    <li class="track-list-item">
         <div class="audio-track">
             <audio src="{{track.url}}" controls></audio>
             <a href="{{ url_for('bands.tracks.delete', track_id=track.id) }}"><i class="i-close"></i></a>

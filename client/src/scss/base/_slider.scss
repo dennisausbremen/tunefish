@@ -79,12 +79,12 @@ $slick-opacity-not-active: .25 !default;
     float: left;
     height: 100%;
     min-height: 1px;
-    [dir="rtl"] & {
-        float: right;
-    }
+    opacity: 0;
+
     img {
         display: block;
     }
+
     &.slick-loading img {
         display: none;
     }

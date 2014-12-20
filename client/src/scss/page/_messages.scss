@@ -1,0 +1,37 @@
+/** Boxen für Fehlermeldungen **/
+
+.message-container {
+    .message, .error, .info, .warning {
+        display: none;
+    }
+}
+
+.message, .error, .info, .warning {
+    margin-top: 1px;
+    padding: 10px;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+.info {
+    background: #B4F785;
+}
+
+.error {
+    background: #FF9E9E;
+}
+
+.missing-files {
+    text-align: center;
+    margin-bottom: $space;
+
+    i {
+        font-size: 160px;
+        transition: font-size 0.5s ease;
+        @include breakpoint(m) {
+            font-size: 320px;
+        }
+    }
+}

@@ -67,6 +67,21 @@ $(document).ready(function() {
         $('.slick-slide').css('height','auto').setAllToMaxHeight();
     };
 
+    var checkStepState = function checkStepState(step,icon,msg) {
+
+        var el = $(''+step),
+            list = $('li', el),
+            files = $('.uploaded-files', el);
+
+        console.log('check ', el, ' list ', list, ' length ', list.length);
+
+        if (!list.length) {
+            var html = '<div class="missing-files"><i class="' + icon + '"></i><h3>' + msg + '</h3></div>';
+            files.css({'display': 'none'});
+            $('h2',el).append(html);
+        }
+    };
+
     {% include "profile.js" %}
     {% include "tracks.js" %}
     {% include "image.js" %}
@@ -75,7 +90,7 @@ $(document).ready(function() {
 
     function updateCheckTab(data) {
         if (data['check_tab'] !== 'undefined')
-            $('#summary').html(data['check_tab']);
+            $('#step-summary').html(data['check_tab']);
     }
 
 });

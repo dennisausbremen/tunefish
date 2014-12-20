@@ -6,9 +6,18 @@
 
 <h2>Techrider</h2>
 
-<div id="techrider">
-    {% include "techrider_link.html" %}
+{% if g.band.techrider_url %}
+<div id="techrider" class="uploaded-files">
+    <ul>
+        {% include "techrider_link.html" %}
+    </ul>
 </div>
+{% else %}
+<div class="missing-files">
+    <i class="i-document"></i>
+    <h3>Noch keinen Techrider hochgeladen</h3>
+</div>
+{% endif %}
 
 <form method="POST" action="{{ url_for('bands.techrider.upload') }}" enctype="multipart/form-data" id="techrider_form">
     {{ techrider_form.csrf_token }}

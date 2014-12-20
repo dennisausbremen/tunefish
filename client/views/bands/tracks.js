@@ -17,25 +17,37 @@ var updateSelectedTracksList = function(field, spinner) {
     }
 };
 
-var removeTrackElement = function removeTrackElement(el){
-    $('audio', el).remove();
-    el.remove();
-}
-
 function updateSelectedTracksStatus(done) {
     var selectedTracksList = $('span', '#selected-tracks');
 
     selectedTracksList.removeClass('spinner');
     if (done) {
         selectedTracksList.html('<i class="i-done"></i>');
+
+        $('#selected-tracks')
+            .delay(1000)
+            .velocity('transition.slideDownOut', 250), function() {
+            setEqualHeightCards();
+        };
+
     } else {
         selectedTracksList.html('<i class="i-close"></i>');
     }
 }
 
 var onTrackDeleteClick = linkAjaxPostHandler(function (target) {
-    var el = target.parent().parent();
-    el.fadeOut(500, removeTrackElement(el));
+    var el = target.parents('li');
+    el
+        .velocity({'opacity': 0}, 250)
+        .velocity({'height': 0}, 250, function() {
+            el.remove();
+            checkStepState('#step-music','i-audio','Keine Musik hochgeladen');
+        });
+
+    setTimeout(function() {
+        setEqualHeightCards();
+    }, 500);
+
 });
 
 $('#track_form').submit(function (e) {
@@ -64,6 +76,8 @@ $('#track_form').submit(function (e) {
             $("#track_list").html(result['track']);
              addMessage('info', 'Track erfolgreich hochgeladen');
             $("input[type=submit]").removeAttr('disabled').css('opacity', '1.0');
+
+            setEqualHeightCards();
         },
         function (errors) {
             updateSelectedTracksStatus(false);

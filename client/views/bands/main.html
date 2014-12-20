@@ -12,7 +12,7 @@
 {{ renderMessages() }}
 
 
-<div id="messages">
+<div id="messages" class="message-container">
 
 </div>
 
@@ -20,23 +20,23 @@
 <section class="main-content profile">
     <div class="row">
         <div class="profile-form-wrapper col-xs-12">
-            <div class="form-action">
+            <div class="form-action" id="step-info">
                 {% include "profile.html" %}
             </div>
 
-            <div class="form-action">
+            <div class="form-action" id="step-music">
                 {% include "tracks.html" %}
             </div>
 
-            <div class="form-action">
+            <div class="form-action" id="step-image">
                 {% include "image.html" %}
             </div>
 
-            <div class="form-action">
+            <div class="form-action" id="step-techrider">
                 {% include "techrider.html" %}
             </div>
 
-            <div class="form-action" id="summary">
+            <div class="form-action" id="step-summary">
                 {% include "check.html" %}
             </div>
         </div>

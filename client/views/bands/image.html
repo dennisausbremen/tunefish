@@ -1,9 +1,10 @@
 <h2>Bild</h2>
 
-<h3>Aktuelles Bild</h3>
-<div id="image">
+<div id="image" class="uploaded-files band-image">
     {% if g.band.image %}
     {% include "image_preview.html" %}
+    {% else %}
+    <img src="{{ url_for('static', filename='img/ph_avatar.png') }}" alt="{{ g.band.name }}"/>
     {% endif %}
 </div>
 

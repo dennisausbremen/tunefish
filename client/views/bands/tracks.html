@@ -6,14 +6,16 @@
 
 <h2>Musik</h2>
 {% if g.band.tracks.count() > 0 %}
-<h3>Deine Uploads</h3>
-<div id="track_list">
-    <ul>
+<div class="uploaded-files">
+    <ul id="track_list" class="track-list">
         {% include "track_item.html" %}
     </ul>
 </div>
 {% else %}
-0
+<div class="missing-files">
+    <i class="i-audio"></i>
+    <h3>Noch keine Musik hochgeladen</h3>
+</div>
 {% endif %}
 
 
@@ -26,13 +28,7 @@
         <input type="file" id="audioFile" name="audioFile[]" multiple>
     </div>
 
-    <ul id="selected-tracks" class="audio-track--uploads">
-        <li><span class="spinner"></span>foo</li>
-        <li><span><i class="i-done"></i></span>bar</li>
-        <li><span><i class="i-close"></i></span>baz</li>
-    </ul>
-
-
+    <ul id="selected-tracks" class="audio-track--uploads"></ul>
 
     <input type="submit" value="Musikupload senden">
 </form>

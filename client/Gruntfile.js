@@ -50,7 +50,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         dot: true,
-                        src: ['<%= cfg.dist %>/**/*', '<%= cfg.src %>/css/**/*']
+                        src: ['<%= cfg.dist %>/**/*', '<%= cfg.src %>/css/**/*','<%= cfg.src %>/js/vendor/**/*']
                     }
                 ]
             }
@@ -133,22 +133,26 @@ module.exports = function (grunt) {
         bowercopy: {
             dev: {
                 options: {
-                    destPrefix: '<%= cfg.src %>/js/vendor/'
+                    destPrefix: '<%= cfg.src %>/js'
                 },
                 files: {
                     'jquery.min.js': 'jquery/dist/jquery.min.js',
-                    'slick.min.js': 'slick.js/slick/slick.min.js'
+                    'vendor/01-slick.min.js': 'slick.js/slick/slick.min.js',
+                    'vendor/02-velocity.min.js': 'velocity/velocity.min.js',
+                    'vendor/03-velocity.ui.min.js': 'velocity/velocity.ui.min.js'
                 }
             },
             dist: {
                 options: {
                     // Bower components folder will be removed afterwards
                     clean: true,
-                    destPrefix: '<%= cfg.src %>/js/vendor/'
+                    destPrefix: '<%= cfg.src %>/js'
                 },
                 files: {
                     'jquery.min.js': 'jquery/dist/jquery.min.js',
-                    'slick.min.js': 'slick.js/slick.min.js'
+                    'vendor/01-slick.min.js': 'slick.js/slick/slick.min.js',
+                    'vendor/02-velocity.min.js': 'velocity/velocity.min.js',
+                    'vendor/03-velocity.ui.min.js': 'velocity/velocity.ui.min.js'
                 }
             }
         },
@@ -158,8 +162,22 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             },
             all: [
-                '<%= cfg.src %>/js/*.js'
+                '!<%= cfg.src %>/js/vendor/*.js',
+                '<%= cfg.src %>/js/lib/*.js',
+                '<%= cfg.src %>/js/app.js'
             ]
+        },
+
+        uglify: {
+            dev: {
+                options: {
+                    mangle: false
+                },
+                files: {
+                    '<%= cfg.dist %>/js/lib/helpers.js': ['<%= cfg.src %>/js/lib/*.js'],
+                    '<%= cfg.dist %>/js/plugins.js': ['<%= cfg.src %>/js/vendor/*.js']
+                }
+            }
         },
 
         copy: {
@@ -191,10 +209,11 @@ module.exports = function (grunt) {
                         src: ['**'],
                         dest: 'views/'
                     },
+                    //Copy JS
                     {
                         expand: true,
                         cwd: '<%= cfg.src %>/js/',
-                        src: ['**'],
+                        src: ['app.js','jquery.min.js'],
                         dest: '<%= cfg.dist %>/js'
                     }
                 ]
@@ -287,6 +306,7 @@ module.exports = function (grunt) {
         'cssmin:dist',
         'bowercopy:dev',
         'jshint',
+        'uglify:dev',
         'copy:all',
         'watch'
     ]);

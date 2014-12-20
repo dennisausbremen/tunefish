@@ -13,6 +13,9 @@ i {
 }
 
 
+.i-audio:before {
+    content: "\e60c";
+}
 .i-link:before {
     content: "\e600";
 }
@@ -27,6 +30,9 @@ i {
 }
 .i-logout:before {
     content: "\e604";
+}
+.i-document:before {
+    content: "\e60b";
 }
 .i-upload:before {
     content: "\e608";

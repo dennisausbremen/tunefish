@@ -21,7 +21,19 @@
             margin: $space-double;
         }
 
-        transition: opacity 0.4s ease;
-
     }
 }
+
+
+.band-image {
+    margin: 0 auto $space;
+    position: relative;
+
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+

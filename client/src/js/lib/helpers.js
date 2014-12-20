@@ -1,5 +1,5 @@
 var helper = (function ($) {
-    "use strict";
+    'use strict';
 
     /*
      PRIVATE FUNCTIONS
@@ -58,6 +58,28 @@ var helper = (function ($) {
         $('.slick-slide').css('height','auto').setAllToMaxHeight();
     };
 
+    var setArrows = function setArrows() {
+        var next = $('.slick-center').next().next();
+        var prev = $('.slick-center').prev().prev();
+
+        var nextLabel = $('.slick-next .arrow-label');
+        var prevLabel = $('.slick-prev .arrow-label');
+
+        if (next) {
+            nextLabel
+                .velocity('transition.slideRightOut', 250, function(){
+                    $('.slick-next').removeClass('slick-disabled');
+                });
+        }
+
+        if (prev) {
+            prevLabel
+                .velocity('transition.slideLeftOut', 250, function(){
+                    $('.slick-prev').removeClass('slick-disabled');
+                });
+        }
+    };
+
     var setArrowTexts = function setArrowTexts() {
         var next = $('.slick-center').next().find('h2').text();
         var prev = $('.slick-center').prev().find('h2').text();
@@ -66,16 +88,26 @@ var helper = (function ($) {
         var prevLabel = $('.slick-prev .arrow-label');
 
         if (next) {
-            nextLabel.text(next);
-            $('.slick-next').removeClass('slick-disabled');
-        } else {
-            $('.slick-next').addClass('slick-disabled');
+            nextLabel
+                .text(next)
+                .velocity('transition.slideLeftIn', 250);
+        }  else {
+            nextLabel
+                .velocity('transition.slideRightOut', 250, function(){
+                    $('.slick-next').addClass('slick-disabled');
+                });
         }
 
         if (prev) {
-            prevLabel.text(prev);
+            prevLabel
+                .text(prev)
+                .velocity('transition.slideRightIn', 250);
+        }  else {
+            prevLabel
+                .velocity('transition.slideLeftOut', 250, function(){
+                    $('.slick-prev').addClass('slick-disabled');
+                });
         }
-
     };
 
     var triggerFileUploadDialogue = function triggerFileUploadDialogue(e) {
@@ -84,13 +116,17 @@ var helper = (function ($) {
     };
 
     var initCards = function initCards() {
-        $('.profile-form-wrapper').slick({
+        var sliderWrap = $('.profile-form-wrapper'),
+            elms = null;
+
+        sliderWrap.slick({
             infinite: false,
+            speed: 250,
             slidesToShow: 1,
             centerMode: true,
             arrows: true,
-            prevArrow: '<button type="button" class="slick-prev"><span class="arrow-label">Zurück</span></button>',
-            nextArrow: '<button type="button" class="slick-next"><span class="arrow-label">Vor</span></button>',
+            prevArrow: '<button type="button" class="slick-prev"><span class="arrow-label"></span></button>',
+            nextArrow: '<button type="button" class="slick-next"><span class="arrow-label">Musik</span></button>',
             dots: true,
             responsive: [
                 {
@@ -110,7 +146,11 @@ var helper = (function ($) {
                 }
             ],
             onInit: function(){
-                setArrowTexts();
+                elms = $('.form-action');
+                elms.velocity('transition.slideDownIn',{ stagger: 250 });
+            },
+            onBeforeChange: function(){
+                setArrows();
             },
             onAfterChange: function(){
                 setArrowTexts();
@@ -118,6 +158,7 @@ var helper = (function ($) {
         });
 
         setEqualHeightCards();
+
 
         $(document).on('click','.fg-upload',triggerFileUploadDialogue);
 
@@ -127,6 +168,12 @@ var helper = (function ($) {
     /*
      PAGE SPECIFIC PRIVATE FUNCTIONS
      */
+    var App = {
+        init: function initGlobalFuncs() {
+            $(document).on('ajaxComplete', Messages.init);
+        }
+    };
+
     var Login = {
         init: function initLoginPage() {
             checkInvalidLogin();
@@ -140,6 +187,19 @@ var helper = (function ($) {
         }
     };
 
+    var Messages = {
+        init: function initMessages(){
+            var messageContainer = $('#messages'),
+                messages = $('div', messageContainer);
+
+            messages
+                .velocity('transition.slideDownIn',{stagger:250})
+                .delay(1500)
+                .velocity('transition.slideUpOut',{stagger: 250, backwards:true});
+
+        }
+    };
+
 
     /*
      PUBLIC FUNCTION EXPORTS
@@ -148,13 +208,16 @@ var helper = (function ($) {
         /*
          PUBLIC FUNCTIONS HERE
          */
+        App: App,
         Login: Login,
-        Profile: Profile
+        Profile: Profile,
+        Messages: Messages
     };
 
 })(jQuery, window);
 
 
 $.fn.setAllToMaxHeight = function(){
-    return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height() }) ) );
-}
+    'use strict';
+    return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height(); }) ) );
+};

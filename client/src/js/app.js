@@ -8,6 +8,7 @@ var tf = (function ($) {
     PRIVATE FUNCTIONS
      */
     var _init = function _init() {
+        tf.helper.App.init();
 
         if ($('.login').length) {
            tf.helper.Login.init();
