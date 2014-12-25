@@ -17,22 +17,25 @@ var updateSelectedTracksList = function(field, spinner) {
     }
 };
 
-function updateSelectedTracksStatus(done) {
-    var selectedTracksList = $('span', '#selected-tracks');
+function updateSelectedTracksStatus(data) {
+    var selectedTracksList = $('#selected-tracks');
+    var selectedTracksListInfo = $('span', selectedTracksList);
 
-    selectedTracksList.removeClass('spinner');
-    if (done) {
-        selectedTracksList.html('<i class="i-done"></i>');
+    selectedTracksListInfo.removeClass('spinner');
 
-        $('#selected-tracks')
-            .delay(1000)
+    data.success.forEach(function(filename) {
+        var track = $( "li:contains('" + filename + "')", selectedTracksList);
+        $("span", track).html('<i class="i-done"></i>');
+        track.delay(5000)
             .velocity('transition.slideDownOut', 250), function() {
             setEqualHeightCards();
         };
+    });
 
-    } else {
-        selectedTracksList.html('<i class="i-close"></i>');
-    }
+    data.fail.forEach(function(filename) {
+        var track = $( "li:contains('" + filename + "')", selectedTracksList);
+        $("span", track).html('<i class="i-close"></i>');
+    });
 }
 
 var onTrackDeleteClick = linkAjaxPostHandler(function (target) {
@@ -69,18 +72,17 @@ $('#track_form').submit(function (e) {
 
     $("input[type=submit]", this).attr('disabled', 'disabled').css('opacity', '0.55');
 
-
     upload(this, formdata,
         function (result) {
-            updateSelectedTracksStatus(true);
             $("#track_list").html(result['track']);
-             addMessage('info', 'Track erfolgreich hochgeladen');
+            addMessage('info', 'Track erfolgreich hochgeladen');
+            updateSelectedTracksStatus(result);
             $("input[type=submit]").removeAttr('disabled').css('opacity', '1.0');
 
             setEqualHeightCards();
         },
         function (errors) {
-            updateSelectedTracksStatus(false);
+            updateSelectedTracksStatus(errors);
             console.log("errors", errors);
             $("input[type=submit]").removeAttr('disabled').css('opacity', '1.0');
             createErrorMessages(errors);
