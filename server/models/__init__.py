@@ -63,7 +63,10 @@ class Band(db.Model):
 
     @property
     def techrider_url(self):
-        return techriderPool.url(self.techrider)
+        if self.techrider:
+            return techriderPool.url(self.techrider)
+        else:
+            return False
 
     @property
     def techrider_path(self):
