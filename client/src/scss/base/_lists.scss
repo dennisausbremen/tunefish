@@ -2,3 +2,42 @@ ul {
     list-style-type: none;
     padding-left: 0;
 }
+
+.uploaded-files.animated,
+.uploads--list {
+    display: none;
+}
+
+.uploads--list {
+    margin: 0;
+    margin-bottom: $space;
+
+    li,
+    i {
+        line-height: 39px;
+    }
+
+    li {
+        position: relative;
+        background-color: $text-light;
+        padding-left: 49px;
+        border-bottom: 1px solid $border-light;
+    }
+
+    span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 39px;
+        text-align: center;
+        border-right: 1px solid $border-light;
+    }
+
+    .i-done {
+        color: $success;
+    }
+
+    .i-close {
+        color: $error;
+    }
+}

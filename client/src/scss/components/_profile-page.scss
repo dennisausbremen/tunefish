@@ -1,18 +1,25 @@
 .profile-form-wrapper {
     padding: $space 0 0;
+    overflow: hidden;
+
+    transition: height 0.2s ease;
 
     h2 {
         margin-top: 0;
     }
 
     @include breakpoint(m) {
-        padding: $space * 2 0 0;
+        padding: 0;
+    }
+
+    @include breakpoint(xl) {
+        padding: $space*2 0 0;
     }
 
     .form-action {
 
         margin: 0.3125rem;
-        min-height: 500px;
+//        min-height: 500px;
         background-color: $bg-sec;
         padding: $space-half;
 
@@ -28,12 +35,30 @@
 .band-image {
     margin: 0 auto $space;
     position: relative;
-
     overflow: hidden;
 
+    width: 100%;
+    padding-bottom: 100%;
+
+    @include breakpoint(m) {
+        max-height: 320px;
+        padding-bottom: 320px;
+    }
+
+    @include breakpoint(xxl) {
+        max-height: 400px;
+        padding-bottom: 400px;
+    }
+
     img {
-        width: 100%;
-        height: auto;
+        width: auto;
+        height: 100%;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%,-50%);
     }
 }
 

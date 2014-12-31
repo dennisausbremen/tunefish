@@ -23,6 +23,7 @@
     background: #FF9E9E;
 }
 
+.icon-container,
 .missing-files {
     text-align: center;
     margin-bottom: $space;
@@ -33,5 +34,9 @@
         @include breakpoint(m) {
             font-size: 320px;
         }
+    }
+
+    &.animated {
+        display: none;
     }
 }

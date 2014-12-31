@@ -26,7 +26,7 @@ band_blueprint.add_url_rule('/submit', view_func=SubmitProfile.as_view('profile.
 band_blueprint.add_url_rule('/resend-confirm', view_func=ResendConfirmMail.as_view('profile.resend'))
 band_blueprint.add_url_rule('/profile', view_func=Onepager.as_view('profile.index'), methods=['GET'])
 band_blueprint.add_url_rule('/profile', view_func=ProfileUpdate.as_view('profile.update'), methods=['POST'])
-band_blueprint.add_url_rule('/profile.js', view_func=JavaScript.as_view('profile.bandjs'), methods=['GET'])
+# band_blueprint.add_url_rule('/profile.js', view_func=JavaScript.as_view('profile.bandjs'), methods=['GET'])
 
 band_blueprint.add_url_rule('/images', view_func=ImageUpload.as_view('image.upload'))
 band_blueprint.add_url_rule('/techrider', view_func=TechriderUpload.as_view('techrider.upload'))

@@ -6,26 +6,31 @@
 
 <h2>Techrider</h2>
 
-{% if g.band.techrider_url %}
-<div id="techrider" class="uploaded-files">
-    <ul>
-        {% include "techrider_link.html" %}
-    </ul>
-</div>
-{% else %}
-<div class="missing-files">
+
+<div class="icon-container">
     <i class="i-document"></i>
-    <h3>Noch keinen Techrider hochgeladen</h3>
+    {% if g.band.techrider_url %}
+    <div id="techrider" class="uploaded-files">
+        <ul>
+            {% include "techrider_link.html" %}
+        </ul>
+    </div>
+    {% else %}
+    <div class="missing-files">
+        <h3>Noch keinen Techrider hochgeladen</h3>
+    </div>
+    {% endif %}
 </div>
-{% endif %}
 
 <form method="POST" action="{{ url_for('bands.techrider.upload') }}" enctype="multipart/form-data" id="techrider_form">
     {{ techrider_form.csrf_token }}
 
     <div class="field-group fg-upload">
         <div class="input-prefix"><i class="i-upload"></i> Datei auswählen...</div>
-        <input type="file" id="techriderFile" name="techriderFile">
+        <input type="file" id="techrider_file" name="techriderFile">
     </div>
+
+    <ul class="uploads--list"></ul>
 
     <input type="submit" value="Techrider senden">
 </form>
