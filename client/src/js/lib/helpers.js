@@ -501,7 +501,7 @@ var helper = (function ($) {
             upload(this, new FormData(this),
                 function (result) {
                     updateSelectedListStatus(self, true);
-                    $('#techrider ul').html(result.techrider);
+                    $('#techrider').html(result.techrider);
                     addMessage('info', 'Techrider erfolgreich hochgeladen');
                 },
                 function (errors) {

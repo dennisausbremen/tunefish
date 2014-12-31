@@ -11,12 +11,10 @@
     <i class="i-document"></i>
     {% if g.band.techrider_url %}
     <div id="techrider" class="uploaded-files">
-        <ul>
-            {% include "techrider_link.html" %}
-        </ul>
+        {% include "techrider_link.html" %}
     </div>
     {% else %}
-    <div class="missing-files">
+    <div id="techrider" class="missing-files">
         <h3>Noch keinen Techrider hochgeladen</h3>
     </div>
     {% endif %}
