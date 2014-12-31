@@ -10,9 +10,9 @@
     <tr>
         <td>Profil</td>
         {% if g.band.is_profile_valid %}
-        <td id="profile-info" class="info">Geile Band</td>
+        <td id="profile-info" class="info">Bandinformationen vollständig ausgefüllt</td>
         {% else %}
-        <td id="profile-info" class="error">Ne Junge, voll nich</td>
+        <td id="profile-info" class="error">Es fehlen noch Informationen!</td>
         {% endif %}
     </tr>
     <tr>
@@ -54,5 +54,5 @@
 {% if g.band.is_ready_for_submit %}
 <a href="{{ url_for('bands.profile.submit') }}" class="info">Abschließen</a>
 {% else %}
-<div class="error">Du kommst hier nicht rein</div>
+<div class="error">Das Abschließen der Bewerbung ist erst möglich, wenn alle obigen Punkte erfüllt sind.</div>
 {% endif %}
