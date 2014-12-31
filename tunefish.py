@@ -1,10 +1,12 @@
 # coding=utf-8
+from server import root_blueprint
 
 from server.app import app
 from server.bands import band_blueprint
 
 
 app.register_blueprint(band_blueprint, url_prefix='/bands')
+app.register_blueprint(root_blueprint, url_prefix='')
 
 
 if __name__ == '__main__':
