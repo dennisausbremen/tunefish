@@ -294,6 +294,30 @@ var helper = (function ($) {
         }
     };
 
+    /*
+     forEach Update from Git. -Nonsense, b/c called once same time-
+     */
+    //function updateSelectedListStatus(data) {
+    //    var selectedTracksList = $('#selected-tracks');
+    //    var selectedTracksListInfo = $('span', selectedTracksList);
+    //
+    //    selectedTracksListInfo.removeClass('spinner');
+    //
+    //    data.success.forEach(function(filename) {
+    //        var track = $( "li:contains('" + filename + "')", selectedTracksList);
+    //        $("span", track).html('<i class="i-done"></i>');
+    //        track.delay(5000)
+    //            .velocity('transition.slideDownOut', 250), function() {
+    //            setEqualHeightCards();
+    //        };
+    //    });
+    //
+    //    data.fail.forEach(function(filename) {
+    //        var track = $( "li:contains('" + filename + "')", selectedTracksList);
+    //        $("span", track).html('<i class="i-close"></i>');
+    //    });
+    //}
+
     var loadDataURL = function loadDataURL(file, elem) {
         return function(e) {
             var image = e.target.result,
