@@ -25,23 +25,28 @@ class TrackUpload(RestrictedBandAjaxForm):
             raise AjaxException(u'Es dürfen nur maximal 5 Demo-Songs hochgeladen werden.')
         else:
             uploaded_files = flask.request.files.getlist("audioFile[]")
+            success = []
+            fail = []
             for uploaded_file in uploaded_files:
                 if self.band.tracks.count() == 5:
-                    # TODO give some information about that too much files were uploaded
-                    break
+                    fail.append(uploaded_file.filename)
+                    continue
                 track = Track()
                 track.trackname = uploaded_file.filename
                 track.band_id = self.band.id
-                trackFilename = str(self.band.id) + '_' + str(uuid4()) + '.'
+                track_filename = str(self.band.id) + '_' + str(uuid4()) + '.'
                 try:
-                    track.filename = trackPool.save(uploaded_file, name=trackFilename)
+                    track.filename = trackPool.save(uploaded_file, name=track_filename)
+                    success.append(uploaded_file.filename)
                 except UploadNotAllowed:
-                    # TODO better error handling
+                    fail.append(uploaded_file.filename)
                     flash('Fehler beim Upload von Datei ' + uploaded_file.filename)
                 db.session.add(track)
                 db.session.commit()
             return {'track': render_template("track_item.html"),
-                    'check_tab': render_template('check.html')}
+                    'check_tab': render_template('check.html'),
+                    'fail': fail,
+                    'success': success}
 
 
 class TrackDelete(RestrictedBandPage):
