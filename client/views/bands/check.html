@@ -6,53 +6,76 @@
 
 <h2>Übersicht</h2>
 
-<table>
-    <tr>
-        <td>Profil</td>
-        {% if g.band.is_profile_valid %}
-        <td id="profile-info" class="info">Bandinformationen vollständig ausgefüllt</td>
-        {% else %}
-        <td id="profile-info" class="error">Es fehlen noch Informationen!</td>
-        {% endif %}
-    </tr>
-    <tr>
-        <td>Kontaktemail</td>
-        {% if g.band.is_email_confirmed %}
-        <td id="profile-email" class="info">bestätigt</td>
-        {% else %}
-        <td id="profile-email" class="error">nicht bestätigt
-        <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a>
-        </td>
-        {% endif %}
-    </tr>
-    <tr>
-        <td>Tracks</td>
-        {% if g.band.is_tracks_valid %}
-        <td id="profile-tracks" class="info">{{ g.band.tracks.count() }} Tracks</td>
-        {% else %}
-        <td id="profile-tracks" class="error">Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</td>
-        {% endif %}
-    </tr>
-    <tr>
-        <td>Bild</td>
-        {% if g.band.image %}
-        <td id="profile-image" class="info">wunderschön</td>
-        {% else %}
-        <td  id="profile-image" class="error">fehlt</td>
-        {% endif %}
-    </tr>
-    <tr>
-        <td>Techrider</td>
-        {% if g.band.techrider %}
-        <td id="profile-techrider" class="info">wunderschön</td>
-        {% else %}
-        <td id="profile-techrider" class="error">fehlt</td>
-        {% endif %}
-    </tr>
-</table>
+<ul class="check-list">
+    <li class="check-row" id="check-step-info">
+        <div class="check-step">Profil</div>
+        <div class="check-step-info">
+            {% if g.band.is_profile_valid %}
+                Bandinformationen vollständig ausgefüllt</div>
+                <div class="check-status"><i class="i-done"></i></div>
+            {% else %}
+                Es fehlen noch Informationen!</div>
+                <div class="check-status"><i class="i-close"></i></div>
+            {% endif %}
+    </li>
 
-{% if g.band.is_ready_for_submit %}
-<a href="{{ url_for('bands.profile.submit') }}" class="info">Abschließen</a>
-{% else %}
-<div class="error">Das Abschließen der Bewerbung ist erst möglich, wenn alle obigen Punkte erfüllt sind.</div>
-{% endif %}
+    <li class="check-row" id="check-step-mail">
+        <div class="check-step">E-Mail</div>
+        <div class="check-step-info">
+            {% if g.band.is_email_confirmed %}
+                bestätigt</div>
+                <div class="check-status"><i class="i-done"></i></div>
+            {% else %}
+                nicht bestätigt
+                <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a></div>
+                <div class="check-status"><i class="i-close"></i></div>
+            {% endif %}
+    </li>
+
+    <li class="check-row" id="check-step-music">
+        <div class="check-step">Musik</div>
+        <div class="check-step-info">
+
+            {% if g.band.is_tracks_valid %}
+                {{ g.band.tracks.count() }} Tracks</div>
+                <div class="check-status"><i class="i-done"></i></div>
+            {% else %}
+                Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</div>
+                <div class="check-status"><i class="i-close"></i></div>
+            {% endif %}
+    </li>
+
+    <li class="check-row" id="check-step-image">
+        <div class="check-step">Bild</div>
+        <div class="check-step-info">
+
+            {% if g.band.image %}
+                hochgeladen</div>
+                <div class="check-status"><i class="i-done"></i></div>
+            {% else %}
+                fehlt</div>
+                <div class="check-status"><i class="i-close"></i></div>
+            {% endif %}
+    </li>
+
+    <li class="check-row" id="check-step-techrider">
+        <div class="check-step">Techrider</div>
+        <div class="check-step-info">
+
+            {% if g.band.techrider %}
+                hochgeladen</div>
+                <div class="check-status"><i class="i-done"></i></div>
+            {% else %}
+                fehlt</div>
+                <div class="check-status"><i class="i-close"></i></div>
+            {% endif %}
+    </li>
+
+    <li class="check-row check-submit">
+        {% if g.band.is_ready_for_submit %}
+        <a href="{{ url_for('bands.profile.submit') }}" class="btn">Abschließen</a>
+        {% else %}
+        <div class="error">Das Abschließen der Bewerbung ist erst möglich, wenn alle obigen Punkte erfüllt sind.</div>
+        {% endif %}
+    </li>
+</ul>

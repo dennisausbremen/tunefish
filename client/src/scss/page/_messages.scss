@@ -21,12 +21,17 @@
     }
 }
 
+.info,
+.error {
+    color: $bg-primary;
+}
+
 .info {
-    background: #B4F785;
+    background: $success;
 }
 
 .error {
-    background: #FF9E9E;
+    background: $error;
 }
 
 .icon-container,

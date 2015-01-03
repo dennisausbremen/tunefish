@@ -253,8 +253,6 @@ var helper = (function ($) {
                 }
             ],
             onInit: function(){
-                elms = $('.form-action');
-                elms.velocity({'opacity': 1},1250);
                 setAppBg();
             },
             onBeforeChange: function(){
@@ -292,24 +290,6 @@ var helper = (function ($) {
         selectedTracksList.css({'display':'block','opacity': 1});
         setEqualHeightCards();
     };
-
-    //var updateSelectedListStatus = function updateSelectedListStatus(form, done) {
-    //    var list = $('.uploads--list span', form);
-    //
-    //    list.removeClass('spinner');
-    //    if (done) {
-    //        list.html('<i class="i-done"></i>');
-    //
-    //        $('.uploads--list', form)
-    //            .delay(1000)
-    //            .velocity('transition.fadeOut',250, function(){
-    //                $('.uploads--list', form).html('');
-    //                setEqualHeightCards();
-    //            });
-    //    } else {
-    //        list.html('<i class="i-close"></i>');
-    //    }
-    //};
 
     /*
      forEach Update from Git. -Nonsense, b/c called once same time-

@@ -1,0 +1,82 @@
+.check-list {
+    margin-bottom: 0;
+}
+
+.check-row {
+    @include clearfix();
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    padding: $space-half 0;
+    border-top: 1px solid $light;
+
+    @include breakpoint(m) {
+        padding: $space 0;
+    }
+}
+
+.check-step {
+    font-size: $h4-font-size;
+    line-height: $h4-line-height;
+
+    padding-right: $space;
+    flex: 1 1 100%;
+
+    @include breakpoint(m) {
+        flex: 1;
+    }
+}
+
+.check-step-info {
+    padding-right: 60px;
+    flex: 1 1 100%;
+
+    a {
+        display: block;
+    }
+
+    @include breakpoint(m) {
+        flex: 3;
+    }
+}
+
+.check-status {
+    width: 45px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+
+    transform: translateY(-50%);
+
+
+    i {
+        color: $bg-primary;
+        font-size: 25px;
+
+        display: inline-block;
+        padding: 10px;
+        border-radius: 50%;
+    }
+
+    .i-close {
+        background-color: $error;
+    }
+
+    .i-done {
+        background-color: $success;
+    }
+}
+
+.check-submit {
+    padding-bottom: 0;
+    text-align: left;
+
+    div {
+        padding: $space;
+    }
+}

@@ -48,10 +48,6 @@ $slick-opacity-not-active: .25 !default;
     }
 }
 .slick-slider .slick-track {
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
 }
 
@@ -79,7 +75,6 @@ $slick-opacity-not-active: .25 !default;
     float: left;
     height: 100%;
     min-height: 1px;
-    opacity: 0;
 
     img {
         display: block;

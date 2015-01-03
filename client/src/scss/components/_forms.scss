@@ -3,6 +3,7 @@ form {
     padding-bottom: $space-half;
 }
 
+.btn,
 input,
 textarea {
     display: block;
@@ -36,10 +37,14 @@ legend {
     display: none;
 }
 
+.btn,
 input[type=submit] {
     width: auto;
     background-color: $bg-ter;
     color: #ffffff;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration: none;
     margin-bottom: 0;
 
     &:hover {
