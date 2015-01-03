@@ -3,79 +3,80 @@
 {% from "_formhelpers.html" import getErrors %}
 {% from "_formhelpers.html" import renderMessages %}
 
+<div class="step-content">
+    <h2>Übersicht</h2>
 
-<h2>Übersicht</h2>
+    <ul class="check-list">
+        <li class="check-row" id="check-step-info">
+            <div class="check-step">Profil</div>
+            <div class="check-step-info">
+                {% if g.band.is_profile_valid %}
+                    Bandinformationen vollständig ausgefüllt</div>
+                    <div class="check-status"><i class="i-done"></i></div>
+                {% else %}
+                    Es fehlen noch Informationen!</div>
+                    <div class="check-status"><i class="i-close"></i></div>
+                {% endif %}
+        </li>
 
-<ul class="check-list">
-    <li class="check-row" id="check-step-info">
-        <div class="check-step">Profil</div>
-        <div class="check-step-info">
-            {% if g.band.is_profile_valid %}
-                Bandinformationen vollständig ausgefüllt</div>
-                <div class="check-status"><i class="i-done"></i></div>
+        <li class="check-row" id="check-step-mail">
+            <div class="check-step">E-Mail</div>
+            <div class="check-step-info">
+                {% if g.band.is_email_confirmed %}
+                    bestätigt</div>
+                    <div class="check-status"><i class="i-done"></i></div>
+                {% else %}
+                    nicht bestätigt
+                    <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a></div>
+                    <div class="check-status"><i class="i-close"></i></div>
+                {% endif %}
+        </li>
+
+        <li class="check-row" id="check-step-music">
+            <div class="check-step">Musik</div>
+            <div class="check-step-info">
+
+                {% if g.band.is_tracks_valid %}
+                    {{ g.band.tracks.count() }} Tracks</div>
+                    <div class="check-status"><i class="i-done"></i></div>
+                {% else %}
+                    Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</div>
+                    <div class="check-status"><i class="i-close"></i></div>
+                {% endif %}
+        </li>
+
+        <li class="check-row" id="check-step-image">
+            <div class="check-step">Bild</div>
+            <div class="check-step-info">
+
+                {% if g.band.image %}
+                    hochgeladen</div>
+                    <div class="check-status"><i class="i-done"></i></div>
+                {% else %}
+                    fehlt</div>
+                    <div class="check-status"><i class="i-close"></i></div>
+                {% endif %}
+        </li>
+
+        <li class="check-row" id="check-step-techrider">
+            <div class="check-step">Techrider</div>
+            <div class="check-step-info">
+
+                {% if g.band.techrider %}
+                    hochgeladen</div>
+                    <div class="check-status"><i class="i-done"></i></div>
+                {% else %}
+                    fehlt</div>
+                    <div class="check-status"><i class="i-close"></i></div>
+                {% endif %}
+        </li>
+
+        <li class="check-row check-submit">
+            {% if g.band.is_ready_for_submit %}
+            <a href="{{ url_for('bands.profile.submit') }}" class="btn">Abschließen</a>
             {% else %}
-                Es fehlen noch Informationen!</div>
-                <div class="check-status"><i class="i-close"></i></div>
+            <div class="error">Das Abschließen der Bewerbung ist erst möglich, wenn alle obigen Punkte erfüllt sind.</div>
             {% endif %}
-    </li>
-
-    <li class="check-row" id="check-step-mail">
-        <div class="check-step">E-Mail</div>
-        <div class="check-step-info">
-            {% if g.band.is_email_confirmed %}
-                bestätigt</div>
-                <div class="check-status"><i class="i-done"></i></div>
-            {% else %}
-                nicht bestätigt
-                <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a></div>
-                <div class="check-status"><i class="i-close"></i></div>
-            {% endif %}
-    </li>
-
-    <li class="check-row" id="check-step-music">
-        <div class="check-step">Musik</div>
-        <div class="check-step-info">
-
-            {% if g.band.is_tracks_valid %}
-                {{ g.band.tracks.count() }} Tracks</div>
-                <div class="check-status"><i class="i-done"></i></div>
-            {% else %}
-                Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</div>
-                <div class="check-status"><i class="i-close"></i></div>
-            {% endif %}
-    </li>
-
-    <li class="check-row" id="check-step-image">
-        <div class="check-step">Bild</div>
-        <div class="check-step-info">
-
-            {% if g.band.image %}
-                hochgeladen</div>
-                <div class="check-status"><i class="i-done"></i></div>
-            {% else %}
-                fehlt</div>
-                <div class="check-status"><i class="i-close"></i></div>
-            {% endif %}
-    </li>
-
-    <li class="check-row" id="check-step-techrider">
-        <div class="check-step">Techrider</div>
-        <div class="check-step-info">
-
-            {% if g.band.techrider %}
-                hochgeladen</div>
-                <div class="check-status"><i class="i-done"></i></div>
-            {% else %}
-                fehlt</div>
-                <div class="check-status"><i class="i-close"></i></div>
-            {% endif %}
-    </li>
-
-    <li class="check-row check-submit">
-        {% if g.band.is_ready_for_submit %}
-        <a href="{{ url_for('bands.profile.submit') }}" class="btn">Abschließen</a>
-        {% else %}
-        <div class="error">Das Abschließen der Bewerbung ist erst möglich, wenn alle obigen Punkte erfüllt sind.</div>
-        {% endif %}
-    </li>
-</ul>
+        </li>
+    </ul>
+</div>
