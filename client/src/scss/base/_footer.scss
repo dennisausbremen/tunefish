@@ -1,20 +1,11 @@
-.footer-push {
-    clear:both;
-    height:92px; // the height of our footer + margin
-}
-
 footer {
-
+    color: rgba(0,0,0,0.5);
     font-weight: 200;
     text-align: center;
     padding: 1rem;
-    background-color: #fff;
-
-    border-top: 1px solid $border-light;
     margin-top:$space;
     height:62px;
+    z-index: 100;
 
-    @include breakpoint(m) {
-        margin-top:0;
-    }
+    position: relative;
 }

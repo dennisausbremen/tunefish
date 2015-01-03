@@ -1,6 +1,12 @@
 /** Boxen für Fehlermeldungen **/
 
 .message-container {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+
     .message, .error, .info, .warning {
         display: none;
     }

@@ -1,6 +1,8 @@
 .login {
+    padding-top: $space-and-half;
     max-width: 1200px;
-    margin-top: $base-line-height;
+    margin: $base-line-height 0 $space-double;
+
 
     @include breakpoint(m) {
         position: absolute;

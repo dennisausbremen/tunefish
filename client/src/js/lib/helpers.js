@@ -150,6 +150,19 @@ var helper = (function ($) {
         $('.slick-slide').css('height','auto').setAllToMaxHeight();
     };
 
+    var setAppBg = function setAppBg() {
+        var bg = $('.main'),
+            active = $('.slick-center').attr('id'),
+            bgClasses = [];
+
+        bg.addClass(active);
+        bgClasses = bg.attr('class').split(' ');
+
+        if (/step/i.test(bg.attr('class')) && (bgClasses.length-1) > 2) {
+            bg.removeClass(bgClasses[2]);
+        }
+    };
+
     var setArrows = function setArrows() {
         var next = $('.slick-center').next().next();
         var prev = $('.slick-center').prev().prev();
@@ -216,36 +229,40 @@ var helper = (function ($) {
             speed: 250,
             slidesToShow: 1,
             centerMode: true,
+            centerPadding: 0,
             arrows: true,
             prevArrow: '<button type="button" class="slick-prev"><span class="arrow-label"></span></button>',
             nextArrow: '<button type="button" class="slick-next"><span class="arrow-label">Musik</span></button>',
             dots: false,
             responsive: [
                 {
-                    breakpoint: 767,
+                    breakpoint: 737,
                     settings: {
                         arrows: false
                     }
                 },
                 {
-                    breakpoint: 481,
+                    breakpoint: 736,
                     settings: {
                         arrows: false,
                         centerMode: true,
-                        centerPadding: '20px',
-                        slidesToShow: 1
+                        centerPadding: 0,
+                        slidesToShow: 1,
+                        adaptiveHeight: true
                     }
                 }
             ],
             onInit: function(){
                 elms = $('.form-action');
-                elms.velocity('transition.slideDownIn',250);
+                elms.velocity({'opacity': 1},1250);
+                setAppBg();
             },
             onBeforeChange: function(){
                 setArrows();
             },
             onAfterChange: function(){
                 setArrowTexts();
+                setAppBg();
             }
         });
 
@@ -276,47 +293,65 @@ var helper = (function ($) {
         setEqualHeightCards();
     };
 
-    var updateSelectedListStatus = function updateSelectedListStatus(form, done) {
-        var list = $('.uploads--list span', form);
-
-        list.removeClass('spinner');
-        if (done) {
-            list.html('<i class="i-done"></i>');
-
-            $('.uploads--list', form)
-                .delay(1000)
-                .velocity('transition.fadeOut',250, function(){
-                    $('.uploads--list', form).html('');
-                    setEqualHeightCards();
-                });
-        } else {
-            list.html('<i class="i-close"></i>');
-        }
-    };
+    //var updateSelectedListStatus = function updateSelectedListStatus(form, done) {
+    //    var list = $('.uploads--list span', form);
+    //
+    //    list.removeClass('spinner');
+    //    if (done) {
+    //        list.html('<i class="i-done"></i>');
+    //
+    //        $('.uploads--list', form)
+    //            .delay(1000)
+    //            .velocity('transition.fadeOut',250, function(){
+    //                $('.uploads--list', form).html('');
+    //                setEqualHeightCards();
+    //            });
+    //    } else {
+    //        list.html('<i class="i-close"></i>');
+    //    }
+    //};
 
     /*
      forEach Update from Git. -Nonsense, b/c called once same time-
      */
-    //function updateSelectedListStatus(data) {
-    //    var selectedTracksList = $('#selected-tracks');
-    //    var selectedTracksListInfo = $('span', selectedTracksList);
-    //
-    //    selectedTracksListInfo.removeClass('spinner');
-    //
-    //    data.success.forEach(function(filename) {
-    //        var track = $( "li:contains('" + filename + "')", selectedTracksList);
-    //        $("span", track).html('<i class="i-done"></i>');
-    //        track.delay(5000)
-    //            .velocity('transition.slideDownOut', 250), function() {
-    //            setEqualHeightCards();
-    //        };
-    //    });
-    //
-    //    data.fail.forEach(function(filename) {
-    //        var track = $( "li:contains('" + filename + "')", selectedTracksList);
-    //        $("span", track).html('<i class="i-close"></i>');
-    //    });
-    //}
+    function updateSelectedListStatus(data, form) {
+        var selectedTracksList = $('.uploads--list', form);
+        var selectedTracksListInfo = $('span', selectedTracksList);
+
+        console.log(data);
+
+        selectedTracksListInfo.removeClass('spinner');
+
+        if (data.success || data.fail) {
+
+            data.success.forEach(function (filename) {
+                var track = $('li:contains("' + filename + '")', selectedTracksList);
+                $('span', track).html('<i class="i-done"></i>');
+                track
+                    .delay(1000)
+                    .velocity('transition.slideDownOut', 250, function () {
+                        setEqualHeightCards();
+                    });
+            });
+
+            data.fail.forEach(function (filename) {
+                var track = $('li:contains("' + filename + '")', selectedTracksList);
+                $('span', track).html('<i class="i-close"></i>');
+            });
+
+        } else if (data.general) {
+
+            selectedTracksListInfo.html('<i class="i-close"></i>');
+
+        } else {
+            selectedTracksListInfo.html('<i class="i-done"></i>');
+            selectedTracksList
+                .delay(1000)
+                .velocity('transition.slideDownOut', 250, function() {
+                    setEqualHeightCards();
+                });
+        }
+    }
 
     var loadDataURL = function loadDataURL(file, elem) {
         return function(e) {
@@ -431,7 +466,7 @@ var helper = (function ($) {
             upload(this, formdata,
                 function (result) {
 
-                    updateSelectedListStatus(self, true);
+                    updateSelectedListStatus(result, self);
                     $('#track_list').html(result.track);
                     addMessage('info', 'Track erfolgreich hochgeladen');
                     $('input[type=submit]').removeAttr('disabled').css('opacity', '1.0');
@@ -439,16 +474,17 @@ var helper = (function ($) {
                     $('.missing-files', slide)
                         .delay(1000)
                         .velocity('transition.slideUpOut',250, function(){
-                            $('.uploaded-files', slide)
-                                .velocity('transition.slideDownIn',250, function() {
-                                    setEqualHeightCards();
-                                });
+                            if ($('.uploaded-files', self).is(':hidden')) {
+                                $('.uploaded-files', slide)
+                                    .velocity('transition.slideDownIn',250, function() {
+                                        setEqualHeightCards();
+                                    });
+                            }
                         });
 
                 },
                 function (errors) {
-                    updateSelectedListStatus(self, false);
-                    //console.log('errors', errors);
+                    updateSelectedListStatus(errors, self);
                     $('input[type=submit]').removeAttr('disabled').css('opacity', '1.0');
                     createErrorMessages(errors);
                 }
@@ -471,14 +507,12 @@ var helper = (function ($) {
 
             upload(this, new FormData(this),
                 function (result) {
-                    updateSelectedListStatus(self, true);
-                    //console.log('result', result);
+                    updateSelectedListStatus(result, self);
                     $('#image').html(result.image);
                     addMessage('info', 'Bandfoto erfolgreich hochgeladen');
                 },
                 function (errors) {
-                    updateSelectedListStatus(self, false);
-                    //console.log('errors', errors);
+                    updateSelectedListStatus(errors, self);
                     createErrorMessages(errors);
                 }
             );
@@ -500,12 +534,13 @@ var helper = (function ($) {
 
             upload(this, new FormData(this),
                 function (result) {
-                    updateSelectedListStatus(self, true);
+                    console.log(result);
+                    updateSelectedListStatus(result, self);
                     $('#techrider').html(result.techrider);
                     addMessage('info', 'Techrider erfolgreich hochgeladen');
                 },
                 function (errors) {
-                    updateSelectedListStatus(self, false);
+                    updateSelectedListStatus(errors, self);
                     createErrorMessages(errors);
 
                 }
@@ -523,9 +558,13 @@ var helper = (function ($) {
      */
     var App = {
         init: function initGlobalFuncs() {
-            $(document).on('ajaxComplete', Messages.init);
+            $(document).on('ajaxComplete messageChange', Messages.init);
             initFileUploads();
             initFormSubmits();
+
+            if ($('#messages div').length) {
+                $(document).trigger('messageChange');
+            }
         }
     };
 
@@ -574,6 +613,9 @@ var helper = (function ($) {
 
 $.fn.setAllToMaxHeight = function(){
     'use strict';
-    //return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height(); }) ) );
-    return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height(); }) ) );
+    var h = $(window).height()+4;
+    if ($(window).width() > 767) {
+        //return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height(); }) ) );
+        return this.height(h);
+    }
 };

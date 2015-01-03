@@ -23,8 +23,9 @@ body {
     height: auto !important; // the magic!
     height:100%;
     margin-bottom:-92px; // the height of our footer + margin
-    padding-top: 52px;
     overflow: hidden;
+
+    transition: background-color 0.5s linear;
 }
 
 .main-content {

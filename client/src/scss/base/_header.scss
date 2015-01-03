@@ -1,9 +1,11 @@
 header {
     @include clearfix();
-    background: $bg-primary;
+    @include shadow(1);
+
+    background: $bg-sec;
     height: $base-line-height * 2;
     padding: 0 $pad;
-    border-bottom: 1px solid $border-light;
+//    color: $bg-sec;
 
     font-weight: 200;
 
@@ -24,9 +26,9 @@ header {
     float: right;
     padding: $pad-half $pad-half $pad-half $pad-and-half;
 
-    @include breakpoint(m) {
-        border-left: 1px solid $border-light;
-    }
+//    @include breakpoint(m) {
+//        border-left: 1px solid $border-light;
+//    }
 
     .account-image,
     span {
@@ -72,7 +74,7 @@ header {
 .logout {
     font-size: $h3-font-size;
     text-decoration: none;
-    color: $text-action;
+//    color: $bg-sec;
 
     height: $base-line-height;
     display: inline-block;
