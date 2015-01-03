@@ -57,7 +57,7 @@ class Band(db.Model):
 
         for name, field in iteritems(bandForm._fields):
             if not field.validate(self, []):
-                return field.name #False
+                return False
         return True
 
 
