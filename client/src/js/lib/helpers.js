@@ -279,7 +279,7 @@ var helper = (function ($) {
             var item = $(items.get(i)),
                 itemID = item.attr('id').split('check-')[1],
                 itemState = $('i', item).attr('class'),
-                stepStateEl = $('#'+itemID+' i');
+                stepStateEl = $('#'+itemID+' .check-status i');
 
             if (stepStateEl.attr('class')) {
                 stepStateEl.removeAttr('class').addClass(itemState);
@@ -471,7 +471,7 @@ var helper = (function ($) {
                     // Message with amount of successful uploaded tracks
                     var successfully_amount = result.success.length;
                     if (successfully_amount > 0) {
-                        if (successfully_amount == 1) {
+                        if (successfully_amount === 1) {
                             addMessage('info', successfully_amount + ' Track erfolgreich hochgeladen');
                         } else {
                             addMessage('info', successfully_amount + ' Tracks erfolgreich hochgeladen');
@@ -481,7 +481,7 @@ var helper = (function ($) {
                     // Message with amount of tracks that couldn't be uploaded
                     var fail_amount = result.fail.length;
                     if (fail_amount > 0) {
-                        if (fail_amount == 1) {
+                        if (fail_amount === 1) {
                             addMessage('error', fail_amount + ' Track wurde nicht hochgeladen');
                         } else {
                             addMessage('error', fail_amount + ' Tracks wurden nicht hochgeladen');
@@ -490,16 +490,17 @@ var helper = (function ($) {
 
                     $('input[type=submit]').removeAttr('disabled').css('opacity', '1.0');
 
-                    $('.missing-files', slide)
-                        .delay(1000)
-                        .velocity('transition.slideUpOut',250, function(){
-                            if ($('.uploaded-files', self).is(':hidden')) {
+                    if ($('.missing-files', slide).is(':visible')) {
+                        $('.missing-files', slide)
+                            .delay(1000)
+                            .velocity('transition.slideUpOut', 250, function () {
+
                                 $('.uploaded-files', slide)
-                                    .velocity('transition.slideDownIn',250, function() {
+                                    .velocity('transition.slideDownIn', 250, function () {
                                         setEqualHeightCards();
                                     });
-                            }
-                        });
+                            });
+                    }
 
                 },
                 function (errors) {
