@@ -52,11 +52,11 @@ class Band(db.Model):
 
     @property
     def is_profile_valid(self):
-        bandForm = BandForm()
-        bandForm.set_from_model(self)
+        band_form = BandForm()
+        band_form.set_from_model(self)
 
-        for name, field in iteritems(bandForm._fields):
-            if not field.validate(self, []):
+        for field_name, field in iteritems(band_form._fields):
+            if not field.validate(self):
                 return False
         return True
 

@@ -31,6 +31,7 @@ class TrackUpload(RestrictedBandAjaxForm):
                 if self.band.tracks.count() == 5:
                     fail.append(uploaded_file.filename)
                     continue
+                # TODO check file ext
                 track = Track()
                 track.trackname = uploaded_file.filename
                 track.band_id = self.band.id
@@ -38,11 +39,10 @@ class TrackUpload(RestrictedBandAjaxForm):
                 try:
                     track.filename = trackPool.save(uploaded_file, name=track_filename)
                     success.append(uploaded_file.filename)
+                    db.session.add(track)
+                    db.session.commit()
                 except UploadNotAllowed:
                     fail.append(uploaded_file.filename)
-                    flash('Fehler beim Upload von Datei ' + uploaded_file.filename)
-                db.session.add(track)
-                db.session.commit()
             return {'track': render_template("track_item.html"),
                     'check_tab': render_template('check.html'),
                     'fail': fail,

@@ -37,14 +37,15 @@ class BandForm(Form):
     city = StringField('Stadt', [InputRequired("Bitte Stadt eintragen"), validators.Length(min=3)])
 
     def set_from_model(self, band):
-        self.name.data = band.name
-        self.descp.data = band.descp
+        self.name.raw_data = self.name.data = band.name
+        self.descp.raw_data = self.descp.data = band.descp
         self.amount_members.data = band.amount_members
-        self.website.data = band.website
+        self.amount_members.raw_data = str(band.amount_members)
+        self.website.raw_data = self.website.data = band.website
         self.youtube_id.data = band.youtube_id
         self.facebook_page.data = band.facebook_page
-        self.phone.data = band.phone
-        self.city.data = band.city
+        self.phone.raw_data = self.phone.data = band.phone
+        self.city.raw_data = self.city.data = band.city
 
     def apply_to_model(self, band):
         band.name = self.name.data
