@@ -63,7 +63,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,                  // Enable dynamic expansion
                         cwd: '<%= cfg.src %>/img',                   // Src matches are relative to this path
-                        src: ['**/*.{png,jpg,gif,svg}'],   // Actual patterns to match
+                        src: '{,*/}**/*.{png,jpg,jpeg,svg}',   // Actual patterns to match
                         dest: '<%= cfg.dist %>/img'                  // Destination path prefix
                     }
                 ]
