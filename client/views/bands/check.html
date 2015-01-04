@@ -4,17 +4,18 @@
 {% from "_formhelpers.html" import renderMessages %}
 
 
-<h2>Übersicht</h2>
+<h2>Übersicht<div class="check-status"><i></i></div></h2>
 
-<ul class="check-list">
+
+<ul class="check-list" id="check-overview">
     <li class="check-row" id="check-step-info">
         <div class="check-step">Profil</div>
         <div class="check-step-info">
             {% if g.band.is_profile_valid %}
-                Bandinformationen vollständig ausgefüllt</div>
+                Informationen vollständig</div>
                 <div class="check-status"><i class="i-done"></i></div>
             {% else %}
-                Es fehlen noch Informationen!</div>
+                Es fehlen noch Informationen</div>
                 <div class="check-status"><i class="i-close"></i></div>
             {% endif %}
     </li>
@@ -23,11 +24,11 @@
         <div class="check-step">E-Mail</div>
         <div class="check-step-info">
             {% if g.band.is_email_confirmed %}
-                bestätigt</div>
+                Bestätigt</div>
                 <div class="check-status"><i class="i-done"></i></div>
             {% else %}
-                nicht bestätigt
-                <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsemail erneut versenden</a></div>
+                <span>Nicht bestätigt</span>
+                <a href="{{ url_for('bands.profile.resend') }}">(Bestätigung erneut senden)</a></div>
                 <div class="check-status"><i class="i-close"></i></div>
             {% endif %}
     </li>
@@ -50,10 +51,10 @@
         <div class="check-step-info">
 
             {% if g.band.image %}
-                hochgeladen</div>
+                Hochgeladen</div>
                 <div class="check-status"><i class="i-done"></i></div>
             {% else %}
-                fehlt</div>
+                Fehlt</div>
                 <div class="check-status"><i class="i-close"></i></div>
             {% endif %}
     </li>
@@ -63,19 +64,22 @@
         <div class="check-step-info">
 
             {% if g.band.techrider %}
-                hochgeladen</div>
+                Hochgeladen</div>
                 <div class="check-status"><i class="i-done"></i></div>
             {% else %}
-                fehlt</div>
+                Fehlt</div>
                 <div class="check-status"><i class="i-close"></i></div>
             {% endif %}
     </li>
-
-    <li class="check-row check-submit">
-        {% if g.band.is_ready_for_submit %}
-        <a href="{{ url_for('bands.profile.submit') }}" class="btn">Abschließen</a>
-        {% else %}
-        <div class="error">Das Abschließen der Bewerbung ist erst möglich, wenn alle obigen Punkte erfüllt sind.</div>
-        {% endif %}
-    </li>
 </ul>
+
+<div class="check-row check-submit">
+    {% if g.band.is_ready_for_submit %}
+    <a href="{{ url_for('bands.profile.submit') }}" class="btn">
+        Bandbewerbung abschließen
+        <small>(Keine Änderungen mehr möglich!)</small>
+    </a>
+    {% else %}
+    <div class="error">Das Abschließen der Bewerbung ist erst möglich, benötigten Schritte vollständig sind.</div>
+    {% endif %}
+</div>

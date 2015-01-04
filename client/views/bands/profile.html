@@ -3,7 +3,8 @@
 {% from "_formhelpers.html" import getErrors %}
 {% from "_formhelpers.html" import renderMessages %}
 
-<h2>Infos</h2>
+<h2>Infos<div class="check-status"><i></i></div></h2>
+
 
 <form method="POST" action="{{ url_for('bands.profile.update') }}" id="band_form">
     {{ band_form.csrf_token }}

@@ -40,6 +40,36 @@
     }
 }
 
+.check-status {
+    float: right;
+    width: 52px;
+    height: 52px;
+
+    position: relative;
+
+    @include breakpoint(m) {
+        top: -5px;
+    }
+
+    i {
+        color: $bg-primary;
+        font-size: 32px;
+
+        display: inline-block;
+        padding: 10px;
+        border-radius: 50%;
+    }
+
+    .i-close {
+        background-color: $error;
+    }
+
+    .i-done {
+        background-color: $success;
+    }
+}
+
+
 
 .band-image {
     margin: 0 auto $space;
@@ -70,4 +100,3 @@
         transform: translate(-50%,-50%);
     }
 }
-

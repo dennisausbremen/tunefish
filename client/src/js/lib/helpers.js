@@ -125,6 +125,7 @@ var helper = (function ($) {
     function updateCheckTab(data) {
         if (data.check_tab !== 'undefined') {
             $('#step-summary').html(data.check_tab);
+            updateStepState();
         }
     }
 
@@ -132,8 +133,6 @@ var helper = (function ($) {
 
         var el = $(''+step),
             files = $('.uploaded-files', el);
-
-        ////console.log('check ', el, ' list ', $('li',el), ' length ', $('li',el).length);
 
         if (!$('li',el).length) {
             var missing = $('.missing-files', el);
@@ -265,11 +264,31 @@ var helper = (function ($) {
         });
 
         setEqualHeightCards();
+        updateStepState();
 
 
         $(document).on('click','.fg-upload',triggerFileUploadDialogue);
 
         $(window).on('resize',setEqualHeightCards);
+    };
+
+    var updateStepState = function updateStepState() {
+        var items = $('#check-overview li');
+
+        for (var i = 0, len = items.length; i < len; ++i) {
+            var item = $(items.get(i)),
+                itemID = item.attr('id').split('check-')[1],
+                itemState = $('i', item).attr('class'),
+                stepStateEl = $('#'+itemID+' i');
+
+            if (stepStateEl.attr('class')) {
+                stepStateEl.removeAttr('class').addClass(itemState);
+            } else {
+                stepStateEl.addClass(itemState);
+            }
+
+
+        }
     };
 
     var updateSelectedFilesList = function(field, spinner) {

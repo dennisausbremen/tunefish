@@ -4,7 +4,9 @@
 {% from "_formhelpers.html" import renderMessages %}
 
 
-<h2>Musik</h2>
+<h2>Musik<div class="check-status"><i></i></div></h2>
+
+
 {% if g.band.tracks.count() > 0 %}
 <div class="uploaded-files">
     <ul id="track_list" class="track-list">
