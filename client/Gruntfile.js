@@ -77,37 +77,24 @@ module.exports = function (grunt) {
             },
             dist: {
                 options: {
-                    outputStyle: 'nested',
+                    outputStyle: 'expanded',
                     sourceComments: 'none'
                 },
                 files: {
-                    '<%= cfg.dist %>/css/app.css': '<%= cfg.src %>/scss/app.scss'
+                    '<%= cfg.src %>/css/app.css': '<%= cfg.src %>/scss/app.scss',
+                    '<%= cfg.src %>/css/source-sans-pro.woff.css': '<%= cfg.src %>/scss/source-sans-pro.woff.scss'
                 }
             },
             dev: {
                 options: {
                     sourceMap: true,
                     sourceComments: 'none',
-                    outputStyle: 'nested'
+                    outputStyle: 'expanded'
                 },
                 files: {
-                    '<%= cfg.dist %>/css/app.css': '<%= cfg.src %>/scss/app.scss',
-                    '<%= cfg.dist %>/css/source-sans-pro.woff.css': '<%= cfg.src %>/scss/source-sans-pro.woff.scss'
+                    '<%= cfg.src %>/css/app.css': '<%= cfg.src %>/scss/app.scss',
+                    '<%= cfg.src %>/css/source-sans-pro.woff.css': '<%= cfg.src %>/scss/source-sans-pro.woff.scss'
                 }
-            }
-        },
-
-        cssmin: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= cfg.dist %>/css/',
-                        src: ['*.css', '!*.min.css'],
-                        dest: '<%= cfg.dist %>/css/',
-                        ext: '.min.css'
-                    }
-                ]
             }
         },
 
@@ -124,8 +111,22 @@ module.exports = function (grunt) {
                 options: {
                     // Target-specific options go here.
                 },
-                src: '<%= cfg.dist %>/css/app.css',
-                dest: '<%= cfg.dist %>/css/app.css'
+                src: '<%= cfg.src %>/css/app.css',
+                dest: '<%= cfg.src %>/css/app.css'
+            }
+        },
+
+        cssmin: {
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= cfg.src %>/css/',
+                        src: ['*.css', '!*.min.css'],
+                        dest: '<%= cfg.dist %>/css/',
+                        ext: '.min.css'
+                    }
+                ]
             }
         },
 
@@ -172,6 +173,20 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     mangle: false
+                },
+                files: {
+                    '<%= cfg.dist %>/js/lib/helpers.js': ['<%= cfg.src %>/js/lib/*.js'],
+                    '<%= cfg.dist %>/js/plugins.js': ['<%= cfg.src %>/js/vendor/*.js']
+                }
+            },
+            dist: {
+                options: {
+                    mangle: true,
+                    compress: {
+                        drop_console: true
+                    },
+                    report: 'min',
+                    preserveComments: false
                 },
                 files: {
                     '<%= cfg.dist %>/js/lib/helpers.js': ['<%= cfg.src %>/js/lib/*.js'],
@@ -270,33 +285,22 @@ module.exports = function (grunt) {
                 ]
             }
 
-        },
-
-        useminPrepare: {
-            html: '<%= cfg.src %>/index.html'
         }
-
-
 
 
     });
 
-    // TODO
-    //grunt.registerTask('build', [
-    //    'clean:dist',
-    //    'imagemin:dist',
-    //    'sass:dist',
-    //    'autoprefixer:dist',
-    //    'bowercopy:dist',
-    //    'jshint',
-    //    'useminPrepare',
-    //    'concat:generated',
-    //    'cssmin:generated',
-    //    'uglify:generated',
-    //    'filerev',
-    //    'usemin',
-    //    'copy:all'
-    //]);
+    grunt.registerTask('build', [
+        'clean:dist',
+        'imagemin:dist',
+        'sass:dist',
+        'autoprefixer:dist',
+        'cssmin:dist',
+        'bowercopy:dev',
+        'jshint',
+        'uglify:dist',
+        'copy:all'
+    ]);
 
     grunt.registerTask('dev', [
         'clean:dist',

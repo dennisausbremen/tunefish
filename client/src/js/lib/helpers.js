@@ -124,7 +124,7 @@ var helper = (function ($) {
 
     function updateCheckTab(data) {
         if (data.check_tab !== 'undefined') {
-            $('#step-summary').html(data.check_tab);
+            $('#step-summary .step-content').html(data.check_tab);
             updateStepState();
         }
     }
@@ -272,6 +272,28 @@ var helper = (function ($) {
         $(window).on('resize',setEqualHeightCards);
     };
 
+    var switchStateIcon = function switchStateIcon (el, state) {
+
+        if (el.attr('class')) {
+
+            if (el.attr('class') !== state) {
+                el
+                    .delay(500)
+                    .velocity('transition.expandOut',250,function(){
+                        el.removeAttr('class').addClass(state);
+                    })
+                    .velocity('transition.shrinkIn',250);
+            }
+
+        } else {
+            el
+                .delay(500)
+                .addClass(state)
+                .velocity('transition.shrinkIn',250);
+        }
+
+    };
+
     var updateStepState = function updateStepState() {
         var items = $('#check-overview li');
 
@@ -281,13 +303,7 @@ var helper = (function ($) {
                 itemState = $('i', item).attr('class'),
                 stepStateEl = $('#'+itemID+' .check-status i');
 
-            if (stepStateEl.attr('class')) {
-                stepStateEl.removeAttr('class').addClass(itemState);
-            } else {
-                stepStateEl.addClass(itemState);
-            }
-
-
+            switchStateIcon(stepStateEl, itemState);
         }
     };
 

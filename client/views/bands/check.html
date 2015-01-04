@@ -41,7 +41,11 @@
                 {{ g.band.tracks.count() }} Tracks</div>
                 <div class="check-status"><i class="i-done"></i></div>
             {% else %}
-                Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</div>
+                {% if 3 - g.band.tracks.count() == 1 %}
+                    Es fehlt mindestens {{ 3 - g.band.tracks.count() }} Track</div>
+                {% else %}
+                    Es fehlen mindestens {{ 3 - g.band.tracks.count() }} Tracks</div>
+                {% endif %}
                 <div class="check-status"><i class="i-close"></i></div>
             {% endif %}
     </li>
