@@ -1,13 +1,116 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <title>PLAY @ SOMMERFEST | SOMMERFEST VORSTRASSE FEAT. SPITTALER STRASSE | VOL XXXVIII</title>
+<head lang="de">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
+    <title>PLAY @ SOMMERFEST | SOMMERFEST VORSTRASSE FEAT. SPITTALER STRASSE | VOL XXXVIII</title>
+    <link href="{{ url_for('static', filename='css/intro.min.css') }}" type="text/css" rel="stylesheet"/>
+
+    <!-- WEBFONT CACHING -->
+    <script type="text/javascript">
+        (function () {
+            function addFont() {
+                var style = document.createElement('style');
+                style.rel = 'stylesheet';
+                document.head.appendChild(style);
+                style.textContent = localStorage.sourceSansPro;
+            }
+
+            try {
+                window.localStorage.clear();
+                if (localStorage.sourceSansPro) {
+                    // The font is in localStorage, we can load it directly
+                    addFont();
+                } else {
+                    // We have to first load the font file asynchronously
+                    var request = new XMLHttpRequest();
+                    request.open('GET', '{{ url_for('static', filename='css/source-sans-pro.min.css') }}', true);
+
+                    request.onload = function () {
+                        if (request.status >= 200 && request.status < 400) {
+                            // We save the file in localStorage
+                            localStorage.sourceSansPro = request.responseText;
+
+                            // ... and load the font
+                            addFont();
+                        }
+                    };
+
+                    request.send();
+                }
+            } catch (ex) {
+                // maybe load the font synchronously for woff-capable browsers
+                // to avoid blinking on every request when localStorage is not available
+            }
+        }());
+    </script>
+    <!-- END WEBFONT CACHING -->
 </head>
 <body>
-<h1>PLAY @ SOMMERFEST | SOMMERFEST VORSTRASSE FEAT. SPITTALER STRASSE | VOL XXXVIII</h1>
 
-<h2>
-    <a href="/bands">Bewerben</a>
-</h2>
+<header>
+    <div class="color-bar"></div>
+</header>
+
+<main class="main">
+
+    <h1>tunefish
+        <span>Sommerfest Vorstrasse feat. Spittaler Strasse</span>
+    </h1>
+
+    <section class="intro">
+        <h1>be a part of</h1>
+        <h2 class="headline slide">
+            <span>38 years of</span>
+			<span class="words-wrapper">
+				<b class="is-visible">sommerfest</b>
+                <b>party</b>
+                <b>rock</b>
+				<b>ska</b>
+				<b>reggae</b>
+                <b>pop</b>
+                <b>hip-hop</b>
+                <b>music</b>
+			</span>
+        </h2>
+
+    </section>
+
+    <a class="btn" href="/bands" title="Zur Bandbewerbung">Zur Bandbewerbung</a>
+
+    <p>
+        <span>Was ist tunefish? Warum machen wir das?</span>
+        Das könnte man sich natürlich als erstes Fragen. <br/>
+        Fakt ist, dass wir jedes Jahr mehr tolle Bewerbungen von Euch bekommen und wir diese Bewerbungen dann erst einmal
+        aufbereiten müssen. Sei es für unser Voting, für unsere Webseite oder für Facebook. <br/>
+        Das ist immer ein recht großer Aufwand für uns und natürlich auch für Euch, falls ihr eventuell, für uns wichtige,
+        Infos bei Eurer Bewerbung vergessen habt und diese nachreichen müsst. <br/> <br/>
+        Deshalb haben wir dieses Jahr unsere interne Votingplattform "tunefish" für euch umgebaut, sodass ihr euch direkt
+        und bequem von Eurem Rechner oder Smartphone aus bewerben könnt. <br/> <br/>
+        Wir glauben, auch wenn wir Euren tollen postalischen Bewerbungen hinterhertrauern werden, dass dies der Schritt in die
+        richtige Richtung ist und unser "tunefish" auch bei Euch Anklang findet. <br/> <br/>
+        Solltet Ihr bei der Benutzung Probleme oder Fragen haben wendet euch bitte umgehend an
+        <br/>
+        <a href="mailto:tunefish@vorstrasse-bremen.de">tunefish@vorstrasse-bremen.de</a>.
+        <br/>
+        Wir helfen euch dann ASAP weiter.
+        <br/><br/>
+        Wir freuen uns schon auf Eure Bewerbungen.
+        <br/>
+        Eure Sommerfest Orga
+    </p>
+
+</main>
+
+<footer>
+    &copy;2014 - Wohnpark am Fleet e.V.
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/intro.js') }}"></script>
+
 </body>
 </html>

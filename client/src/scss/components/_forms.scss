@@ -46,6 +46,9 @@ input[type=submit] {
     line-height: normal;
     text-decoration: none;
     margin-bottom: 0;
+    padding: 0 1rem;
+
+    transition: background-color 0.2s ease;
 
     &:hover {
         background-color: lighten($bg-ter,25%);

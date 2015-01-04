@@ -82,6 +82,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     '<%= cfg.src %>/css/app.css': '<%= cfg.src %>/scss/app.scss',
+                    '<%= cfg.src %>/css/intro.css': '<%= cfg.src %>/scss/intro.scss',
                     '<%= cfg.src %>/css/source-sans-pro.woff.css': '<%= cfg.src %>/scss/source-sans-pro.woff.scss'
                 }
             },
@@ -93,6 +94,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     '<%= cfg.src %>/css/app.css': '<%= cfg.src %>/scss/app.scss',
+                    '<%= cfg.src %>/css/intro.css': '<%= cfg.src %>/scss/intro.scss',
                     '<%= cfg.src %>/css/source-sans-pro.woff.css': '<%= cfg.src %>/scss/source-sans-pro.woff.scss'
                 }
             }
@@ -106,13 +108,11 @@ module.exports = function (grunt) {
                 }
             },
 
-            // prefix the specified file
             dist: {
-                options: {
-                    // Target-specific options go here.
-                },
-                src: '<%= cfg.src %>/css/app.css',
-                dest: '<%= cfg.src %>/css/app.css'
+                expand: true,
+                flatten: true,
+                src: '<%= cfg.src %>/css/*.css',
+                dest: '<%= cfg.src %>/css/'
             }
         },
 
@@ -165,7 +165,8 @@ module.exports = function (grunt) {
             all: [
                 '!<%= cfg.src %>/js/vendor/*.js',
                 '<%= cfg.src %>/js/lib/*.js',
-                '<%= cfg.src %>/js/app.js'
+                '<%= cfg.src %>/js/app.js',
+                '<%= cfg.src %>/js/intro.js'
             ]
         },
 
@@ -175,6 +176,8 @@ module.exports = function (grunt) {
                     mangle: false
                 },
                 files: {
+                    '<%= cfg.dist %>/js/app.js': ['<%= cfg.src %>/js/app.js'],
+                    '<%= cfg.dist %>/js/intro.js': ['<%= cfg.src %>/js/intro.js'],
                     '<%= cfg.dist %>/js/lib/helpers.js': ['<%= cfg.src %>/js/lib/*.js'],
                     '<%= cfg.dist %>/js/plugins.js': ['<%= cfg.src %>/js/vendor/*.js']
                 }
@@ -189,6 +192,8 @@ module.exports = function (grunt) {
                     preserveComments: false
                 },
                 files: {
+                    '<%= cfg.dist %>/js/app.js': ['<%= cfg.src %>/js/app.js'],
+                    '<%= cfg.dist %>/js/intro.js': ['<%= cfg.src %>/js/intro.js'],
                     '<%= cfg.dist %>/js/lib/helpers.js': ['<%= cfg.src %>/js/lib/*.js'],
                     '<%= cfg.dist %>/js/plugins.js': ['<%= cfg.src %>/js/vendor/*.js']
                 }
@@ -228,7 +233,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: '<%= cfg.src %>/js/',
-                        src: ['app.js','jquery.min.js'],
+                        src: ['jquery.min.js'],
                         dest: '<%= cfg.dist %>/js'
                     }
                 ]

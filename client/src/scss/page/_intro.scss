@@ -1,0 +1,200 @@
+.main {
+    text-align: center;
+    margin-bottom: 0;
+
+    > h1 span {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1;
+        display: block;
+    }
+}
+
+.intro {
+    width: 90%;
+    max-width: 1000px;
+    text-align: center;
+    margin: 4rem auto;
+
+    @include breakpoint(m) {
+        margin: 4rem auto;
+    }
+
+    h1, h2 {
+        font-weight: 300;
+        margin: 0;
+    }
+
+    h1 {
+        font-size: $h1-font-size*0.75;
+        line-height: $h1-line-height*0.75;
+    }
+
+    h2 {
+        font-size: $h2-font-size*0.75;
+    }
+
+    @include breakpoint(m) {
+        h1 {
+            font-size: $h1-font-size;
+            line-height: $h1-line-height;
+        }
+
+        h2 {
+            font-size: $h2-font-size;
+        }
+    }
+
+    @include breakpoint(l) {
+        h1 {
+            font-size: $h1-font-size*1.5;
+            line-height: $h1-line-height*1.5;
+        }
+
+        h2 {
+            font-size: $h2-font-size*1.5;
+        }
+    }
+}
+
+.headline {
+    font-size: 3rem;
+    line-height: 1.2;
+
+    @include breakpoint(m) {
+        font-size: 4.4rem;
+        font-weight: 300;
+    }
+
+    @include breakpoint(l) {
+        font-size: 6rem;
+    }
+
+    span {
+        display: inline-block;
+        padding: .2em 0;
+    }
+
+    .words-wrapper {
+        overflow: hidden;
+        vertical-align: top;
+    }
+
+    b {
+        opacity: 0;
+        top: .2em;
+
+        &.is-visible {
+            top: 0;
+            opacity: 1;
+            animation-name: slide-in;
+            animation-duration: .6s;
+        }
+
+        &.is-hidden {
+            animation-name: slide-out;
+            animation-duration: .6s;
+        }
+    }
+}
+
+.words-wrapper {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+
+    transition: all 0.25s ease;
+
+    b {
+        font-weight: 300;
+        line-height: 1.2;
+        display: inline-block;
+        position: absolute;
+        white-space: nowrap;
+        left: 0;
+        top: 0;
+
+        &.is-visible {
+            position: relative;
+        }
+    }
+
+    .no-js & b {
+        opacity: 0;
+
+        &.is-visible {
+            opacity: 1;
+        }
+
+    }
+}
+
+.btn {
+    color: $bg-sec;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+
+    display: inline-block;
+    padding: 1rem 4rem;
+    background-color: $bg-ter;
+
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: lighten($bg-ter,25%);
+    }
+}
+
+p {
+    width: 80%;
+    max-width: 1000px;
+    margin: 4rem auto 0;
+    text-align: left;
+
+    @include breakpoint(m) {
+        width: 60%;
+    }
+
+    span {
+        font-size: $h3-font-size;
+        display: block;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid $bg-ter;
+    }
+}
+
+@keyframes slide-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(20%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    60% {
+        opacity: 0;
+        transform: translateY(120%);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+}

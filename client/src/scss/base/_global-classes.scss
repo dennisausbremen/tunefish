@@ -1,3 +1,7 @@
+.color-bar {
+    height: 10px;
+    background: linear-gradient(to right, $step1 0%,$step1 20%, $step2 20%, $step2 40%, $step3 40%, $step3 60%, $step4 60%, $step4 80%, $step5 80%, $step5 100%);
+}
 
 a {
     color: $text-dark;
