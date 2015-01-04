@@ -593,9 +593,14 @@ var helper = (function ($) {
 
 $.fn.setAllToMaxHeight = function(){
     'use strict';
-    var h = $(window).height()+4;
+    var h = $(window).height()+5;
     if ($(window).width() > 767) {
-        //return this.height( Math.max.apply(this, $.map( this , function(e){ return $(e).height(); }) ) );
-        return this.height(h);
+        var max = Math.max.apply(this, $.map( this , function(e){ return $(e).outerHeight(); }) );
+
+        if (h>max) {
+            return this.height(h);
+        } else {
+            return this.height(max);
+        }
     }
 };
