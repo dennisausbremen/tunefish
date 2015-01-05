@@ -19,21 +19,21 @@ class State:
 
 class Band(db.Model):
     id = db.Column(Integer, primary_key=True)
-    login = db.Column(String, unique=True)
+    login = db.Column(String(25), unique=True)
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
-    name = db.Column(String)
-    email = db.Column(String)
+    name = db.Column(String(60))
+    email = db.Column(String(100))
     is_email_confirmed = db.Column(Boolean, default=False)
-    email_confirmation_token = db.Column(String)
-    descp = db.Column(String)
+    email_confirmation_token = db.Column(String(36))
+    descp = db.Column(String(5000))
     amount_members = db.Column(Integer)
     website = db.Column(URLType)
-    youtube_id = db.Column(String)
-    facebook_page = db.Column(String)
-    phone = db.Column(String)
-    city = db.Column(String)
-    image = db.Column(String)
-    techrider = db.Column(String)
+    youtube_id = db.Column(String(20))
+    facebook_page = db.Column(String(100))
+    phone = db.Column(String(30))
+    city = db.Column(String(50))
+    image = db.Column(String(80))
+    techrider = db.Column(String(80))
     state = db.Column(Integer, default=State.NEW)
     apply_timestamp = db.Column(DateTime)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
@@ -95,8 +95,8 @@ class Band(db.Model):
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'))
-    filename = db.Column(String)
-    trackname = db.Column(String)
+    filename = db.Column(String(80))
+    trackname = db.Column(String(100))
 
     @property
     def url(self):
