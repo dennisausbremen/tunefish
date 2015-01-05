@@ -8,13 +8,26 @@
 {% block body %}
 {{ renderMessages() }}
 
-<h1>Danke für's mitmachen</h1>
-<p>
-    Moin {{ g.band.name }}, vielen Dank für eure Bewerbung. <br><br>
-    <i>Wir melden uns. Rufen Sie uns nicht an! </i>
-</p>
-<p>
-    MfG<br>
-    SoFe '15
-</p>
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    <h2>Vielen Dank fürs Mitmachen!</h2>
+
+                    <p>
+                        Hey {{ g.band.name }},<br/>
+                        Deine Bewerbung wurde in unser System übertragen und steht nun für das Voting bereit.<br/><br/>
+                        Alles was Du nun tun musst ist warten.<br/>
+                        Wir benachrichtigen Dich sobald das Voting abgeschlossen ist. <br/><br/>
+                        Liebe Grüße,<br/>
+                        Deine Sommerfest Orga
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
