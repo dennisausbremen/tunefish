@@ -109,7 +109,7 @@ var helper = (function ($) {
     };
 
     var addErrorMessage = function addErrorMessage (field,error) {
-        addMessage('error', 'Fehler im Feld ' + field + ': ' + error);
+        addMessage('error', error);
     };
 
     var clearMessages = function() {

@@ -7,7 +7,6 @@ from wtforms.fields.html5 import EmailField, TelField, IntegerField, URLField
 
 
 class LoginForm(Form):
-
     login = StringField('Login', [InputRequired('Bitte Login eintragen')])
     password = PasswordField('Passwort', [InputRequired('Bitte Passwort eintragen')])
 
@@ -27,14 +26,14 @@ class RegistrationForm(Form):
 
 
 class BandForm(Form):
-    name = StringField('Name', [InputRequired("Bitte Bandnamen eintragen"), validators.Length(min=2, max=60)])
-    descp = TextAreaField('Beschreibung', [InputRequired("Bitte Bandbeschreibungstext eintragen"), validators.Length(min=30)])
-    amount_members = IntegerField('Mitglieder', [InputRequired("Bitte Mitgliederanzahl eintragen"), validators.NumberRange(min=1, max=30, message=u"Anzahl der Bandmitglieder muss zwischen %(min)s und %(max)s liegen.")])
-    website = URLField('Website URL', [InputRequired("Bitte Webseite eintragen"), validators.Length(min=6)])
+    name = StringField('Name', [InputRequired("Bitte Bandnamen eintragen"), validators.Length(min=2, max=60, message="Der Bandname muss zwischen 2 und 60 Zeichen lang sein.")])
+    descp = TextAreaField('Beschreibung', [InputRequired("Bitte Bandbeschreibungstext eintragen"), validators.Length(min=30, max=5000, message="Die Bandbeschreibung muss zwischen %(min)s und %(max)s Zeichen lang sein.")])
+    amount_members = IntegerField('Mitglieder', [InputRequired("Bitte Mitgliederanzahl eintragen"), validators.NumberRange(min=1, max=30, message="Anzahl der Bandmitglieder muss zwischen %(min)s und %(max)s liegen.")])
+    website = URLField('Website URL', [InputRequired("Bitte Webseite eintragen"), validators.Length(min=6, message="Die Webseite muss mindestens %(min)s Zeichen lang sein.")])
     youtube_id = StringField('YouTube Video ID')
     facebook_page = StringField('facebook')
-    phone = TelField('Telefon', [InputRequired("Bitte Telefonnummer eintragen"), validators.Length(min=6)])
-    city = StringField('Stadt', [InputRequired("Bitte Stadt eintragen"), validators.Length(min=3)])
+    phone = TelField('Telefon', [InputRequired("Bitte Telefonnummer eintragen"), validators.Length(min=6, max=30, message="Die Telefonnummer muss zwischen %(min)s und %(max)s Zeichen lang sein.")])
+    city = StringField('Stadt', [InputRequired("Bitte Stadt eintragen"), validators.Length(min=2, max=50, message="Der Name der Stadt muss zwischen %(min)s und %(max)s Zeichen lang sein.")])
 
     def set_from_model(self, band):
         self.name.raw_data = self.name.data = band.name
@@ -64,6 +63,7 @@ class TrackUploadForm(Form):
 
 class ImageUploadForm(Form):
     image_file = FileField('Bild', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
+
 
 class TechriderUploadForm(Form):
     techriderFile = FileField('Techrider', [validators.DataRequired(message=u'Sie müssen eine Datei hochladen.')])
