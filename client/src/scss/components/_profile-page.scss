@@ -100,3 +100,34 @@
         transform: translate(-50%,-50%);
     }
 }
+
+.hint{
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 1px solid $dark;
+    color: $dark;
+
+    .hint-icon{
+        float: left;
+        width: 60px;
+        height: 55px;
+
+        position: relative;
+
+        i {
+            color: $bg-primary;
+            font-family: $font-family;
+            font-size: 25px;
+            background-color: $dark;
+
+            display: inline-block;
+            padding: 10px 17px;
+            border-radius: 50%;
+        }
+
+    }
+}
+
+.i-help:before{
+    content: "?";
+}
