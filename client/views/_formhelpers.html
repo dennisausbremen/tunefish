@@ -1,5 +1,5 @@
 
-{% macro getField(field, placeholder = '', required=False) %}
+{% macro getField(field, placeholder = '', regex='', required=False) %}
     {% if field.errors %}
         {% for error in field.errors %}
 
