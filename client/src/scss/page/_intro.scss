@@ -2,14 +2,20 @@
     text-align: center;
     margin-bottom: 0;
 
-    > h1 span {
-        font-size: 14px;
-        font-weight: 300;
-        line-height: 1.5;
-        display: block;
+    > h1 {
+        span {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.5;
+            display: block;
 
-        &:first-child {
-            margin-top: -10px;
+            &:first-child {
+                margin-top: -10px;
+            }
+        }
+        .date {
+            font-weight: 700;
+            font-size: 31px;
         }
     }
 }
