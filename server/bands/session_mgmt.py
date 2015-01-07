@@ -19,6 +19,7 @@ class LoginAndRegister(MethodView):
         super(LoginAndRegister, self).__init__()
         self.login_form = LoginForm()
         self.registration_form = RegistrationForm()
+        g.deadline = datetime.strptime(app.SETTINGS['BAND_CANDIDATURE_END'], "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y")
 
     def render(self):
         return render_template('loginAndRegister.html', loginForm=self.login_form, registerForm=self.registration_form)
