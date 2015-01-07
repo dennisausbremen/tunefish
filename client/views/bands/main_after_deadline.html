@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+
+{% block body %}
+{{ renderMessages() }}
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    <h2>Deadline erreicht!</h2>
+
+                    <p>
+                        Hey {{ g.band.name }},<br/>
+                        der Bewerbungszeitraum für 2015 ist abgelaufen.<br /><br />
+                        {% if g.band.state == states.NEW %}
+                            Leider habt ihr die Bewerbung nicht vollständig ausgefüllt und abgeschickt. Daher seid ihr leider
+                            dieses Jahr nicht mit im Voting. Wir freuen uns aber über eure Bewerbung 2016!
+                        {% endif %}
+                        {% if g.band.state > states.NEW %}
+                            Eure Bewerbung ist erfolgreich bei uns eingegangen. Wir müssen jetzt eure Bewerbungen sichten,
+                            durchhören und bewerten. Wir melden uns auf jeden Fall bis Mitte Mai 2015.
+                        {% endif %}
+                         <br/><br/>
+                        Liebe Grüße,<br/>
+                        Deine Sommerfest Orga
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

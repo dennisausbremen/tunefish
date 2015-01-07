@@ -1,10 +1,12 @@
 # coding=utf-8
+from datetime import datetime, date
 from uuid import uuid4
 
 from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
+from server import app
 from server.ajax import AjaxForm, AJAX_FAIL
 from server.bands.forms import LoginForm, RegistrationForm
 from server.bands.mails import send_registration_mail
@@ -17,6 +19,7 @@ class LoginAndRegister(MethodView):
         super(LoginAndRegister, self).__init__()
         self.login_form = LoginForm()
         self.registration_form = RegistrationForm()
+        g.deadline = datetime.strptime(app.SETTINGS['BAND_CANDIDATURE_END'], "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y")
 
     def render(self):
         return render_template('loginAndRegister.html', loginForm=self.login_form, registerForm=self.registration_form)
@@ -70,6 +73,7 @@ class Logout(MethodView):
 
 class RestrictedBandPage(MethodView):
     def dispatch_request(self, *args, **kwargs):
+        g.deadline = datetime.strptime(app.SETTINGS['BAND_CANDIDATURE_END'], "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y")
         if not 'bandId' in session:
             return redirect(url_for('bands.session.index'))
         else:
