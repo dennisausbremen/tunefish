@@ -5,8 +5,12 @@
     > h1 span {
         font-size: 14px;
         font-weight: 300;
-        line-height: 1;
+        line-height: 1.5;
         display: block;
+
+        &:first-child {
+            margin-top: -10px;
+        }
     }
 }
 
