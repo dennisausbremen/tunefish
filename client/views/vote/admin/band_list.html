@@ -1,0 +1,46 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+{{ renderMessages() }}
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / Bands
+
+                    <h2>Bandübersicht</h2>
+
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Band</th>
+                                <th>Mitgl.</th>
+                                <th>Herkunft</th>
+                                <th>Status</th>
+                                <th colspan="2">Optionen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for band in bands %}
+                            <tr>
+                                <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name }}</a></td>
+                                <td>{{ band.amount_members }}</td>
+                                <td>{{ band.city }}</td>
+                                <td>{% if band.state==state.NEW %}neu{% endif %}{% if band.state==state.READY_FOR_VOTE %}abgeschlossen{% endif %}</td>
+                                <td>Edit</td>
+                                <td>X</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

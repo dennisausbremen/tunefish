@@ -1,5 +1,6 @@
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean, DateTime
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils import URLType, PasswordType
 
 from server.app import app, trackPool, techriderPool, imagePool
@@ -15,6 +16,13 @@ class State:
     IN_VOTE = 2
     DECLINED = 3
     ACCEPTED = 4
+
+
+class Access:
+    INACTIVE = 0
+    USER = 1
+    MODERATOR = 2
+    ADMIN = 3
 
 
 class Band(db.Model):
@@ -106,5 +114,49 @@ class Track(db.Model):
     def path(self):
         return trackPool.path(self.filename)
 
+
+class User(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    login = db.Column(String(25), unique=True)
+    password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
+    name = db.Column(String(60))
+    _access = db.Column(Integer)
+
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
+        self._access = Access.INACTIVE
+
+    def __repr__(self):
+        return '<User %r>' % (self.name)
+
+    @hybrid_property
+    def access(self):
+        return self._access
+
+    # avoid disallowed changes
+    @access.setter
+    def access(self, access):
+        # by now you could only set the access to USER (activate user), everything else must be done in the database
+        if access < Access.MODERATOR: # TODO change to currentUser.access >= access, don't know how to get currentUser
+            # so later on an mod i.e. can set somebody to user or mod, but not to admin
+            self.access = access
+
+    @property
+    def access_name(self):
+        access_names = {0: '', 1: 'Benutzer', 2: 'Moderator', 3: 'Administrator'}
+        return access_names[self.access]
+
+    @property
+    def is_mod(self):
+        return self.access == Access.MODERATOR
+
+    @property
+    def is_admin(self):
+        return self.access == Access.ADMIN
+
+    @property
+    def is_user(self):
+        return self.access == Access.USER
 
 db.create_all()

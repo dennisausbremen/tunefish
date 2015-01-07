@@ -1,0 +1,21 @@
+<div class="color-bar"></div>
+<header>
+    <div class="logo">
+        <!--<img src="img/tunefish.svg" alt="Tunefish" class="anim-logo"/>-->
+        <span>tunefish</span>
+    </div>
+
+    {% if g.user %}
+        <div class="account">
+            <span>{{ g.user.login }}</span>
+
+            <span>Zugriff: {{ g.user.access_name }} &nbsp;</span>
+            {% if g.user.is_mod or g.user.is_admin %}
+                <span><a href="{{ url_for('vote.admin.index') }}">Administration</a>&nbsp;</span>
+            {% endif %}
+
+            <a class="logout" href="{{ url_for('vote.session.logout') }}"><i class="i-logout"></i></a>
+        </div>
+    {% endif %}
+
+</header>

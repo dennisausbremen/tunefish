@@ -1,0 +1,62 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderDefault %}
+{% from "_formhelpers.html" import getField %}
+{% from "_formhelpers.html" import getErrors %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+
+<section class="main-content login">
+    <div class="row center-xs end-sm middle-xs ">
+        <div class="col-xs-12 col-sm-4 col-md-6 login-text">
+            <h1>
+                <span>welcome to</span>
+                tunefish
+            </h1>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+
+            <div class="login-container">
+
+                {{ renderMessages() }}
+
+                <ul class="tabs">
+                    <li><a href="#login-toggle" title="Login" class="active">Login</a></li>
+                    <li><a href="#register-toggle" title="Registrieren">Registrieren</a></li>
+                </ul>
+
+
+
+                <div class="form-action-wrapper">
+
+                    <div id="login-toggle" class="form-action">
+                        <h2>Login</h2>
+                       <form method="POST" action="{{ url_for('vote.session.login') }}">
+                            {{ loginForm.csrf_token }}
+                            {{ renderDefault(loginForm.login, 'Login', true) }}
+                            {{ renderDefault(loginForm.password, 'Passwort', true) }}
+                            <input type="submit" value="Login">
+                        </form>
+                    </div>
+
+                    <div id="register-toggle" class="form-action">
+                        <h2>Registrieren</h2>
+                        <form method="POST" action="{{ url_for('vote.session.register') }}">
+                            {{ registerForm.csrf_token }}
+                            {{ renderDefault(registerForm.login, 'Login') }}
+                            {{ renderDefault(registerForm.password, 'Passwort') }}
+                            {{ renderDefault(registerForm.confirm, 'Passwort wiederholen') }}
+                            <input type="submit" value="Band registrieren">
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+

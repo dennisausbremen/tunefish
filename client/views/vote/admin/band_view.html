@@ -1,0 +1,84 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+{{ renderMessages() }}
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / <a href="{{ url_for('vote.admin.bands.list') }}">Bands</a> / Details "{{ band.name }}"
+
+                    <h2>Band {{ band.name }}</h2>
+
+
+                    <table style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td>Kontakt:</td>
+                                <td>{{ band.email }}, {{ band.phone }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mitglieder:</td>
+                                <td>{{ band.amount_members }}</td>
+                            </tr>
+                            <tr>
+                                <td>Herkunft:</td>
+                                <td>{{ band.city }}</td>
+                            </tr>
+                            <tr>
+                                <td>Webseite:</td>
+                                <td>{{ band.website }}</td>
+                            </tr>
+                            {% if band.youtube_id %}
+                            <tr>
+                                <td>YouTube:</td>
+                                <td>{{ band.youtube_id }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if band.facebook_page %}
+                            <tr>
+                                <td>facebook:</td>
+                                <td>{{ band.facebook_page }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td>Bewerbungsstatus:</td>
+                                <td>{% if band.state==state.NEW %}neu{% endif %}{% if band.state==state.READY_FOR_VOTE %}abgeschlossen{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Techrider:</td>
+                                <td>{% if band.techrider_url %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else %}fehlt{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Beschreibung:</td>
+                                <td>{{ band.descp }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Tracks</h3>
+                    <ul>
+                    {% for track in band.tracks %}
+                        <li>
+                            <audio src="{{track.url}}" controls></audio>
+                            {{ track.trackname }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+
+                    <h3>Bandfoto</h3>
+                    {% if band.image_url %}
+                        <img src="{{ band.image_url }}" alt="Band {{ band.name }}" />
+                    {% else %}
+                        Noch kein Foto hochgeladen
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

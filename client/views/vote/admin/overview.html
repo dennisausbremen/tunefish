@@ -1,0 +1,23 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+{{ renderMessages() }}
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    Administration
+                    <h2>Administration</h2>
+
+                    <a href="{{ url_for('vote.admin.bands.list') }}">Bands</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
