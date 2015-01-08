@@ -49,3 +49,10 @@
         }
     }
 }
+
+.deadline {
+    @include breakpoint(m) {
+        display: block;
+    }
+    display: none;
+}
