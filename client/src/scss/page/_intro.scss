@@ -16,6 +16,11 @@
         .date {
             font-weight: 700;
             font-size: 31px;
+            background: $dark;
+            color: $bg-primary;
+            padding: 0 10px;
+            margin: 0 auto;
+            display: inline-block;
         }
     }
 }
@@ -37,7 +42,7 @@
 
     h1 {
         font-size: $h1-font-size*0.75;
-        line-height: $h1-line-height*0.75;
+        line-height: 1;
     }
 
     h2 {
@@ -173,6 +178,11 @@ p {
         margin-bottom: 1rem;
         border-bottom: 1px solid $bg-ter;
     }
+}
+
+.btn-text {
+    line-height: 1;
+    margin-top: $space-half;
 }
 
 @keyframes slide-in {
