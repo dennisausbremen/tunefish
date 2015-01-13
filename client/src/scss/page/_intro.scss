@@ -1,3 +1,13 @@
+.application-bar {
+    text-align: center;
+    padding: 15px;
+    font-size: 26px;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: $dark;
+    color: $bg-primary;
+}
+
 .main {
     text-align: center;
     margin-bottom: 0;
