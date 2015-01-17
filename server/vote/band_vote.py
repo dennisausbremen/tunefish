@@ -4,7 +4,7 @@ from flask import flash, url_for, redirect
 
 from flask.templating import render_template
 
-from server.models import Band, State, Comment, db
+from server.models import Band, State, Comment, db, Vote
 from server.vote.forms import CommentForm
 from server.vote.session_mgmt import RestrictedUserPage
 
@@ -26,6 +26,25 @@ class BandDetails(RestrictedUserPage):
             flash('Es existiert keine Band mit dieser ID', 'error')
             return redirect(url_for('vote.bands.list'))
 
+
+class BandVote(RestrictedUserPage):
+    def get(self, band_id, vote):
+        band = Band.query.get(band_id)
+        if band and 0 < vote < 6:
+            voting = Vote.query.filter(Vote.band_id == band_id, Vote.user_id == self.user.id).first()
+            if not voting:
+                voting = Vote()
+                voting.user_id = self.user.id
+                voting.band_id = band_id
+                db.session.add(voting)
+
+            voting.vote = vote
+            db.session.commit()
+            flash('Vote gespeichert', 'info')
+            return redirect(url_for('vote.bands.view', band_id=band_id))
+        else:
+            flash('Es existiert keine Band mit dieser ID', 'error')
+            return redirect(url_for('vote.bands.list'))
 
 
 class BandCommendAdd(RestrictedUserPage):

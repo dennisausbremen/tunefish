@@ -10,12 +10,18 @@
         <div class="profile-form-wrapper col-xs-12">
             <div class="form-action" id="step-finish">
                 <div class="step-content">
-                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / <a
-                        href="{{ url_for('vote.admin.bands.list') }}">Bands</a> / Details "{{ band.name }}"
+                    Voting / <a
+                        href="{{ url_for('vote.bands.list') }}">Bands</a> / Details "{{ band.name }}"
 
-                    <h2>Band {{ band.name }}</h2>
+                    <h2>Band {{ band.name }} ({{ band.vote_count }} Votes, {{ band.vote_average }})</h2>
 
-
+                    <ul>
+                        <li><a href="{{ url_for('vote.bands.vote', band_id=band.id, vote=1)}}">1</a></li>
+                        <li><a href="{{ url_for('vote.bands.vote', band_id=band.id, vote=2)}}">2</a></li>
+                        <li><a href="{{ url_for('vote.bands.vote', band_id=band.id, vote=3)}}">3</a></li>
+                        <li><a href="{{ url_for('vote.bands.vote', band_id=band.id, vote=4)}}">4</a></li>
+                        <li><a href="{{ url_for('vote.bands.vote', band_id=band.id, vote=5)}}">5</a></li>
+                    </ul>
                     <table style="width: 100%;">
                         <tbody>
                         <tr>

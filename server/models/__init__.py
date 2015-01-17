@@ -53,6 +53,8 @@ class Band(db.Model):
     apply_timestamp = db.Column(DateTime)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
+    votes = db.relationship("Vote", backref="band")
+
 
 
     def __init__(self, login, password):
@@ -113,6 +115,16 @@ class Band(db.Model):
     def state_label(self):
         return State.descp[self.state]
 
+    @property
+    def vote_average(self):
+        if self.vote_count == 0:
+            return 0
+        else:
+            return sum([x.vote for x in self.votes]) / float(len(self.votes))
+
+    @property
+    def vote_count(self):
+        return len(self.votes)
 
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
@@ -177,6 +189,11 @@ class User(db.Model):
     def is_user(self):
         return self.access == Access.USER
 
+
+class Vote(db.Model):
+    band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
+    user_id = db.Column(Integer, db.ForeignKey('user.id'), primary_key=True)
+    vote = db.Column(Integer)
 
 class Comment(db.Model):
     id = db.Column(Integer, primary_key=True)
