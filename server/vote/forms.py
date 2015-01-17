@@ -1,9 +1,10 @@
 # coding=utf-8
 
 from flask.ext.wtf import Form
-from wtforms import PasswordField, validators, StringField, TextAreaField, FileField
-from wtforms.validators import InputRequired, Email
-from wtforms.fields.html5 import EmailField, TelField, IntegerField, URLField
+from wtforms import PasswordField, validators, StringField, TextAreaField
+from wtforms.fields.simple import HiddenField
+from wtforms.validators import InputRequired
+
 
 class UserRegistrationForm(Form):
     login = StringField('Login',
@@ -16,3 +17,8 @@ class UserRegistrationForm(Form):
         InputRequired('Bitte Passwort wiederholen'),
         validators.EqualTo('password', message=u'Passwörter müssen identisch sein')
     ])
+
+class CommentForm(Form):
+    band_id = HiddenField('band')
+    message = TextAreaField('Kommentar', [InputRequired("Bitte Kommentar eingeben"), validators.Length(min=2, max=1000, message="Die Bandbeschreibung muss zwischen %(min)s und %(max)s Zeichen lang sein.")])
+

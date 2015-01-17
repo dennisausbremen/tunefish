@@ -1,4 +1,5 @@
 {% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderDefault %}
 {% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
@@ -9,102 +10,138 @@
         <div class="profile-form-wrapper col-xs-12">
             <div class="form-action" id="step-finish">
                 <div class="step-content">
-                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / <a href="{{ url_for('vote.admin.bands.list') }}">Bands</a> / Details "{{ band.name }}"
+                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / <a
+                        href="{{ url_for('vote.admin.bands.list') }}">Bands</a> / Details "{{ band.name }}"
 
                     <h2>Band {{ band.name }}</h2>
 
 
                     <table style="width: 100%;">
                         <tbody>
-                            <tr>
-                                <td>Kontakt:</td>
-                                <td>{{ band.email }}, {{ band.phone }}</td>
-                            </tr>
-                            <tr>
-                                <td>Mitglieder:</td>
-                                <td>{{ band.amount_members }}</td>
-                            </tr>
-                            <tr>
-                                <td>Herkunft:</td>
-                                <td>{{ band.city }}<br/>
-                                    <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{band.city|urlencode}}&zoom=10&size=600x300&sensor=false" />
+                        <tr>
+                            <td>Kontakt:</td>
+                            <td>{{ band.email }}, {{ band.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Mitglieder:</td>
+                            <td>{{ band.amount_members }}</td>
+                        </tr>
+                        <tr>
+                            <td>Herkunft:</td>
+                            <td>{{ band.city }}<br/>
+                                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{band.city|urlencode}}&zoom=10&size=600x300&sensor=false"/>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Webseite:</td>
-                                <td>{{ band.website }}</td>
-                            </tr>
-                            {% if band.youtube_id and not band.youtube_id.endswith('.') %} <!-- TODO: dirty hack for youtube fail :( -->
-                            <tr>
-                                <td>YouTube:</td>
-                                <td>
-                                    {% if 'youtube' in band.youtube_id %}
-                                        {% if not band.youtube_id.startswith('http') %}
-                                        <iframe id="ytplayer" type="text/html" width="640" height="390"
-                                                src="https://{{ band.youtube_id }}"
-                                                frameborder="0"/>
-                                        {% else %}
-                                        <iframe id="ytplayer" type="text/html" width="640" height="390"
-                                                src="{{ band.youtube_id }}"
-                                                frameborder="0"/>
-                                        {% endif %}
-                                    {% else %}
-                                    <iframe id="ytplayer" type="text/html" width="640" height="390"
-                                            src="http://www.youtube.com/embed/{{ band.youtube_id }}"
-                                            frameborder="0"/>
-                                    {% endif %}
-                                    </td>
-                            </tr>
-                            {% endif %}
-                            {% if band.facebook_page %}
-                            <tr>
-                                <td>facebook:</td>
-                                <td>
-                                    {% if 'facebook.com' in band.facebook_page %}
-                                        {% if not band.facebook_page.startswith('http') %}
-                                            <a href="https://{{ band.facebook_page }}">{{ band.facebook_page }}</a>
-                                        {% else %}
-                                            <a href="{{ band.facebook_page }}">{{ band.facebook_page }}</a>
-                                        {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Webseite:</td>
+                            <td>{{ band.website }}</td>
+                        </tr>
+                        {% if band.youtube_id and not band.youtube_id.endswith('.') %}
+                        <!-- TODO: dirty hack for youtube fail :( -->
+                        <tr>
+                            <td>YouTube:</td>
+                            <td>
+                                {% if 'youtube' in band.youtube_id %}
+                                {% if not band.youtube_id.startswith('http') %}
+                                <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                        src="https://{{ band.youtube_id }}"
+                                        frameborder="0"/>
+                                {% else %}
+                                <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                        src="{{ band.youtube_id }}"
+                                        frameborder="0"/>
+                                {% endif %}
+                                {% else %}
+                                <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                        src="http://www.youtube.com/embed/{{ band.youtube_id }}"
+                                        frameborder="0"/>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% if band.facebook_page %}
+                        <tr>
+                            <td>facebook:</td>
+                            <td>
+                                {% if 'facebook.com' in band.facebook_page %}
+                                {% if not band.facebook_page.startswith('http') %}
+                                <a href="https://{{ band.facebook_page }}">{{ band.facebook_page }}</a>
+                                {% else %}
+                                <a href="{{ band.facebook_page }}">{{ band.facebook_page }}</a>
+                                {% endif %}
 
-                                    {% else %}
-                                    <a href="http://facebook.com/{{ band.facebook_page }}">facebook.com/{{ band.facebook_page }}</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endif %}
-                            <tr>
-                                <td>Bewerbungsstatus:</td>
-                                <td>{{ band.state_label }}</td>
-                            </tr>
-                            <tr>
-                                <td>Techrider:</td>
-                                <td>{% if band.techrider_url %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else %}fehlt{% endif %}</td>
-                            </tr>
-                            <tr>
-                                <td>Beschreibung:</td>
-                                <td>{{ band.descp }}</td>
-                            </tr>
+                                {% else %}
+                                <a href="http://facebook.com/{{ band.facebook_page }}">facebook.com/{{
+                                    band.facebook_page }}</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td>Bewerbungsstatus:</td>
+                            <td>{{ band.state_label }}</td>
+                        </tr>
+                        <tr>
+                            <td>Techrider:</td>
+                            <td>{% if band.techrider_url %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else
+                                %}fehlt{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Beschreibung:</td>
+                            <td>{{ band.descp }}</td>
+                        </tr>
                         </tbody>
                     </table>
 
                     <h3>Tracks</h3>
                     <ul>
-                    {% for track in band.tracks %}
+                        {% for track in band.tracks %}
                         <li>
                             <audio src="{{track.url}}" controls></audio>
                             {{ track.trackname }}
                         </li>
-                    {% endfor %}
+                        {% endfor %}
                     </ul>
 
                     <h3>Bandfoto</h3>
                     {% if band.image_url %}
-                        <img src="{{ band.image_url }}" alt="Band {{ band.name }}" width="100%" />
+                    <img src="{{ band.image_url }}" alt="Band {{ band.name }}" width="100%"/>
                     {% else %}
-                        Noch kein Foto hochgeladen
+                    Noch kein Foto hochgeladen
                     {% endif %}
+
+                    <h3>Kommentare</h3>
+                    <table style="width: 100%;">
+                        <tbody>
+                        {% for comment in band.comments %}
+                        <tr>
+                            <td>{{ comment.author.login }} <br> {{ comment.timestamp }}</td>
+                            <td>{{ comment.message }}</td>
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                    <h3>Dein Kommentar:</h3>
+
+                    <form method="POST" action="{{ url_for('vote.comment.add') }}">
+                        {{ comment_form.csrf_token }}
+                        {{ comment_form.band_id }}
+
+                        <fieldset>
+                            <legend>Basics</legend>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    {{ renderDefault(comment_form.message) }}
+                                </div>
+                            </div>
+
+                            <input type="submit" value="Bandinfos senden">
+                        </fieldset>
+                    </form>
                 </div>
             </div>
         </div>

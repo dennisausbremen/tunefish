@@ -52,6 +52,8 @@ class Band(db.Model):
     state = db.Column(Integer, default=State.NEW)
     apply_timestamp = db.Column(DateTime)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
+    comments = db.relationship('Comment', backref='comment', lazy='dynamic')
+
 
     def __init__(self, login, password):
         self.login = login
@@ -174,6 +176,16 @@ class User(db.Model):
     @property
     def is_user(self):
         return self.access == Access.USER
+
+
+class Comment(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    band_id = db.Column(Integer, db.ForeignKey('band.id'))
+    author_id = db.Column(Integer, db.ForeignKey('user.id'))
+    author = db.relationship("User", backref=db.backref("comment", uselist=False))
+
+    message = db.Column(String(1000))
+    timestamp = db.Column(DateTime)
 
 
 db.create_all()
