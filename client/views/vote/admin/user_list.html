@@ -1,0 +1,44 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+
+<div id="messages" class="message-container">
+    {{ renderMessages() }}
+</div>
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / Benutzer
+
+                    <h2>Benutzerübersicht</h2>
+
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Benutzer</th>
+                                <th>Zugriff</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.login }}</td>
+                                <td>{{ user.access_name }}</td>
+                                <td><a href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}aktivieren{% else %}deaktivieren{% endif %}</td
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

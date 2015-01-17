@@ -140,12 +140,16 @@ class User(db.Model):
         # by now you could only set the access to USER (activate user), everything else must be done in the database
         if access < Access.MODERATOR: # TODO change to currentUser.access >= access, don't know how to get currentUser
             # so later on an mod i.e. can set somebody to user or mod, but not to admin
-            self.access = access
+            self._access = access
 
     @property
     def access_name(self):
-        access_names = {0: '', 1: 'Benutzer', 2: 'Moderator', 3: 'Administrator'}
+        access_names = {0: 'Inaktiv', 1: 'Benutzer', 2: 'Moderator', 3: 'Administrator'}
         return access_names[self.access]
+
+    @property
+    def is_inactive(self):
+        return self.access == Access.INACTIVE
 
     @property
     def is_mod(self):
