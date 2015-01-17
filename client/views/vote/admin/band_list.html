@@ -34,7 +34,7 @@
                                 <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name }}</a></td>
                                 <td>{{ band.amount_members }}</td>
                                 <td>{{ band.city }}</td>
-                                <td>{% if band.state==state.NEW %}neu{% endif %}{% if band.state==state.READY_FOR_VOTE %}abgeschlossen{% endif %}</td>
+                                <td>{{ band.state_label }}</td>
                                 <td>Edit</td>
                                 <td>X</td>
                             </tr>

@@ -2,6 +2,7 @@
 
 from flask import Blueprint
 from server.vote.band_mgmt import AdminBandList, AdminBandView
+from server.vote.band_vote import BandList, BandDetails
 
 from server.vote.profile import UserIndex, AdminIndex
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
@@ -24,4 +25,8 @@ vote_blueprint.add_url_rule('/admin/bands/<int:band_id>', view_func=AdminBandVie
 vote_blueprint.add_url_rule('/admin/users', view_func=AdminUserList.as_view('admin.users.list'))
 vote_blueprint.add_url_rule('/admin/users/access/<int:user_id>', view_func=AdminUserAccess.as_view('admin.users.access'))
 
+
+
+vote_blueprint.add_url_rule('/bands', view_func=BandList.as_view('bands.list'))
+vote_blueprint.add_url_rule('/bands/<int:band_id>', view_func=BandDetails.as_view('bands.view'))
 
