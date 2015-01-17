@@ -15,14 +15,9 @@ class BandList(RestrictedUserPage):
 
 class BandDetails(RestrictedUserPage):
     def get(self, band_id):
-        if self.user.is_mod or self.user.is_admin:
-            band = Band.query.get(band_id)
-            if band:
-                return render_template('admin/band_view.html', band=band, state=State)
-            else:
-                flash('Es existiert keine Band mit dieser ID', 'error')
-                return redirect(url_for('vote.admin.bands.list'))
-
+        band = Band.query.get(band_id)
+        if band:
+            return render_template('band_view.html', band=band)
         else:
-            flash('Du hast hier keinen Zugriff', 'error')
-            return redirect(url_for('vote.home.index'))
+            flash('Es existiert keine Band mit dieser ID', 'error')
+            return redirect(url_for('vote.bands.list'))
