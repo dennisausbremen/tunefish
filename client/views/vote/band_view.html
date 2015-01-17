@@ -26,22 +26,52 @@
                             </tr>
                             <tr>
                                 <td>Herkunft:</td>
-                                <td>{{ band.city }}</td>
+                                <td>{{ band.city }}<br/>
+                                    <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{band.city|urlencode}}&zoom=10&size=600x300&sensor=false" />
+
+                                </td>
                             </tr>
                             <tr>
                                 <td>Webseite:</td>
                                 <td>{{ band.website }}</td>
                             </tr>
-                            {% if band.youtube_id %}
+                            {% if band.youtube_id and not band.youtube_id.endswith('.') %} <!-- TODO: dirty hack for youtube fail :( -->
                             <tr>
                                 <td>YouTube:</td>
-                                <td>{{ band.youtube_id }}</td>
+                                <td>
+                                    {% if 'youtube' in band.youtube_id %}
+                                        {% if not band.youtube_id.startswith('http') %}
+                                        <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                                src="https://{{ band.youtube_id }}"
+                                                frameborder="0"/>
+                                        {% else %}
+                                        <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                                src="{{ band.youtube_id }}"
+                                                frameborder="0"/>
+                                        {% endif %}
+                                    {% else %}
+                                    <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                            src="http://www.youtube.com/embed/{{ band.youtube_id }}"
+                                            frameborder="0"/>
+                                    {% endif %}
+                                    </td>
                             </tr>
                             {% endif %}
                             {% if band.facebook_page %}
                             <tr>
                                 <td>facebook:</td>
-                                <td>{{ band.facebook_page }}</td>
+                                <td>
+                                    {% if 'facebook.com' in band.facebook_page %}
+                                        {% if not band.facebook_page.startswith('http') %}
+                                            <a href="https://{{ band.facebook_page }}">{{ band.facebook_page }}</a>
+                                        {% else %}
+                                            <a href="{{ band.facebook_page }}">{{ band.facebook_page }}</a>
+                                        {% endif %}
+
+                                    {% else %}
+                                    <a href="http://facebook.com/{{ band.facebook_page }}">facebook.com/{{ band.facebook_page }}</a>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endif %}
                             <tr>
@@ -71,7 +101,7 @@
 
                     <h3>Bandfoto</h3>
                     {% if band.image_url %}
-                        <img src="{{ band.image_url }}" alt="Band {{ band.name }}" />
+                        <img src="{{ band.image_url }}" alt="Band {{ band.name }}" width="100%" />
                     {% else %}
                         Noch kein Foto hochgeladen
                     {% endif %}
