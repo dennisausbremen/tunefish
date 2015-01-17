@@ -71,6 +71,9 @@ var helper = (function ($) {
             success: function(data) {
                 updateCheckTab(data);
                 onSuccess(data);
+                setTimeout(function(){
+                    $('.profile-form-wrapper').slickNext();
+                }, 2250);
             }
         }).fail(function (data) {
             //console.log(data);
@@ -87,6 +90,11 @@ var helper = (function ($) {
         $.post(form.action, $(form).serialize(), function(data) {
             updateCheckTab(data);
             onSuccess(data);
+
+            setTimeout(function(){
+                $('.profile-form-wrapper').slickNext();
+            }, 1000);
+
         }).fail(function (data) {
             onFailure(data.responseJSON.errors);
         });
@@ -324,6 +332,7 @@ var helper = (function ($) {
 
         selectedTracksList.css({'display':'block','opacity': 1});
         setEqualHeightCards();
+        $('.profile-form-wrapper').resize();
     };
 
     /*
@@ -375,7 +384,9 @@ var helper = (function ($) {
 
             replaceImages.velocity({opacity: 0},250,function(){
                 replaceImages.attr('src',image);
-            }).delay(250).velocity({opacity: 1}, 250);
+            }).delay(250).velocity({opacity: 1}, 250, function(){
+                $('.profile-form-wrapper').resize();
+            });
         };
     };
 
