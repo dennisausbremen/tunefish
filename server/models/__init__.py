@@ -150,16 +150,10 @@ class User(db.Model):
     # avoid disallowed changes
     @access.setter
     def access(self, access):
-        self._access = access
-        #        cur_user = User.query.get(session['userId'])
+        cur_user = User.query.get(session['userId'])
 
-        #       if cur_user and cur_user.access >= access:
-        #          self._access = access
-
-        # by now you could only set the access to USER (activate user), everything else must be done in the database
-        #if access < Access.MODERATOR: # TODO change to currentUser.access >= access, don't know how to get currentUser
-            # so later on an mod i.e. can set somebody to user or mod, but not to admin
-         #   self._access = access
+        if cur_user and cur_user.access >= access:
+            self._access = access
 
     @property
     def access_name(self):

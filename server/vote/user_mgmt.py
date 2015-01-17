@@ -17,7 +17,7 @@ class AdminUserList(RestrictedUserPage):
             return redirect(url_for('vote.home.index'))
 
 
-class AdminUserAccess(RestrictedUserPage):
+class AdminUserActivation(RestrictedUserPage):
     def get(self, user_id):
         if self.user.is_mod or self.user.is_admin:
             user = User.query.get(user_id)
@@ -42,7 +42,8 @@ class AdminUserAccess(RestrictedUserPage):
             flash(u'Du kannst keine Berechtigungen', 'error')
             return redirect(url_for('vote.home.index'))
 
-class AdminUserAccessMod(RestrictedUserPage):
+
+class AdminUserAccess(RestrictedUserPage):
     def get(self, user_id):
         if self.user.is_admin:
             user = User.query.get(user_id)
@@ -63,6 +64,6 @@ class AdminUserAccessMod(RestrictedUserPage):
 
             return redirect(url_for('vote.admin.users.list'))
         else:
-            flash(u'Du kannst keine Berechtigungen', 'error')
+            flash(u'Du kannst keine Berechtigungen ändern', 'error')
             return redirect(url_for('vote.home.index'))
 

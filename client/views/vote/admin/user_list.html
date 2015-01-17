@@ -34,7 +34,18 @@
                                 <td>{{ user.access_name }}</td>
                                 <td><a href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}aktivieren{% else %}deaktivieren{% endif %}</td>
                                 {% if g.user.is_admin %}
-                                    <td><a href="{{ url_for('vote.admin.users.access_mod', user_id=user.id) }}">{% if user.is_mod %}degradieren{% else %}befördern{% endif %}</a></td>
+                                    <td>
+                                        {% if user.is_admin %}-
+                                        {% else %}
+                                            <a href="{{ url_for('vote.admin.users.access_mod', user_id=user.id) }}">
+                                                {% if user.is_mod %}
+                                                    degradieren
+                                                {% else %}
+                                                    befördern
+                                                {% endif %}
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
 
                             </tr>
