@@ -1,4 +1,5 @@
 # coding=utf-8
+from flask import session
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -43,8 +44,8 @@ class Band(db.Model):
     descp = db.Column(String(5000))
     amount_members = db.Column(Integer)
     website = db.Column(URLType)
-    youtube_id = db.Column(String(20))
-    facebook_page = db.Column(String(100))
+    youtube_id = db.Column(String(100))
+    facebook_page = db.Column(String(300))
     phone = db.Column(String(30))
     city = db.Column(String(50))
     image = db.Column(String(80))
@@ -149,10 +150,16 @@ class User(db.Model):
     # avoid disallowed changes
     @access.setter
     def access(self, access):
+        self._access = access
+        #        cur_user = User.query.get(session['userId'])
+
+        #       if cur_user and cur_user.access >= access:
+        #          self._access = access
+
         # by now you could only set the access to USER (activate user), everything else must be done in the database
-        if access < Access.MODERATOR: # TODO change to currentUser.access >= access, don't know how to get currentUser
+        #if access < Access.MODERATOR: # TODO change to currentUser.access >= access, don't know how to get currentUser
             # so later on an mod i.e. can set somebody to user or mod, but not to admin
-            self._access = access
+         #   self._access = access
 
     @property
     def access_name(self):
