@@ -22,6 +22,9 @@
                                 <th>Benutzer</th>
                                 <th>Zugriff</th>
                                 <th>Status</th>
+                                {% if g.user.is_admin %}
+                                    <th>Berechtigungen</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -29,7 +32,11 @@
                             <tr>
                                 <td>{{ user.login }}</td>
                                 <td>{{ user.access_name }}</td>
-                                <td><a href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}aktivieren{% else %}deaktivieren{% endif %}</td
+                                <td><a href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}aktivieren{% else %}deaktivieren{% endif %}</td>
+                                {% if g.user.is_admin %}
+                                    <td><a href="{{ url_for('vote.admin.users.access_mod', user_id=user.id) }}">{% if user.is_mod %}degradieren{% else %}befördern{% endif %}</a></td>
+                                {% endif %}
+
                             </tr>
                             {% endfor %}
                         </tbody>
