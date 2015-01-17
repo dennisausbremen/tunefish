@@ -1,0 +1,29 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+{{ renderMessages() }}
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    Voting / Bands
+
+                    <h2>Bandübersicht</h2>
+
+                    {% for band in bands %}
+                    <div style="width: 100px; height: 100px; background-color: red;">
+                        {{ band.name }}
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

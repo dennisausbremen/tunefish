@@ -1,3 +1,4 @@
+# coding=utf-8
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -12,10 +13,16 @@ db = SQLAlchemy(app)
 
 class State:
     NEW = 0
-    READY_FOR_VOTE = 1
-    IN_VOTE = 2
-    DECLINED = 3
-    ACCEPTED = 4
+    IN_VOTE = 1
+    DECLINED = 2
+    ACCEPTED = 3
+
+    descp = {
+        NEW: u'Unvollständig',
+        IN_VOTE: u'Im Voting',
+        DECLINED: u'Abgelehnt',
+        ACCEPTED: u'Voting bestanden'
+    }
 
 
 class Access:
@@ -94,10 +101,15 @@ class Band(db.Model):
     @property
     def is_ready_for_submit(self):
         return self.image and \
-            self.techrider and \
-            self.is_email_confirmed and \
-            self.is_profile_valid and \
-            self.is_tracks_valid
+               self.techrider and \
+               self.is_email_confirmed and \
+               self.is_profile_valid and \
+               self.is_tracks_valid
+
+
+    @property
+    def state_label(self):
+        return State.descp[self.state]
 
 
 class Track(db.Model):
@@ -158,5 +170,6 @@ class User(db.Model):
     @property
     def is_user(self):
         return self.access == Access.USER
+
 
 db.create_all()

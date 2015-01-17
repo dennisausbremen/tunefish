@@ -64,7 +64,7 @@ class SubmitProfile(RestrictedBandPage):
             flash(u'Die Bestätigung der Bewerbung ist nicht mehr möglich!', 'error')
         else:
             if self.band.is_ready_for_submit:
-                self.band.state = State.READY_FOR_VOTE
+                self.band.state = State.IN_VOTE
                 db.session.commit()
                 flash(u'Anmeldung erfolgreich', 'info')
             else:
