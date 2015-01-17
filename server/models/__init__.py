@@ -1,4 +1,5 @@
 # coding=utf-8
+from flask import session
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -163,9 +164,9 @@ class User(db.Model):
     # avoid disallowed changes
     @access.setter
     def access(self, access):
-        # by now you could only set the access to USER (activate user), everything else must be done in the database
-        if access < Access.MODERATOR: # TODO change to currentUser.access >= access, don't know how to get currentUser
-            # so later on an mod i.e. can set somebody to user or mod, but not to admin
+        cur_user = User.query.get(session['userId'])
+
+        if cur_user and cur_user.access >= access:
             self._access = access
 
     @property

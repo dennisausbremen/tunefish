@@ -6,7 +6,7 @@ from server.vote.band_vote import BandList, BandDetails, BandCommendAdd, BandVot
 
 from server.vote.profile import UserIndex, AdminIndex
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
-from server.vote.user_mgmt import AdminUserList, AdminUserAccess
+from server.vote.user_mgmt import AdminUserList, AdminUserActivation, AdminUserAccess
 
 
 vote_blueprint = Blueprint('vote', __name__, template_folder='../../client/views/vote')
@@ -23,7 +23,8 @@ vote_blueprint.add_url_rule('/admin/bands', view_func=AdminBandList.as_view('adm
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>', view_func=AdminBandView.as_view('admin.bands.view'))
 
 vote_blueprint.add_url_rule('/admin/users', view_func=AdminUserList.as_view('admin.users.list'))
-vote_blueprint.add_url_rule('/admin/users/access/<int:user_id>', view_func=AdminUserAccess.as_view('admin.users.access'))
+vote_blueprint.add_url_rule('/admin/users/access/<int:user_id>', view_func=AdminUserActivation.as_view('admin.users.access'))
+vote_blueprint.add_url_rule('/admin/users/access_mod/<int:user_id>', view_func=AdminUserAccess.as_view('admin.users.access_mod'))
 
 
 
