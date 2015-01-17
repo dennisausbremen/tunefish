@@ -7,36 +7,29 @@
     {{ renderMessages() }}
 </div>
 
-
-
 <section class="main-content profile finish">
     <div class="row">
         <div class="profile-form-wrapper col-xs-12">
             <div class="form-action" id="step-finish">
                 <div class="step-content">
-                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / Bands
+                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / Benutzer
 
-                    <h2>Bandübersicht</h2>
+                    <h2>Benutzerübersicht</h2>
 
                     <table style="width: 100%;">
                         <thead>
                             <tr>
-                                <th>Band</th>
-                                <th>Mitgl.</th>
-                                <th>Herkunft</th>
+                                <th>Benutzer</th>
+                                <th>Zugriff</th>
                                 <th>Status</th>
-                                <th colspan="2">Optionen</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for band in bands %}
+                            {% for user in users %}
                             <tr>
-                                <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name }}</a></td>
-                                <td>{{ band.amount_members }}</td>
-                                <td>{{ band.city }}</td>
-                                <td>{{ band.state_label }}</td>
-                                <td>Edit</td>
-                                <td>X</td>
+                                <td>{{ user.login }}</td>
+                                <td>{{ user.access_name }}</td>
+                                <td><a href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}aktivieren{% else %}deaktivieren{% endif %}</td
                             </tr>
                             {% endfor %}
                         </tbody>
