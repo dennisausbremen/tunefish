@@ -2,7 +2,12 @@
 {% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
-{{ renderMessages() }}
+
+<div id="messages" class="message-container">
+    {{ renderMessages() }}
+</div>
+
+
 
 <section class="main-content profile finish">
     <div class="row">
