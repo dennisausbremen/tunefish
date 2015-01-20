@@ -21,3 +21,18 @@ Tunefish.BandRoute = Ember.Route.extend({
         return $.getJSON('/vote/ajax/bands/' + params.band_id);
     }
 });
+
+Tunefish.BandController = Ember.ObjectController.extend({
+    actions : {
+        "vote" : function(vote) {
+            var self = this;
+            $.post("/vote/ajax/bands/vote", {
+                "band_id" : this.get("model.id"),
+                "vote": vote
+            }).then(function (result) {
+                self.set("model.vote_count", result.vote_count);
+                self.set("model.vote_average", result.vote_average);
+            });
+        }
+    }
+});
