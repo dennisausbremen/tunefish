@@ -14,6 +14,10 @@ class BandList(RestrictedUserPage):
         bands = Band.query.filter(Band.state == State.IN_VOTE)
         return render_template('band_list.html', bands=bands)
 
+class BandApp(RestrictedUserPage):
+    def get(self):
+        return render_template('app.html')
+
 
 class BandDetails(RestrictedUserPage):
     def get(self, band_id):

@@ -1,0 +1,32 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+{{ renderMessages() }}
+
+
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content" id="app_container">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% raw %}
+<script type="text/x-handlebars" id="bands">
+    Hello World
+</script>
+{% endraw %}
+
+
+{% endblock %}
+
+
+{% block inlinejs %}
+<script src="{{ url_for('static', filename='js/ember_app.js') }}"></script>
+{% endblock %}
