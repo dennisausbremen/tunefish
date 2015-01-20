@@ -65,7 +65,7 @@
     <ul>
         {{#each track in tracks }}
         <li>
-            <audio src="{{track.url}}" controls></audio>
+            <audio {{bind-attr src=track.url}} controls></audio>
             {{ track.trackname }}
         </li>
         {{/each}}

@@ -30,7 +30,10 @@ class JsonBandDetails(RestrictedUserPage):
             "image_url": band.image_url,
             "vote_count": band.vote_count,
             "vote_average": band.vote_average,
-            "tracks": [],
+            "tracks": [{
+                "trackname": track.trackname,
+                "url": track.url,
+            } for track in band.tracks],
             "comments": []
         })
 
