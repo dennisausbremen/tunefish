@@ -19,7 +19,15 @@
 
 {% raw %}
 <script type="text/x-handlebars" id="bands">
-    Hello World
+    {{#each band in this }}
+        {{#link-to "band" band }}
+        <div style="width: 200px; height: 200px; background: url('{{ unbound band.thumbnail }}'); display: inline-block; margin: 10px; position: relative;">
+            <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
+                {{ band.name }}
+            </div>
+        </div>
+        {{/link-to}}
+    {{/each}}
 </script>
 {% endraw %}
 
