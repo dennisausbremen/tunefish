@@ -137,10 +137,12 @@ module.exports = function (grunt) {
                     destPrefix: '<%= cfg.src %>/js'
                 },
                 files: {
-                    'jquery.min.js': 'jquery/dist/jquery.min.js',
-                    'vendor/01-slick.min.js': 'slick.js/slick/slick.min.js',
-                    'vendor/02-velocity.min.js': 'velocity/velocity.min.js',
-                    'vendor/03-velocity.ui.min.js': 'velocity/velocity.ui.min.js'
+                    'jquery.min.js': 'jquery/dist/jquery.js',
+                    'vendor/01-slick.min.js': 'slick.js/slick/slick.js',
+                    'vendor/02-velocity.min.js': 'velocity/velocity.js',
+                    'vendor/03-velocity.ui.min.js': 'velocity/velocity.ui.js',
+                    'vendor/05-handlebars.min.js': 'handlebars/handlebars.js',
+                    'vendor/06-ember.min.js': 'ember/ember.js'
                 }
             },
             dist: {
@@ -153,7 +155,9 @@ module.exports = function (grunt) {
                     'jquery.min.js': 'jquery/dist/jquery.min.js',
                     'vendor/01-slick.min.js': 'slick.js/slick/slick.min.js',
                     'vendor/02-velocity.min.js': 'velocity/velocity.min.js',
-                    'vendor/03-velocity.ui.min.js': 'velocity/velocity.ui.min.js'
+                    'vendor/03-velocity.ui.min.js': 'velocity/velocity.ui.min.js',
+                    'vendor/05-handlebars.min.js': 'handlebars/handlebars.min.js',
+                    'vendor/06-ember.min.js': 'ember/ember.min.js'
                 }
             }
         },
