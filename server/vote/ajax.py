@@ -15,3 +15,21 @@ class JsonBandList(RestrictedUserPage):
                                   "vote_average": band.vote_average
                               }
                               for band in bands])
+
+
+class JsonBandDetails(RestrictedUserPage):
+    def get(self, band_id):
+        band = Band.query.get_or_404(band_id)
+        return jsonify({
+            "id": band.id,
+            "name": band.name,
+            "amount_members": band.amount_members,
+            "city": band.city,
+            "website": band.website,
+            "descp": band.descp,
+            "image_url": band.image_url,
+            "vote_count": band.vote_count,
+            "vote_average": band.vote_average,
+            "tracks": [],
+            "comments": []
+        })

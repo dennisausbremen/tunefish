@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from flask import Blueprint
-from server.vote.ajax import JsonBandList
+from server.vote.ajax import JsonBandList, JsonBandDetails
 from server.vote.band_mgmt import AdminBandList, AdminBandView
 from server.vote.band_vote import BandList, BandDetails, BandCommendAdd, BandVote, BandApp
 
@@ -39,3 +39,4 @@ vote_blueprint.add_url_rule('/comment/add', view_func=BandCommendAdd.as_view('co
 
 ### ajax
 vote_blueprint.add_url_rule('/ajax/bands', view_func=JsonBandList.as_view('ajax.bands'))
+vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandDetails.as_view('ajax.bands.details'))

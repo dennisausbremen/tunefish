@@ -5,7 +5,6 @@
 {{ renderMessages() }}
 
 
-
 <section class="main-content profile finish">
     <div class="row">
         <div class="profile-form-wrapper col-xs-12">
@@ -17,17 +16,60 @@
     </div>
 </section>
 
+
 {% raw %}
 <script type="text/x-handlebars" id="bands">
     {{#each band in this }}
-        {{#link-to "band" band }}
-        <div style="width: 200px; height: 200px; background: url('{{ unbound band.thumbnail }}'); display: inline-block; margin: 10px; position: relative;">
-            <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
-                {{ band.name }}
-            </div>
+    {{#link-to "band" band.id }}
+    <div style="width: 200px; height: 200px; background: url('{{ unbound band.thumbnail }}'); display: inline-block; margin: 10px; position: relative;">
+        <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
+            {{ band.name }}
         </div>
-        {{/link-to}}
+    </div>
+    {{/link-to}}
     {{/each}}
+</script>
+
+<script type="text/x-handlebars" id="band">
+
+    <h2>Band {{ name }} ({{ vote_count }} Votes, {{ vote_average }})</h2>
+
+    <table style="width: 100%;">
+        <tbody>
+        <tr>
+            <td>Mitglieder:</td>
+            <td>{{ amount_members }}</td>
+        </tr>
+        <tr>
+            <td>Herkunft:</td>
+            <td>{{ city }}<br/>
+                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers=Timbuktu&zoom=10&size=600x300&sensor=false"/>
+
+            </td>
+        </tr>
+        <tr>
+            <td>Webseite:</td>
+            <td>{{ website }}</td>
+        </tr>
+        <tr>
+            <td>Beschreibung:</td>
+            <td>{{ descp }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Tracks</h3>
+    <ul>
+        {{#each track in tracks }}
+        <li>
+            <audio src="{{track.url}}" controls></audio>
+            {{ track.trackname }}
+        </li>
+        {{/each}}
+    </ul>
+
+    <h3>Bandfoto</h3>
+        <img {{bind-attr src=image_url }} width="100%"/>
 </script>
 {% endraw %}
 

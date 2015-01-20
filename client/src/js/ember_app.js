@@ -16,9 +16,8 @@ Tunefish.BandsRoute = Ember.Route.extend({
     }
 });
 
-var bands = [
-    {
-        'name': 'Foo Fighters olol'
+Tunefish.BandRoute = Ember.Route.extend({
+    model: function (params) {
+        return $.getJSON('/vote/ajax/bands/' + params.band_id);
     }
-]
-
+});
