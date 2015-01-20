@@ -32,11 +32,16 @@
 
 <script type="text/x-handlebars" id="band">
     <h2>Band {{ name }} ({{ vote_count }} Votes, {{ vote_average }})</h2>
-    <button {{action "vote" 1}}>Vote 1</button>
-    <button {{action "vote" 2}}>Vote 2</button>
-    <button {{action "vote" 3}}>Vote 3</button>
-    <button {{action "vote" 4}}>Vote 4</button>
-    <button {{action "vote" 5}}>Vote 5</button>
+    <button
+    {{action "vote" 1}}>Vote 1</button>
+    <button
+    {{action "vote" 2}}>Vote 2</button>
+    <button
+    {{action "vote" 3}}>Vote 3</button>
+    <button
+    {{action "vote" 4}}>Vote 4</button>
+    <button
+    {{action "vote" 5}}>Vote 5</button>
     <table style="width: 100%;">
         <tbody>
         <tr>
@@ -65,14 +70,32 @@
     <ul>
         {{#each track in tracks }}
         <li>
-            <audio {{bind-attr src=track.url}} controls></audio>
+            <audio
+            {{bind-attr src=track.url}} controls></audio>
             {{ track.trackname }}
         </li>
         {{/each}}
     </ul>
 
     <h3>Bandfoto</h3>
-        <img {{bind-attr src=image_url }} width="100%"/>
+    <img {{bind-attr src=image_url }} width="100%"/>
+
+    <h3>Kommentare</h3>
+    <table style="width: 100%;">
+        <tbody>
+        {{#each comment in comments }}
+        <tr>
+            <td>{{ comment.author }} <br> {{ comment.timestamp }}</td>
+            <td>{{ comment.message }}</td>
+        </tr>
+        {{/each}}
+
+        </tbody>
+    </table>
+    <h3>Dein Kommentar:</h3>
+
+
+
 </script>
 {% endraw %}
 

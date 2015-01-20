@@ -31,10 +31,14 @@ class JsonBandDetails(RestrictedUserPage):
             "vote_count": band.vote_count,
             "vote_average": band.vote_average,
             "tracks": [{
-                "trackname": track.trackname,
-                "url": track.url,
-            } for track in band.tracks],
-            "comments": []
+                           "trackname": track.trackname,
+                           "url": track.url,
+                       } for track in band.tracks],
+            "comments": [{
+                             "author": comment.author.login,
+                             "timestamp": comment.timestamp,
+                             "message": comment.message,
+                         } for comment in band.comments]
         })
 
 
@@ -58,5 +62,5 @@ class JsonBandVote(RestrictedUserPage):
         return jsonify({
             "vote_count": band.vote_count,
             "vote_average": band.vote_average,
-            })
+        })
 
