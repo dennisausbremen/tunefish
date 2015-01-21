@@ -128,6 +128,13 @@ class Band(db.Model):
     def vote_count(self):
         return len(self.votes)
 
+    def get_user_vote(self, user):
+        vote = [vote.vote for vote in self.votes if vote.user_id == user.id]
+        if len(vote) == 0:
+            return 0
+        else:
+            return vote[0]
+
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'))

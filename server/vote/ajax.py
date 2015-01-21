@@ -12,7 +12,8 @@ class JsonBandList(RestrictedUserPage):
                                   "name": band.name,
                                   "thumbnail": resized_img_src(band.image, mode="crop", width=200, height=200),
                                   "vote_count": band.vote_count,
-                                  "vote_average": band.vote_average
+                                  "vote_average": band.vote_average,
+                                  "own_vote": band.get_user_vote(self.user)
                               }
                               for band in bands])
 
