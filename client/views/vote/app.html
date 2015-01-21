@@ -18,6 +18,23 @@
 
 
 {% raw %}
+<script type="text/x-handlebars" id="main">
+    <div style="position:fixed; top: 50px; right:0; width: 300px; height: 300px; background-color: #f0f0f0; z-index:9001;">
+        <h5>hier könnte ihr audioplayer stehen</h5>
+
+        <div id="" style="overflow-y: scroll; height:200px;">
+            <ul>
+                {{#each track in tracks}}
+                <li>{{ track.trackname }}</li>
+                {{/each}}
+            </ul>
+        </div>
+
+    </div>
+    <hr/>
+    {{ outlet }}
+</script>
+
 <script type="text/x-handlebars" id="bands">
     {{#each band in this }}
     {{#link-to "band" band.id }}
@@ -73,6 +90,8 @@
             <audio
             {{bind-attr src=track.url}} controls></audio>
             {{ track.trackname }}
+            <button
+            {{action "addTrack" track}}>Append</button>
         </li>
         {{/each}}
     </ul>
@@ -93,7 +112,6 @@
         </tbody>
     </table>
     <h3>Dein Kommentar:</h3>
-
 
 
 </script>
