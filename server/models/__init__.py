@@ -1,4 +1,5 @@
 # coding=utf-8
+import datetime
 from flask import session
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean, DateTime
@@ -196,6 +197,7 @@ class Vote(db.Model):
     user_id = db.Column(Integer, db.ForeignKey('user.id'), primary_key=True)
     vote = db.Column(Integer)
 
+
 class Comment(db.Model):
     id = db.Column(Integer, primary_key=True)
     band_id = db.Column(Integer, db.ForeignKey('band.id'))
@@ -204,6 +206,10 @@ class Comment(db.Model):
 
     message = db.Column(String(1000))
     timestamp = db.Column(DateTime)
+
+    def __init__(self):
+        self.timestamp = datetime.datetime.now()
+
 
 
 db.create_all()
