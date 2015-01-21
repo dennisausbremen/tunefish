@@ -237,7 +237,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: '<%= cfg.src %>/js/',
-                        src: ['jquery.min.js'],
+                        src: ['jquery.min.js', 'ember_app.js'],
                         dest: '<%= cfg.dist %>/js'
                     }
                 ]
@@ -314,6 +314,20 @@ module.exports = function (grunt) {
     grunt.registerTask('dev', [
         'clean:dist',
         'imagemin:dist',
+        'sass:dev',
+        'autoprefixer:dist',
+        'cssmin:dist',
+        'bowercopy:dev',
+        'jshint',
+        'uglify:dev',
+        'copy:all',
+        'watch'
+    ]);
+
+
+
+    grunt.registerTask('dev_noimagemin', [
+        'clean:dist',
         'sass:dev',
         'autoprefixer:dist',
         'cssmin:dist',
