@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from flask.ext.images import resized_img_src
-from server.models import Band, State, db, Vote
+from server.models import Band, State, db, Vote, Comment
 from server.vote.session_mgmt import RestrictedUserPage
 
 
@@ -63,4 +63,32 @@ class JsonBandVote(RestrictedUserPage):
             "vote_count": band.vote_count,
             "vote_average": band.vote_average,
         })
+
+
+class JsonCommentAdd(RestrictedUserPage):
+    def post(self):
+        band_id = int(request.form["band_id"])
+        comment_text = str(request.form["comment"])
+        band = Band.query.get_or_404(band_id)
+        if band and 0 < len(comment_text) < 1001:
+            comment = Comment()
+            comment.author_id = self.user.id
+            comment.message = comment_text.strip()
+            comment.band_id = band_id
+            db.session.add(comment)
+            db.session.commit()
+
+            return jsonify({
+                             "author": comment.author.login,
+                             "timestamp": comment.timestamp,
+                             "message": comment.message,
+                         })
+        else:
+            return jsonify({
+                "error": "Der Kommentar darf nur zwischen 1 und 1000 Zeichen lang sein."
+            })
+
+
+
+
 

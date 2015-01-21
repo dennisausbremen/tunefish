@@ -23,6 +23,8 @@ Tunefish.BandRoute = Ember.Route.extend({
 });
 
 Tunefish.BandController = Ember.ObjectController.extend({
+    comment: "",
+
     actions : {
         "vote" : function(vote) {
             var self = this;
@@ -32,6 +34,17 @@ Tunefish.BandController = Ember.ObjectController.extend({
             }).then(function (result) {
                 self.set("model.vote_count", result.vote_count);
                 self.set("model.vote_average", result.vote_average);
+            });
+        },
+
+        "addComment": function() {
+            var self = this;
+            $.post("/vote/ajax/comments/add", {
+                "band_id" : this.get("model.id"),
+                "comment" : this.get("comment")
+            }).then(function (result) {
+                self.get("model.comments").pushObject(result);
+                self.set("comment", ' ');
             });
         }
     }
