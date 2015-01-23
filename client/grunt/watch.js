@@ -8,7 +8,7 @@ module.exports = {
     },
     js: {
         files: ['<%= dirs.src %>/<%= dirs.js %>/**/*'],
-        tasks: ['jshint', 'copy:js', 'copy:jsTmp']
+        tasks: ['jshint:dist', 'copy:js', 'copy:jsTmp']
     },
     images: {
         files: ['<%= dirs.src %>/<%= dirs.img %>/**/*'],

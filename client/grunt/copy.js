@@ -29,7 +29,7 @@ module.exports = {
             {
                 expand: true,
                 cwd: '<%= dirs.tmp %>/<%= dirs.js %>/',
-                src: ['**', '!app.js', '!intro.js', '!lib/helpers.js'],
+                src: ['**', '!app.js', '!intro.js', '!ember_app.js', '!lib/helpers.js'],
                 dest: '<%= dirs.dist %>/<%= dirs.js %>'
             }
         ]
