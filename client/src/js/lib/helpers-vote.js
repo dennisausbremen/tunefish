@@ -10,7 +10,7 @@ var helper = (function ($) {
     var setActivePanel = function setActiveTab(target) {
         var tabs = $('.tabs'),
             children = tabs.children().length,
-            steps = 100/children,
+            steps = 100 / children,
             tab = tabs.find('a'),
             idx = target.parent().index(),
             content = $('.form-action-wrapper');
@@ -18,14 +18,14 @@ var helper = (function ($) {
         tab.removeClass('active');
         tab.eq(idx).addClass('active');
 
-        content.css('transform','translate3d(-'+ (steps * idx) +'%,0,0)');
+        content.css('transform', 'translate3d(-' + (steps * idx) + '%,0,0)');
     };
 
     var setLoginContainerHeight = function setLoginContainerHeight() {
         var i = $('.tabs a.active').parent().index();
         var th = $('.tabs').outerHeight();
         var h = $('.form-action-wrapper .form-action').eq(i).outerHeight();
-        $('.login-container').height(th+h);
+        $('.login-container').height(th + h);
     };
 
     var checkInvalidLogin = function checkInvalidLogin() {
@@ -33,86 +33,128 @@ var helper = (function ($) {
 
 
         if (target) {
-            setActivePanel($('[href=#'+target+']'));
+            setActivePanel($('[href=#' + target + ']'));
         }
         setLoginContainerHeight();
     };
 
     var initTabs = function initTabs() {
-        $(document).on('click','.tabs a:not(.active)',function(){
+        $(document).on('click', '.tabs a:not(.active)', function () {
             var el = $(this),
                 target = el.attr('href');
 
-            setActivePanel($('[href='+target+']'));
+            setActivePanel($('[href=' + target + ']'));
             setLoginContainerHeight();
             return false;
         });
     };
 
 
-
     var App = {
-      init: function initAmberApp () {
-          //INIT MESSAGES
-          $(document).on('ajaxComplete messageChange', Messages.init);
+        init: function initAmberApp() {
+            //INIT MESSAGES
+            $(document).on('ajaxComplete messageChange', Messages.init);
 
-          if ($('#messages div').length) {
-              $(document).trigger('messageChange');
-          }
-
-
-          window.Tunefish = Ember.Application.create({
-              rootElement: '#app_container'
-          });
-
-          Tunefish.Router.map(function () {
-              this.resource('bands', { path: '/' });
-              this.resource('band', { path: '/:band_id'});
-          });
+            if ($('#messages div').length) {
+                $(document).trigger('messageChange');
+            }
 
 
-          Tunefish.BandsRoute = Ember.Route.extend({
-              model: function () {
-                  return $.getJSON('/vote/ajax/bands').then(function (data) {
-                      return data.bands;
-                  });
-              }
-          });
+            window.Tunefish = Ember.Application.create({
+                rootElement: '#app_container'
+            });
 
-          Tunefish.BandRoute = Ember.Route.extend({
-              model: function (params) {
-                  return $.getJSON('/vote/ajax/bands/' + params.band_id);
-              }
-          });
+            Tunefish.ApplicationStore = DS.Store.extend();
 
-          Tunefish.BandController = Ember.ObjectController.extend({
-              comment: '',
+            Tunefish.ApplicationAdapter = DS.RESTAdapter.extend({
+                namespace: 'vote/ajax'
+            });
 
-              actions : {
-                  'vote' : function(vote) {
-                      var self = this;
-                      $.post('/vote/ajax/bands/vote', {
-                          'band_id' : this.get('model.id'),
-                          'vote': vote
-                      }).then(function (result) {
-                          self.set('model.vote_count', result.vote_count);
-                          self.set('model.vote_average', result.vote_average);
-                      });
-                  },
+            Tunefish.Band = DS.Model.extend({
+                name: DS.attr('string'),
+                members: DS.attr('number'),
+                city: DS.attr('string'),
+                website: DS.attr('string'),
+                descp: DS.attr('string'),
+                image: DS.attr('string'),
+                thumbnail: DS.attr('string'),
+                voteCount: DS.attr('number'),
+                voteAverage: DS.attr('number'),
+                ownVote: DS.attr('number'),
+                comments: DS.hasMany('comment'),
+                tracks: DS.hasMany('track')
+            });
 
-                  'addComment': function() {
-                      var self = this;
-                      $.post('/vote/ajax/comments/add', {
-                          'band_id' : this.get('model.id'),
-                          'comment' : this.get('comment')
-                      }).then(function (result) {
-                          self.get('model.comments').pushObject(result);
-                          self.set('comment', ' ');
-                      });
-                  }
-              }
-          });
-      }
+            Tunefish.Comment = DS.Model.extend({
+                author: DS.attr('string'),
+                timestamp: DS.attr('string'),
+                message: DS.attr('string'),
+                band: DS.belongsTo('band')
+            });
+
+            Tunefish.Track = DS.Model.extend({
+                trackname: DS.attr('string'),
+                band: DS.belongsTo('band')
+            });
+
+            Tunefish.Router.map(function () {
+                this.resource('main', {'path': '/'}, function() {
+                    this.resource('bands', { path: '/bands/' });
+                    this.resource('band', { path: '/:band_id'});
+                });
+            });
+
+
+            Tunefish.BandsRoute = Ember.Route.extend({
+                model: function () {
+                    return this.store.find('band');
+                }
+            });
+
+
+            Tunefish.BandRoute = Ember.Route.extend({
+                model: function (params) {
+                    return this.store.find('band', params.band_id);
+                }
+            });
+
+
+            Tunefish.MainController = Ember.ObjectController.extend({
+                tracks: [],
+                actions: {
+                    addTrack: function(track) {
+                        this.get('tracks').pushObject(track);
+                    }
+                }
+            });
+
+
+            Tunefish.BandController = Ember.ObjectController.extend({
+                needs: ['main'],
+                comment: '',
+
+                actions : {
+                    vote : function(vote) {
+                        var band = this.get('model');
+                        band.set('ownVote', vote);
+                        band.save();
+                    },
+
+                    addComment: function() {
+                        var comment = this.store.createRecord('comment', {
+                            message: this.get('comment'),
+                            band: this.get('model')
+                        });
+                        console.log(comment);
+                        comment.save();
+                    },
+                    addTrack: function(track) {
+                        this.get('controllers.main').send('addTrack', track);
+                    }
+                }
+            });
+
+        }
     };
 
     var Login = {
@@ -123,14 +165,14 @@ var helper = (function ($) {
     };
 
     var Messages = {
-        init: function initMessages(){
+        init: function initMessages() {
             var messageContainer = $('#messages'),
                 messages = $('div', messageContainer);
 
             messages
-                .velocity('transition.slideDownIn',{stagger:250})
+                .velocity('transition.slideDownIn', {stagger: 250})
                 .delay(5000)
-                .velocity('transition.slideUpOut',{stagger: 250, backwards:true});
+                .velocity('transition.slideUpOut', {stagger: 250, backwards: true});
 
         }
     };

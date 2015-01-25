@@ -39,6 +39,6 @@ vote_blueprint.add_url_rule('/comment/add', view_func=BandCommendAdd.as_view('co
 
 ### ajax
 vote_blueprint.add_url_rule('/ajax/bands', view_func=JsonBandList.as_view('ajax.bands'))
-vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandDetails.as_view('ajax.bands.details'))
-vote_blueprint.add_url_rule('/ajax/bands/vote', view_func=JsonBandVote.as_view('ajax.bands.vote'))
-vote_blueprint.add_url_rule('/ajax/comments/add', view_func=JsonCommentAdd.as_view('ajax.comment.add'))
+vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandDetails.as_view('ajax.bands.details'), methods=['GET'])
+vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandVote.as_view('ajax.bands.vote'), methods=['PUT'])
+vote_blueprint.add_url_rule('/ajax/comments', view_func=JsonCommentAdd.as_view('ajax.comment.add'))
