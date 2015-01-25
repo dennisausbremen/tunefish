@@ -3,7 +3,8 @@
 client/bower_components/
 client/node_modules
 client/app
-client/_tmp/
+client/.tmp/
+server/uploads/
 **/*.db
 **/*.pyc
 /settings.py
