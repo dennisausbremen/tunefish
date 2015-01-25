@@ -1,0 +1,30 @@
+{
+    "default": ["dev"],
+    "dev": [
+        "clean:prepare",
+        "imagemin:dist",
+        "sass:dev",
+        "autoprefixer:dist",
+        "jshint:dist",
+        "bowercopy:dist",
+        "concat:dist",
+        "copy:js",
+        "copy:css",
+        "copy:deploy",
+        "watch"
+    ],
+    "build": [
+        "clean:prepare",
+        "imagemin:dist",
+        "sass:dist",
+        "autoprefixer:dist",
+        "cssmin:dist",
+        "jshint:dist",
+        "bowercopy:dist",
+        "concat:dist",
+        "clean:jsTmp",
+        "uglify:dist",
+        "copy:deploy",
+        "clean:tmp"
+    ]
+}
