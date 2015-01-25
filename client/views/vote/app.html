@@ -71,7 +71,7 @@
         <tr>
             <td>Herkunft:</td>
             <td>{{ city }}<br/>
-                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city_encoded }}&zoom=10&size=600x300&sensor=false"/>
+                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
                 <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
             </td>
         </tr>
