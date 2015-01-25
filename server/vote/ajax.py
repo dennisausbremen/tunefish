@@ -48,7 +48,8 @@ class JsonBandList(RestrictedUserPage):
     def get(self):
         bands = Band.query.filter(Band.state == State.IN_VOTE)
         return jsonify(bands=[band2json(band) for band in bands],
-                       tracks=[track2json(track) for track in Track.query.all()])
+                       tracks=[track2json(track) for track in Track.query.all()],
+                       comments=[comment2json(comment) for comment in Comment.query.all()])
 
 
 class JsonBandDetails(RestrictedUserPage):

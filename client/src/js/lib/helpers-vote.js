@@ -100,8 +100,16 @@ var helper = (function ($) {
                 band: DS.belongsTo('band')
             });
 
+            Tunefish.QueueitemView = Ember.View.extend({
+                tagName: 'li',
+                classNameBindings: ['isActive:active'],
+                isActive: function () {
+                    return this.get('track.id') === this.get('controller.current.id');
+                }.property('track', 'controller.current')
+            });
+
             Tunefish.Router.map(function () {
-                this.resource('main', {'path': '/'}, function() {
+                this.resource('main', {'path': '/'}, function () {
                     this.resource('bands', { path: '/bands/' });
                     this.resource('band', { path: '/bands/:band_id'});
                 });
@@ -123,15 +131,73 @@ var helper = (function ($) {
 
             Tunefish.MainController = Ember.ObjectController.extend({
                 tracks: [],
+                currentIndex: -1,
                 current: null,
+                currentTime: 0,
+                currentDuration: 0,
+                playerState: 'idle',
+                player: function () {
+                    return document.getElementById('#tunefishPlayer');
+                },
                 actions: {
-                    addTrack: function(track) {
-                        this.set('current', track);
-                        this.get('tracks').pushObject(track);
-                    },
-                    play: {
+                    addTrack: function (track) {
+                        var currentIndex = this.get('currentIndex');
+                        var tracks = this.get('tracks');
 
+                        tracks.pushObject(track);
+                        if (currentIndex < 0 && tracks.length > 0) {
+                            this.send('next');
+                            this.send('play');
+                        }
+                    },
+                    play: function () {
+                        var self = this;
+                        var currentIndex = this.get('currentIndex');
+                        var $player = $('#tunefishPlayer');
+                        if (currentIndex === -1) {
+                            return;
+                        }
+
+                        this.set('playerState', 'playing');
+                        $player.attr('autoplay', 'autoplay');
+                        $player.get(0).play();
+                        $player.on('ended', function () {
+                            self.send('next');
+                        });
+                        $player.on('timeupdate', function() {
+                            self.set('currentTime', Math.ceil($player.get(0).currentTime));
+                            self.set('currentDuration', Math.ceil($player.get(0).duration));
+                        });
+
+                    },
+                    pause: function () {
+                        var $player = $('#tunefishPlayer');
+
+                        $player.removeAttr('autoplay');
+                        $player.get(0).pause();
+                        $player.off('ended');
+                        $player.off('timeupdate');
+                        this.set('playerState', 'idle');
+                    },
+                    next: function () {
+                        var currentIndex = this.get('currentIndex');
+                        var tracks = this.get('tracks');
+
+                        if (currentIndex < tracks.length - 1) {
+                            this.set('currentIndex', currentIndex + 1);
+                            this.set('current', tracks.get(currentIndex + 1));
+                        }
+                    },
+                    prev: function () {
+                        var currentIndex = this.get('currentIndex');
+                        var tracks = this.get('tracks');
+
+                        if (currentIndex > 0) {
+                            this.set('currentIndex', currentIndex - 1);
+                            this.set('current', tracks.get(currentIndex - 1));
+                        }
                     }
+
                 }
             });
 
@@ -140,29 +206,28 @@ var helper = (function ($) {
                 needs: ['main'],
                 comment: '',
 
-                actions : {
-                    vote : function(vote) {
+                actions: {
+                    vote: function (vote) {
                         var band = this.get('model');
                         band.set('ownVote', vote);
                         band.save();
                     },
 
-                    addComment: function() {
+                    addComment: function () {
                         var comment = this.store.createRecord('comment', {
                             message: this.get('comment'),
                             band: this.get('model')
                         });
-                        console.log(comment);
                         comment.save();
                     },
-                    addTrack: function(track) {
+                    addTrack: function (track) {
                         this.get('controllers.main').send('addTrack', track);
                     },
-                    calcDistance: function() {
+                    calcDistance: function () {
                         $.post('/vote/ajax/distance', {
-                                'band_id' : this.get('model.id')
+                                'band_id': this.get('model.id')
                             }
-                        ).then(function(result) {
+                        ).then(function (result) {
                                 $('button#calcDist').text(result.distance);
                             });
                     }
