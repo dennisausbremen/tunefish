@@ -10,5 +10,5 @@ SETTINGS = {
     'UPLOADED_TECHRIDERPOOL_DEST': 'uploads/techrider',
     'CELERY_BROKER_URL' : 'sqla+sqlite:///celerydb.db',
     'BAND_CANDIDATURE_END': '2015-03-01 23:59:59',
-    'IMAGES_PATH': ['uploads/images'],
+    'IMAGES_PATH': ['../uploads/images'],
 }
