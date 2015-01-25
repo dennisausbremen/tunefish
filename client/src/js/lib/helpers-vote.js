@@ -128,6 +128,9 @@ var helper = (function ($) {
                     addTrack: function(track) {
                         this.set('current', track);
                         this.get('tracks').pushObject(track);
+                    },
+                    play: {
+
                     }
                 }
             });

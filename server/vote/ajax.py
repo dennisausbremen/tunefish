@@ -2,7 +2,7 @@ from urllib import quote_plus
 import urllib2
 from flask import jsonify, request, g, json
 from flask.ext.images import resized_img_src
-from server.models import Band, State, db, Vote, Comment
+from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
 
 
@@ -47,7 +47,8 @@ def track2json(track):
 class JsonBandList(RestrictedUserPage):
     def get(self):
         bands = Band.query.filter(Band.state == State.IN_VOTE)
-        return jsonify(bands=[band2json(band) for band in bands])
+        return jsonify(bands=[band2json(band) for band in bands],
+                       tracks=[track2json(track) for track in Track.query.all()])
 
 
 class JsonBandDetails(RestrictedUserPage):
