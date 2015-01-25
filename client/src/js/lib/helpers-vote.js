@@ -75,6 +75,8 @@ var helper = (function ($) {
                 members: DS.attr('number'),
                 city: DS.attr('string'),
                 website: DS.attr('string'),
+                facebookUrl: DS.attr('string'),
+                youtubeUrl: DS.attr('string'),
                 descp: DS.attr('string'),
                 image: DS.attr('string'),
                 thumbnail: DS.attr('string'),

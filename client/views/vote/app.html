@@ -74,9 +74,9 @@
         </tr>
         <tr>
             <td>Webseite:</td>
-            <td><a href="{{unbound website }}">{{ website }}</a>
-             {{#if facebook_url }},
-              <a href="{{unbound facebook_url}}">facebook</a>
+            <td><a {{bind-attr href=website }}>{{ website }}</a>
+             {{#if facebookUrl }},
+              <a {{ bind-attr href=facebookUrl }}>facebook</a>
               {{/if }}
             </td>
         </tr>
@@ -86,7 +86,7 @@
             <td>
             <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
              <iframe id="ytplayer" type="text/html" width="640" height="390"
-                                        src="{{unbound youtube_url }}"
+                                        {{ bind-attr src=youtubeUrl }}"
                                         frameborder="0"/>
             </td>
         </tr>

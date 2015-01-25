@@ -14,6 +14,8 @@ def band2json(band):
         "city": band.city,
         "website": band.website,
         "descp": band.descp,
+        "facebookUrl": band.facebook_url,
+        "youtubeUrl": band.youtube_url,
         "image": band.image_url,
         "thumbnail": resized_img_src(band.image, mode="crop", width=200, height=200),
         "voteCount": band.vote_count,
