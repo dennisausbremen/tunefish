@@ -50,9 +50,10 @@
 
         <div id="" style="overflow-y: scroll; height:200px;">
             <ul>
-                {{#each track in tracks}}
-                {{#view "queueitem" track=track }}
-                {{ track.trackname }} {{ track.band.name }}
+                {{#each item in tracks}}
+                {{#view "queueitem" item=item }}
+                <a href="#" {{action "jumpTo" item.index }}>{{ item.track.trackname }}</a>
+                by {{#link-to "band" item.track.band.id }}{{ item.track.band.name }} {{/link-to}}
                 {{/view}}
                 {{/each}}
             </ul>

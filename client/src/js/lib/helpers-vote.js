@@ -102,10 +102,10 @@ var helper = (function ($) {
 
             Tunefish.QueueitemView = Ember.View.extend({
                 tagName: 'li',
-                classNameBindings: ['isActive:active'],
-                isActive: function () {
-                    return this.get('track.id') === this.get('controller.current.id');
-                }.property('track', 'controller.current')
+                classNameBindings: ['isPlaying:playing'],
+                isPlaying: function () {
+                    return this.get('item.index') === this.get('controller.currentIndex');
+                }.property('item', 'controller.currentIndex')
             });
 
             Tunefish.Router.map(function () {
@@ -153,10 +153,21 @@ var helper = (function ($) {
                         var currentIndex = this.get('currentIndex');
                         var tracks = this.get('tracks');
 
-                        tracks.pushObject(track);
+                        tracks.pushObject({
+                            'index': tracks.length,
+                            'track': track
+                        });
                         if (currentIndex < 0 && tracks.length > 0) {
                             this.send('next');
                             this.send('play');
+                        }
+                    },
+                    jumpTo: function (index) {
+                        var tracks = this.get('tracks');
+
+                        if (index >= 0 && index < tracks.length) {
+                            this.set('currentIndex', index);
+                            this.set('current', tracks.get(index).track);
                         }
                     },
                     play: function () {
@@ -194,7 +205,7 @@ var helper = (function ($) {
 
                         if (currentIndex < tracks.length - 1) {
                             this.set('currentIndex', currentIndex + 1);
-                            this.set('current', tracks.get(currentIndex + 1));
+                            this.set('current', tracks.get(currentIndex + 1).track);
                         }
                     },
                     prev: function () {
@@ -203,7 +214,7 @@ var helper = (function ($) {
 
                         if (currentIndex > 0) {
                             this.set('currentIndex', currentIndex - 1);
-                            this.set('current', tracks.get(currentIndex - 1));
+                            this.set('current', tracks.get(currentIndex - 1).track);
                         }
                     }
 
