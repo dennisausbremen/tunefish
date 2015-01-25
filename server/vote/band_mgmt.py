@@ -14,7 +14,7 @@ class AdminBandList(RestrictedUserPage):
             return render_template('admin/band_list.html', bands=bands)
         else:
             flash('Du hast hier keinen Zugriff', 'error')
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
 
 
 class AdminBandView(RestrictedUserPage):
@@ -29,7 +29,7 @@ class AdminBandView(RestrictedUserPage):
 
         else:
             flash('Du hast hier keinen Zugriff', 'error')
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
 
 
 class AdminBandState(RestrictedUserPage):
@@ -50,4 +50,4 @@ class AdminBandState(RestrictedUserPage):
                 return redirect(url_for('vote.admin.bands.list'))
         else:
             flash('Du hast hier keinen Zugriff', 'error')
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))

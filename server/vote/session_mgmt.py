@@ -20,7 +20,7 @@ class LoginAndRegisterUser(MethodView):
 
     def get(self):
         if 'userId' in session:
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
         else:
             return self.render()
 
@@ -34,7 +34,7 @@ class RegisterUser(LoginAndRegisterUser):
                 db.session.commit()
                 session['userId'] = user.id
                 flash('Willkommen Benutzer "%s".' % user.login, 'info')
-                return redirect(url_for('vote.home.index'))
+                return redirect(url_for('vote.home.inactive'))
             except IntegrityError:
                 self.registration_form.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render()
@@ -47,7 +47,10 @@ class LoginUser(LoginAndRegisterUser):
             user = User.query.filter(User.login == self.login_form.login.data).first()
             if user and user.password == self.login_form.password.data:
                 session['userId'] = user.id
-                return redirect(url_for('vote.home.index'))
+                if user.is_inactive:
+                    return redirect(url_for('vote.home.inactive'))
+                else:
+                    return redirect(url_for('vote.bands.app'))
             else:
                 self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
                 self.login_form.password.errors.append("Passwort eingeben")
@@ -62,7 +65,7 @@ class LogoutUser(MethodView):
             return redirect(url_for('vote.session.index'))
 
 
-class RestrictedUserPage(MethodView):
+class RestrictedInactiveUserPage(MethodView):
     def dispatch_request(self, *args, **kwargs):
         if not 'userId' in session:
             return redirect(url_for('vote.session.index'))
@@ -73,7 +76,24 @@ class RestrictedUserPage(MethodView):
                 return redirect(url_for('vote.session.index'))
             else:
                 g.user = self.user
+                return super(RestrictedInactiveUserPage, self).dispatch_request(*args, **kwargs)
+
+
+class RestrictedUserPage(MethodView):
+    def dispatch_request(self, *args, **kwargs):
+        if not 'userId' in session:
+            return redirect(url_for('vote.session.index'))
+        else:
+            self.user = User.query.get(session['userId'])
+            if not self.user:
+                del session['userId']
+                return redirect(url_for('vote.session.index'))
+            g.user = self.user
+            if self.user.is_inactive:
+                return redirect(url_for('vote.home.inactive'))
+            else:
                 return super(RestrictedUserPage, self).dispatch_request(*args, **kwargs)
+
 
 
 class RestrictedUserAjaxForm(RestrictedUserPage, AjaxForm):

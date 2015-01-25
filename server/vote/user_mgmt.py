@@ -14,7 +14,7 @@ class AdminUserList(RestrictedUserPage):
             return render_template('admin/user_list.html', users=users, state=State)
         else:
             flash('Du hast hier keinen Zugriff', 'error')
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
 
 
 class AdminUserActivation(RestrictedUserPage):
@@ -40,7 +40,7 @@ class AdminUserActivation(RestrictedUserPage):
             return redirect(url_for('vote.admin.users.list'))
         else:
             flash(u'Du kannst keine Berechtigungen', 'error')
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
 
 
 class AdminUserAccess(RestrictedUserPage):
@@ -65,5 +65,5 @@ class AdminUserAccess(RestrictedUserPage):
             return redirect(url_for('vote.admin.users.list'))
         else:
             flash(u'Du kannst keine Berechtigungen ändern', 'error')
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
 

@@ -57,8 +57,6 @@ class Band(db.Model):
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
     votes = db.relationship("Vote", backref="band")
 
-
-
     def __init__(self, login, password):
         self.login = login
         self.name = login
