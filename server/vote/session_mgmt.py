@@ -3,6 +3,7 @@ from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
+
 from server.ajax import AjaxForm
 from server.bands.forms import LoginForm
 from server.models import db, User
@@ -16,7 +17,8 @@ class LoginAndRegisterUser(MethodView):
         self.registration_form = UserRegistrationForm()
 
     def render(self):
-        return render_template('loginAndRegisterUser.html', loginForm=self.login_form, registerForm=self.registration_form)
+        return render_template('loginAndRegisterUser.html', loginForm=self.login_form,
+                               registerForm=self.registration_form)
 
     def get(self):
         if 'userId' in session:
@@ -65,8 +67,8 @@ class LogoutUser(MethodView):
             return redirect(url_for('vote.session.index'))
 
 
-class RestrictedInactiveUserPage(MethodView):
-    def dispatch_request(self, *args, **kwargs):
+class RestrictedUserSessionPage(MethodView):
+    def initialize_user(self):
         if not 'userId' in session:
             return redirect(url_for('vote.session.index'))
         else:
@@ -75,25 +77,40 @@ class RestrictedInactiveUserPage(MethodView):
                 del session['userId']
                 return redirect(url_for('vote.session.index'))
             else:
-                g.user = self.user
-                return super(RestrictedInactiveUserPage, self).dispatch_request(*args, **kwargs)
+                return True
 
-
-class RestrictedUserPage(MethodView):
     def dispatch_request(self, *args, **kwargs):
-        if not 'userId' in session:
-            return redirect(url_for('vote.session.index'))
-        else:
-            self.user = User.query.get(session['userId'])
-            if not self.user:
-                del session['userId']
-                return redirect(url_for('vote.session.index'))
+        if self.initialize_user():
+            g.user = self.user
+            return super(RestrictedUserSessionPage, self).dispatch_request(*args, **kwargs)
+
+
+class RestrictedUserPage(RestrictedUserSessionPage):
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user():
             g.user = self.user
             if self.user.is_inactive:
                 return redirect(url_for('vote.home.inactive'))
             else:
                 return super(RestrictedUserPage, self).dispatch_request(*args, **kwargs)
 
+
+class RestrictedModAdminPage(RestrictedUserPage):
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user() and (self.user.is_admin or self.user.is_mod):
+            return super(RestrictedModAdminPage, self).dispatch_request(*args, **kwargs)
+        else:
+            flash('Du hast hier keinen Zugriff.', 'error')
+            return redirect(url_for('vote.bands.app'))
+
+
+class RestrictedAdminPage(RestrictedUserPage):
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user() and self.user.is_admin:
+            return super(RestrictedAdminPage, self).dispatch_request(*args, **kwargs)
+        else:
+            flash('Du hast hier keinen Zugriff.', 'error')
+            return redirect(url_for('vote.bands.app'))
 
 
 class RestrictedUserAjaxForm(RestrictedUserPage, AjaxForm):
