@@ -81,7 +81,10 @@ var helper = (function ($) {
 
           Tunefish.BandRoute = Ember.Route.extend({
               model: function (params) {
-                  return $.getJSON('/vote/ajax/bands/' + params.band_id);
+                  var self = this;
+                  return $.getJSON('/vote/ajax/bands/' + params.band_id).fail(function() {
+                      self.transitionTo('bands')
+                  });
               }
           });
 

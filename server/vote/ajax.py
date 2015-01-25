@@ -25,29 +25,32 @@ class JsonBandList(RestrictedUserPage):
 class JsonBandDetails(RestrictedUserPage):
     def get(self, band_id):
         band = Band.query.get_or_404(band_id)
-        return jsonify({
-            "id": band.id,
-            "name": band.name,
-            "amount_members": band.amount_members,
-            "city": band.city,
-            "city_encoded": quote_plus(band.city),
-            "website": band.website,
-            "facebook_url": band.facebook_url,
-            "youtube_url": band.youtube_url,
-            "descp": band.descp,
-            "image_url": band.image_url,
-            "vote_count": band.vote_count,
-            "vote_average": band.vote_average,
-            "tracks": [{
-                           "trackname": track.trackname,
-                           "url": track.url,
-                       } for track in band.tracks],
-            "comments": [{
-                             "author": comment.author.login,
-                             "timestamp": comment.timestamp,
-                             "message": comment.message,
-                         } for comment in band.comments]
-        })
+        if band.state != State.IN_VOTE:
+            return '', 404
+        else:
+            return jsonify({
+                "id": band.id,
+                "name": band.name,
+                "amount_members": band.amount_members,
+                "city": band.city,
+                "city_encoded": quote_plus(band.city),
+                "website": band.website,
+                "facebook_url": band.facebook_url,
+                "youtube_url": band.youtube_url,
+                "descp": band.descp,
+                "image_url": band.image_url,
+                "vote_count": band.vote_count,
+                "vote_average": band.vote_average,
+                "tracks": [{
+                               "trackname": track.trackname,
+                               "url": track.url,
+                           } for track in band.tracks],
+                "comments": [{
+                                 "author": comment.author.login,
+                                 "timestamp": comment.timestamp,
+                                 "message": comment.message,
+                             } for comment in band.comments]
+            })
 
 
 class JsonBandVote(RestrictedUserPage):
