@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/client/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/client/bower_components" />
       <excludeFolder url="file://$MODULE_DIR$/client/node_modules" />
     </content>
@@ -10,4 +11,3 @@
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
-
