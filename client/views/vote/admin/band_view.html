@@ -52,6 +52,10 @@
                                 <td>{{ band.state_label }}</td>
                             </tr>
                             <tr>
+                                <td>Voting:</td>
+                                <td>&#8960; {{ band.vote_average }} von 5, {{ band.vote_count }} Stimme{% if band.vote_count == 1 %}n{% endif %}</td>
+                            </tr>
+                            <tr>
                                 <td>Techrider:</td>
                                 <td>{% if band.techrider_url %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else %}fehlt{% endif %}</td>
                             </tr>

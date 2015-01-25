@@ -57,8 +57,6 @@ class Band(db.Model):
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
     votes = db.relationship("Vote", backref="band")
 
-
-
     def __init__(self, login, password):
         self.login = login
         self.name = login
@@ -134,6 +132,32 @@ class Band(db.Model):
             return 0
         else:
             return vote[0]
+
+    @property
+    def facebook_url(self):
+        if self.facebook_page and self.facebook_page != 'NULL':
+            if 'facebook.com' in self.facebook_page:
+                if not self.facebook_page.startswith('http'):
+                    return 'https://' + self.facebook_page
+                else:
+                    return self.facebook_page
+            else:
+                return 'https://facebook.com/' + self.facebook_page
+        else:
+            return False
+
+    @property
+    def youtube_url(self):
+        if self.youtube_id and self.youtube_id != 'NULL':
+            if 'youtube' in self.youtube_id:
+                if not self.youtube_id.startswith('http'):
+                    return 'https://' + self.youtube_id
+                else:
+                    return self.youtube_id
+            else:
+                return 'http://www.youtube.com/embed/' + self.youtube_id
+        else:
+            return False
 
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)

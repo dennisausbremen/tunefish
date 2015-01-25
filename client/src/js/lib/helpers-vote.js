@@ -150,6 +150,14 @@ var helper = (function ($) {
                     },
                     addTrack: function(track) {
                         this.get('controllers.main').send('addTrack', track);
+                    },
+                    calcDistance: function() {
+                        $.post('/vote/ajax/distance', {
+                                'band_id' : this.get('model.id')
+                            }
+                        ).then(function(result) {
+                                $("button#calcDist").text(result.distance);
+                            });
                     }
                 }
             });

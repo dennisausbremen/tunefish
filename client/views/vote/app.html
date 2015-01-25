@@ -68,14 +68,30 @@
         <tr>
             <td>Herkunft:</td>
             <td>{{ city }}<br/>
-                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers=Timbuktu&zoom=10&size=600x300&sensor=false"/>
-
+                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city_encoded }}&zoom=10&size=600x300&sensor=false"/>
+                <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
             </td>
         </tr>
         <tr>
             <td>Webseite:</td>
-            <td>{{ website }}</td>
+            <td><a href="{{unbound website }}">{{ website }}</a>
+             {{#if facebook_url }},
+              <a href="{{unbound facebook_url}}">facebook</a>
+              {{/if }}
+            </td>
         </tr>
+        {{#if youtube_url }}
+        <tr>
+            <td>YouTube:</td>
+            <td>
+            <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
+             <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                        src="{{unbound youtube_url }}"
+                                        frameborder="0"/>
+            </td>
+        </tr>
+        {{/if }}
+
         <tr>
             <td>Beschreibung:</td>
             <td>{{ descp }}</td>

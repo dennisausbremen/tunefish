@@ -3,6 +3,7 @@ from flask import session, redirect, url_for, flash, g
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
+
 from server.ajax import AjaxForm
 from server.bands.forms import LoginForm
 from server.models import db, User
@@ -16,11 +17,12 @@ class LoginAndRegisterUser(MethodView):
         self.registration_form = UserRegistrationForm()
 
     def render(self):
-        return render_template('loginAndRegisterUser.html', loginForm=self.login_form, registerForm=self.registration_form)
+        return render_template('loginAndRegisterUser.html', loginForm=self.login_form,
+                               registerForm=self.registration_form)
 
     def get(self):
         if 'userId' in session:
-            return redirect(url_for('vote.home.index'))
+            return redirect(url_for('vote.bands.app'))
         else:
             return self.render()
 
@@ -34,7 +36,7 @@ class RegisterUser(LoginAndRegisterUser):
                 db.session.commit()
                 session['userId'] = user.id
                 flash('Willkommen Benutzer "%s".' % user.login, 'info')
-                return redirect(url_for('vote.home.index'))
+                return redirect(url_for('vote.home.inactive'))
             except IntegrityError:
                 self.registration_form.login.errors.append("Eine Band mit diesem Login existiert bereits")
                 return self.render()
@@ -47,7 +49,10 @@ class LoginUser(LoginAndRegisterUser):
             user = User.query.filter(User.login == self.login_form.login.data).first()
             if user and user.password == self.login_form.password.data:
                 session['userId'] = user.id
-                return redirect(url_for('vote.home.index'))
+                if user.is_inactive:
+                    return redirect(url_for('vote.home.inactive'))
+                else:
+                    return redirect(url_for('vote.bands.app'))
             else:
                 self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
                 self.login_form.password.errors.append("Passwort eingeben")
@@ -62,8 +67,8 @@ class LogoutUser(MethodView):
             return redirect(url_for('vote.session.index'))
 
 
-class RestrictedUserPage(MethodView):
-    def dispatch_request(self, *args, **kwargs):
+class RestrictedInactiveUserPage(MethodView):
+    def initialize_user(self):
         if not 'userId' in session:
             return redirect(url_for('vote.session.index'))
         else:
@@ -72,8 +77,40 @@ class RestrictedUserPage(MethodView):
                 del session['userId']
                 return redirect(url_for('vote.session.index'))
             else:
-                g.user = self.user
+                return True
+
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user():
+            g.user = self.user
+            return super(RestrictedInactiveUserPage, self).dispatch_request(*args, **kwargs)
+
+
+class RestrictedUserPage(RestrictedInactiveUserPage):
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user():
+            g.user = self.user
+            if self.user.is_inactive:
+                return redirect(url_for('vote.home.inactive'))
+            else:
                 return super(RestrictedUserPage, self).dispatch_request(*args, **kwargs)
+
+
+class RestrictedModAdminPage(RestrictedUserPage):
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user() and (self.user.is_admin or self.user.is_mod):
+            return super(RestrictedModAdminPage, self).dispatch_request(*args, **kwargs)
+        else:
+            flash('Du hast hier keinen Zugriff.', 'error')
+            return redirect(url_for('vote.bands.app'))
+
+
+class RestrictedAdminPage(RestrictedUserPage):
+    def dispatch_request(self, *args, **kwargs):
+        if self.initialize_user() and self.user.is_admin:
+            return super(RestrictedAdminPage, self).dispatch_request(*args, **kwargs)
+        else:
+            flash('Du hast hier keinen Zugriff.', 'error')
+            return redirect(url_for('vote.bands.app'))
 
 
 class RestrictedUserAjaxForm(RestrictedUserPage, AjaxForm):

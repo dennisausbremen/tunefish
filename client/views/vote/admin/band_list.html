@@ -7,8 +7,6 @@
     {{ renderMessages() }}
 </div>
 
-
-
 <section class="main-content profile finish">
     <div class="row">
         <div class="profile-form-wrapper col-xs-12">
@@ -25,18 +23,28 @@
                                 <th>Mitgl.</th>
                                 <th>Herkunft</th>
                                 <th>Status</th>
-                                <th colspan="2">Optionen</th>
+                                <th>Voting</th>
+                                <th colspan="3">Optionen</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for band in bands %}
                             <tr>
                                 <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name }}</a></td>
-                                <td>{{ band.amount_members }}</td>
-                                <td>{{ band.city }}</td>
+                                <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
+                                <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
                                 <td>{{ band.state_label }}</td>
+                                <td>{{ band.vote_count }}, &#8960; {{ band.vote_average }}</td>
                                 <td>Edit</td>
                                 <td>X</td>
+                                <td>{% if band.state == 1 %}
+                                        <a href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">- Voting</a>
+                                    {% elif band.state == 2 %}
+                                        <a href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">+ Voting</a>
+                                    {% else %}
+                                        [---]
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -17,7 +17,8 @@ def band2json(band):
         "voteCount": band.vote_count,
         "voteAverage": band.vote_average,
         "ownVote": band.get_user_vote(g.user),
-        "comments": [comment.id for comment in band.comments]
+        "comments": [comment.id for comment in band.comments],
+        'voted': band.get_user_vote(self.user) > 0
     }
 
 
@@ -41,16 +42,26 @@ def track2json(track):
 class JsonBandList(RestrictedUserPage):
     def get(self):
         bands = Band.query.filter(Band.state == State.IN_VOTE)
-        return jsonify(bands=[band2json(band) for band in bands],
-                       tracks=[track2json(track) for track in Track.query.all()])
+        return jsonify(bands=[{
+                                  "id": band.id,
+                                  "name": band.name,
+                                  "thumbnail": resized_img_src(band.image, mode="crop", width=200, height=200),
+                                  "vote_count": band.vote_count,
+                                  "vote_average": band.vote_average,
+                                  "own_vote": band.get_user_vote(self.user)
+                              }
+                              for band in bands])
 
 
 class JsonBandDetails(RestrictedUserPage):
     def get(self, band_id):
         band = Band.query.get_or_404(band_id)
-        return jsonify(band=band2json(band),
-                       comments=[comment2json(comment) for comment in band.comments],
-                       tracks=[track2json(track) for track in band.tracks]
+        if band.state != State.IN_VOTE:
+            return '', 404
+        else:
+            return jsonify(band=band2json(band),
+                           comments=[comment2json(comment) for comment in band.comments],
+                           tracks=[track2json(track) for track in band.tracks]
         )
 
 
@@ -96,6 +107,19 @@ class JsonCommentAdd(RestrictedUserPage):
             return "{}", 400
 
 
+# damn Same-Origin-Rule ...
+class JsonDistance(RestrictedUserPage):
+    def post(self):
+        band_id = request.form["band_id"]
+        band = Band.query.get_or_404(band_id)
+        if band:
+            city = quote_plus(band.city)
+            distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
+            distance_json = distance_api.read()
+            distance = loads(str(distance_json))
 
-
-
+            if distance['status'] == "OK":
+                text = distance['rows'][0]['elements'][0]['distance']['text']
+                return jsonify({'distance': text})
+            else:
+                return jsonify({'distance': 'failed'})
