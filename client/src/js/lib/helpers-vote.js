@@ -96,6 +96,7 @@ var helper = (function ($) {
 
             Tunefish.Track = DS.Model.extend({
                 trackname: DS.attr('string'),
+                url: DS.attr('string'),
                 band: DS.belongsTo('band')
             });
 
@@ -122,8 +123,10 @@ var helper = (function ($) {
 
             Tunefish.MainController = Ember.ObjectController.extend({
                 tracks: [],
+                current: null,
                 actions: {
                     addTrack: function(track) {
+                        this.set('current', track);
                         this.get('tracks').pushObject(track);
                     }
                 }

@@ -39,6 +39,7 @@ def track2json(track):
     return {
         "id": track.id,
         "trackname": track.trackname,
+        "url": track.url,
         "band": track.band_id
     }
 
@@ -46,15 +47,7 @@ def track2json(track):
 class JsonBandList(RestrictedUserPage):
     def get(self):
         bands = Band.query.filter(Band.state == State.IN_VOTE)
-        return jsonify(bands=[{
-                                  "id": band.id,
-                                  "name": band.name,
-                                  "thumbnail": resized_img_src(band.image, mode="crop", width=200, height=200),
-                                  "vote_count": band.vote_count,
-                                  "vote_average": band.vote_average,
-                                  "own_vote": band.get_user_vote(self.user)
-                              }
-                              for band in bands])
+        return jsonify(bands=[band2json(band) for band in bands])
 
 
 class JsonBandDetails(RestrictedUserPage):
