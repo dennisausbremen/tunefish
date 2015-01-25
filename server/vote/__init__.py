@@ -2,7 +2,7 @@
 
 from flask import Blueprint
 from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd
-from server.vote.band_mgmt import AdminBandList, AdminBandView
+from server.vote.band_mgmt import AdminBandList, AdminBandView, AdminBandState
 from server.vote.band_vote import BandList, BandDetails, BandCommendAdd, BandVote, BandApp
 
 from server.vote.profile import UserIndex, AdminIndex
@@ -22,6 +22,7 @@ vote_blueprint.add_url_rule('/home', view_func=UserIndex.as_view('home.index'))
 vote_blueprint.add_url_rule('/admin', view_func=AdminIndex.as_view('admin.index'))
 vote_blueprint.add_url_rule('/admin/bands', view_func=AdminBandList.as_view('admin.bands.list'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>', view_func=AdminBandView.as_view('admin.bands.view'))
+vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/vote_state', view_func=AdminBandState.as_view('admin.bands.vote_state'))
 
 vote_blueprint.add_url_rule('/admin/users', view_func=AdminUserList.as_view('admin.users.list'))
 vote_blueprint.add_url_rule('/admin/users/access/<int:user_id>', view_func=AdminUserActivation.as_view('admin.users.access'))
