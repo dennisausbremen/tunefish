@@ -140,6 +140,15 @@ var helper = (function ($) {
                     return document.getElementById('#tunefishPlayer');
                 },
                 actions: {
+                    vote: function (vote) {
+                        var current = this.get('current');
+                        if (current === null) {
+                            return;
+                        }
+                        var band = current.get('band');
+                        band.set('ownVote', vote);
+                        band.save();
+                    },
                     addTrack: function (track) {
                         var currentIndex = this.get('currentIndex');
                         var tracks = this.get('tracks');
