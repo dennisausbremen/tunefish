@@ -32,6 +32,8 @@ class JsonBandDetails(RestrictedUserPage):
             "city": band.city,
             "city_encoded": quote_plus(band.city),
             "website": band.website,
+            "facebook_url": band.facebook_url,
+            "youtube_url": band.youtube_url,
             "descp": band.descp,
             "image_url": band.image_url,
             "vote_count": band.vote_count,
