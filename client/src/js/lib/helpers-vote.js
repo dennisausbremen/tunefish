@@ -109,7 +109,23 @@ var helper = (function ($) {
                           self.get('model.comments').pushObject(result);
                           self.set('comment', ' ');
                       });
+                  },
+
+                  'calcDistance': function() {
+                      var self = this;
+                      console.log(this.get('model.city'));
+
+                      $.post('/vote/ajax/distance', {
+                            'band_id' : this.get('model.id')
+                          }
+                      ).then(function(result) {
+                          console.log(result);
+                      });
+                      $("button#calcDist").text('55 km');
+
                   }
+
+
               }
           });
       }
