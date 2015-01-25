@@ -1,6 +1,8 @@
 from urllib import quote_plus
+import urllib2
 from flask import jsonify, request
 from flask.ext.images import resized_img_src
+from flask.json import loads
 from server.models import Band, State, db, Vote, Comment
 from server.vote.session_mgmt import RestrictedUserPage
 
@@ -91,3 +93,21 @@ class JsonCommentAdd(RestrictedUserPage):
             return jsonify({
                 "error": "Der Kommentar darf nur zwischen 1 und 1000 Zeichen lang sein."
             })
+
+
+# damn Same-Origin-Rule ...
+class JsonDistance(RestrictedUserPage):
+    def post(self):
+        band_id = request.form["band_id"]
+        band = Band.query.get_or_404(band_id)
+        if band:
+            city = quote_plus(band.city)
+            distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
+            distance_json = distance_api.read()
+            distance = loads(str(distance_json))
+
+            if distance['status'] == "OK":
+                text = distance['rows'][0]['elements'][0]['distance']['text']
+                return jsonify({'distance': text})
+            else:
+                return jsonify({'distance': 'failed'})
