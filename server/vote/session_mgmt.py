@@ -67,7 +67,7 @@ class LogoutUser(MethodView):
             return redirect(url_for('vote.session.index'))
 
 
-class RestrictedUserSessionPage(MethodView):
+class RestrictedInactiveUserPage(MethodView):
     def initialize_user(self):
         if not 'userId' in session:
             return redirect(url_for('vote.session.index'))
@@ -82,10 +82,10 @@ class RestrictedUserSessionPage(MethodView):
     def dispatch_request(self, *args, **kwargs):
         if self.initialize_user():
             g.user = self.user
-            return super(RestrictedUserSessionPage, self).dispatch_request(*args, **kwargs)
+            return super(RestrictedInactiveUserPage, self).dispatch_request(*args, **kwargs)
 
 
-class RestrictedUserPage(RestrictedUserSessionPage):
+class RestrictedUserPage(RestrictedInactiveUserPage):
     def dispatch_request(self, *args, **kwargs):
         if self.initialize_user():
             g.user = self.user
