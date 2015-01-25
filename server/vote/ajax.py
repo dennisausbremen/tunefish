@@ -1,6 +1,8 @@
+from urllib import quote_plus
+import urllib2
 from flask import jsonify, request, g, json
 from flask.ext.images import resized_img_src
-from server.models import Band, State, db, Vote, Comment, Track
+from server.models import Band, State, db, Vote, Comment
 from server.vote.session_mgmt import RestrictedUserPage
 
 
@@ -18,7 +20,7 @@ def band2json(band):
         "voteAverage": band.vote_average,
         "ownVote": band.get_user_vote(g.user),
         "comments": [comment.id for comment in band.comments],
-        'voted': band.get_user_vote(self.user) > 0
+        'voted': band.get_user_vote(g.user) > 0
     }
 
 
@@ -116,7 +118,7 @@ class JsonDistance(RestrictedUserPage):
             city = quote_plus(band.city)
             distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
             distance_json = distance_api.read()
-            distance = loads(str(distance_json))
+            distance = json.loads(str(distance_json))
 
             if distance['status'] == "OK":
                 text = distance['rows'][0]['elements'][0]['distance']['text']

@@ -100,10 +100,9 @@ var helper = (function ($) {
             Tunefish.Router.map(function () {
                 this.resource('main', {'path': '/'}, function() {
                     this.resource('bands', { path: '/bands/' });
-                    this.resource('band', { path: '/:band_id'});
+                    this.resource('band', { path: '/bands/:band_id'});
                 });
             });
-
 
             Tunefish.BandsRoute = Ember.Route.extend({
                 model: function () {
@@ -156,7 +155,7 @@ var helper = (function ($) {
                                 'band_id' : this.get('model.id')
                             }
                         ).then(function(result) {
-                                $("button#calcDist").text(result.distance);
+                                $('button#calcDist').text(result.distance);
                             });
                     }
                 }
