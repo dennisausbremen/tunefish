@@ -1,3 +1,4 @@
+from urllib import quote_plus
 from flask import jsonify, request
 from flask.ext.images import resized_img_src
 from server.models import Band, State, db, Vote, Comment
@@ -13,7 +14,8 @@ class JsonBandList(RestrictedUserPage):
                                   "thumbnail": resized_img_src(band.image, mode="crop", width=200, height=200),
                                   "vote_count": band.vote_count,
                                   "vote_average": band.vote_average,
-                                  "own_vote": band.get_user_vote(self.user)
+                                  "own_vote": band.get_user_vote(self.user),
+                                  'voted': band.get_user_vote(self.user) > 0
                               }
                               for band in bands])
 
@@ -26,6 +28,7 @@ class JsonBandDetails(RestrictedUserPage):
             "name": band.name,
             "amount_members": band.amount_members,
             "city": band.city,
+            "city_encoded": quote_plus(band.city),
             "website": band.website,
             "descp": band.descp,
             "image_url": band.image_url,
@@ -88,8 +91,3 @@ class JsonCommentAdd(RestrictedUserPage):
             return jsonify({
                 "error": "Der Kommentar darf nur zwischen 1 und 1000 Zeichen lang sein."
             })
-
-
-
-
-
