@@ -1,10 +1,9 @@
 # coding=utf-8
-from flask import flash, url_for, redirect
+from flask import url_for, redirect
 
 from flask.templating import render_template
 
-from server.models import Access
-from server.vote.session_mgmt import RestrictedUserPage, RestrictedInactiveUserPage
+from server.vote.session_mgmt import RestrictedInactiveUserPage, RestrictedModAdminPage
 
 
 class InactiveUserIndex(RestrictedInactiveUserPage):
@@ -15,10 +14,6 @@ class InactiveUserIndex(RestrictedInactiveUserPage):
             return redirect(url_for('vote.bands.app'))
 
 
-class AdminIndex(RestrictedUserPage):
+class AdminIndex(RestrictedModAdminPage):
     def get(self):
-        if self.user.is_admin or self.user.is_mod:
-            return render_template('admin/overview.html')
-        else:
-            flash('Du hast hier keinen Zugriff!', 'error')
-            return redirect(url_for('vote.bands.app'))
+        return render_template('admin/overview.html')

@@ -13,6 +13,52 @@
 
 
 {% raw %}
+<script type="text/x-handlebars" id="main">
+    <div style="position:fixed; top: 50px; right:0; width: 300px; height: 500px; background-color: #f0f0f0; z-index:9001;">
+
+        {{#link-to "band" current.band.id }}
+        <div style="width: 200px; height: 200px; display: inline-block; margin: 10px; position: relative;" class="player">
+            <image {{ bind-attr src=current.band.thumbnail }} />
+            <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
+                {{ current.band.name }} ( {{ current.band.ownVote }})
+            </div>
+        </div>
+        {{/link-to}}
+        <br> Vote
+        <a href="#" {{action "vote" 1}}>1</a>
+        <a href="#" {{action "vote" 2}}>2</a>
+        <a href="#" {{action "vote" 3}}>3</a>
+        <a href="#" {{action "vote" 4}}>4</a>
+        <a href="#" {{action "vote" 5}}>5</a>
+
+        <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
+        <div id="playCtrls" {{bind-attr class="playerState"}} >
+        <a href="#" {{action "pause"}}>pause</a> ({{currentTime}} / {{currentDuration}})
+        </div>
+        <div id="idleCtrls" {{bind-attr class="playerState"}} >
+            <a href="#" {{action "play"}}>play</a>
+        </div>
+
+
+        <a href="#" {{action "prev"}}>prev</a>
+        <a href="#" {{action "next"}}>next</a>
+
+        <div id="" style="overflow-y: scroll; height:200px;">
+            <ul>
+                {{#each item in tracks}}
+                {{#view "queueitem" item=item }}
+                <a href="#" {{action "jumpTo" item.index }}>{{ item.track.trackname }}</a>
+                by {{#link-to "band" item.track.band.id }}{{ item.track.band.name }} {{/link-to}}
+                {{/view}}
+                {{/each}}
+            </ul>
+        </div>
+
+    </div>
+    <hr/>
+    {{ outlet }}
+</script>
+
 <script type="text/x-handlebars" id="bands">
     {{#view "bandgrid"}}
     <div id="band-grid">
@@ -35,34 +81,49 @@
 </script>
 
 <script type="text/x-handlebars" id="band">
-    <h2>Band {{ name }} ({{ vote_count }} Votes, {{ vote_average }})</h2>
-    <button
-    {{action "vote" 1}}>Vote 1</button>
-    <button
-    {{action "vote" 2}}>Vote 2</button>
-    <button
-    {{action "vote" 3}}>Vote 3</button>
-    <button
-    {{action "vote" 4}}>Vote 4</button>
-    <button
-    {{action "vote" 5}}>Vote 5</button>
+
+    <h2>Band {{ name }} ({{ voteCount }} Votes, {{ voteAverage }})</h2>
+
+    <p>{{#link-to 'bands' }}Bands{{/link-to}} / Band "{{ name }}"</p>
+
+    <a href="#" {{action "vote" 1}}>1</a>
+    <a href="#" {{action "vote" 2}}>2</a>
+    <a href="#" {{action "vote" 3}}>3</a>
+    <a href="#" {{action "vote" 4}}>4</a>
+    <a href="#" {{action "vote" 5}}>5</a>
     <table style="width: 100%;">
         <tbody>
         <tr>
             <td>Mitglieder:</td>
-            <td>{{ amount_members }}</td>
+            <td>{{ members }}</td>
         </tr>
         <tr>
             <td>Herkunft:</td>
             <td>{{ city }}<br/>
-                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers=Timbuktu&zoom=10&size=600x300&sensor=false"/>
-
+                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
+                <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
             </td>
         </tr>
         <tr>
             <td>Webseite:</td>
-            <td>{{ website }}</td>
+            <td><a {{bind-attr href=website }}>{{ website }}</a>
+             {{#if facebookUrl }},
+              <a {{ bind-attr href=facebookUrl }}>facebook</a>
+              {{/if }}
+            </td>
         </tr>
+        {{#if youtube_url }}
+        <tr>
+            <td>YouTube:</td>
+            <td>
+            <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
+             <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                        {{ bind-attr src=youtubeUrl }}"
+                                        frameborder="0"/>
+            </td>
+        </tr>
+        {{/if }}
+
         <tr>
             <td>Beschreibung:</td>
             <td>{{ descp }}</td>
@@ -73,16 +134,15 @@
     <h3>Tracks</h3>
     <ul>
         {{#each track in tracks }}
-        <li>
-            <audio
-            {{bind-attr src=track.url}} controls></audio>
+        <li ><a href="#" {{ action "addTrack" track }}>
             {{ track.trackname }}
+            </a>
         </li>
         {{/each}}
     </ul>
 
     <h3>Bandfoto</h3>
-    <img {{bind-attr src=image_url }} width="100%"/>
+    <img {{bind-attr src=image }} width="100%"/>
 
     <h3>Kommentare</h3>
     <table style="width: 100%;">

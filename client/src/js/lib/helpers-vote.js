@@ -11,7 +11,7 @@ var helper = (function ($) {
     var setActivePanel = function setActiveTab(target) {
         var tabs = $('.tabs'),
             children = tabs.children().length,
-            steps = 100/children,
+            steps = 100 / children,
             tab = tabs.find('a'),
             idx = target.parent().index(),
             content = $('.form-action-wrapper');
@@ -19,14 +19,14 @@ var helper = (function ($) {
         tab.removeClass('active');
         tab.eq(idx).addClass('active');
 
-        content.css('transform','translate3d(-'+ (steps * idx) +'%,0,0)');
+        content.css('transform', 'translate3d(-' + (steps * idx) + '%,0,0)');
     };
 
     var setLoginContainerHeight = function setLoginContainerHeight() {
         var i = $('.tabs a.active').parent().index();
         var th = $('.tabs').outerHeight();
         var h = $('.form-action-wrapper .form-action').eq(i).outerHeight();
-        $('.login-container').height(th+h);
+        $('.login-container').height(th + h);
     };
 
     var checkInvalidLogin = function checkInvalidLogin() {
@@ -34,27 +34,20 @@ var helper = (function ($) {
 
 
         if (target) {
-            setActivePanel($('[href=#'+target+']'));
+            setActivePanel($('[href=#' + target + ']'));
         }
         setLoginContainerHeight();
     };
 
     var initTabs = function initTabs() {
-        $(document).on('click','.tabs a:not(.active)',function(){
+        $(document).on('click', '.tabs a:not(.active)', function () {
             var el = $(this),
                 target = el.attr('href');
 
-            setActivePanel($('[href='+target+']'));
+            setActivePanel($('[href=' + target + ']'));
             setLoginContainerHeight();
             return false;
         });
-    };
-
-
-    var initScriptsAfterLoad = function initScriptsAfterLoad(){
-        //MIXITUP!
-        alert('foo');
-        $('#container').mixItUp();
     };
 
 
@@ -69,63 +62,209 @@ var helper = (function ($) {
           }
 
 
-          $('.band-tile').velocity('transition.slideUpIn',500,{stagger: true});
-
-          window.Tunefish = Ember.Application.create({
-              rootElement: '#app_container'
-          });
+            window.Tunefish = Ember.Application.create({
+                rootElement: '#app_container'
+            });
 
           Ember.LinkView.reopen({
               attributeBindings: ['data-sort','data-voted']
           });
+
+          Tunefish.ApplicationStore = DS.Store.extend();
 
           Tunefish.Router.map(function () {
               this.resource('bands', { path: '/' });
               this.resource('band', { path: '/:band_id'});
           });
 
+            Tunefish.ApplicationAdapter = DS.RESTAdapter.extend({
+                namespace: 'vote/ajax'
+            });
 
-          Tunefish.BandsRoute = Ember.Route.extend({
-              model: function () {
-                  return $.getJSON('/vote/ajax/bands').then(function (data) {
-                      return data.bands;
-                  });
-              }
-          });
+            Tunefish.Band = DS.Model.extend({
+                name: DS.attr('string'),
+                members: DS.attr('number'),
+                city: DS.attr('string'),
+                website: DS.attr('string'),
+                facebookUrl: DS.attr('string'),
+                youtubeUrl: DS.attr('string'),
+                descp: DS.attr('string'),
+                image: DS.attr('string'),
+                thumbnail: DS.attr('string'),
+                voteCount: DS.attr('number'),
+                voteAverage: DS.attr('number'),
+                voted: DS.attr('boolean'),
+                ownVote: DS.attr('number'),
+                comments: DS.hasMany('comment'),
+                tracks: DS.hasMany('track')
+            });
 
-          Tunefish.BandRoute = Ember.Route.extend({
-              model: function (params) {
-                  return $.getJSON('/vote/ajax/bands/' + params.band_id);
-              }
-          });
+            Tunefish.Comment = DS.Model.extend({
+                author: DS.attr('string'),
+                timestamp: DS.attr('string'),
+                message: DS.attr('string'),
+                band: DS.belongsTo('band')
+            });
 
-          Tunefish.BandController = Ember.ObjectController.extend({
-              comment: '',
+            Tunefish.Track = DS.Model.extend({
+                trackname: DS.attr('string'),
+                url: DS.attr('string'),
+                band: DS.belongsTo('band')
+            });
 
-              actions : {
-                  'vote' : function(vote) {
-                      var self = this;
-                      $.post('/vote/ajax/bands/vote', {
-                          'band_id' : this.get('model.id'),
-                          'vote': vote
-                      }).then(function (result) {
-                          self.set('model.vote_count', result.vote_count);
-                          self.set('model.vote_average', result.vote_average);
-                      });
-                  },
+            Tunefish.QueueitemView = Ember.View.extend({
+                tagName: 'li',
+                classNameBindings: ['isPlaying:playing'],
+                isPlaying: function () {
+                    return this.get('item.index') === this.get('controller.currentIndex');
+                }.property('item', 'controller.currentIndex')
+            });
 
-                  'addComment': function() {
-                      var self = this;
-                      $.post('/vote/ajax/comments/add', {
-                          'band_id' : this.get('model.id'),
-                          'comment' : this.get('comment')
-                      }).then(function (result) {
-                          self.get('model.comments').pushObject(result);
-                          self.set('comment', ' ');
-                      });
-                  }
-              }
-          });
+            Tunefish.Router.map(function () {
+                this.resource('main', {'path': '/'}, function () {
+                    this.resource('bands', { path: '/bands/' });
+                    this.resource('band', { path: '/bands/:band_id'});
+                });
+            });
+
+            Tunefish.BandsRoute = Ember.Route.extend({
+                model: function () {
+                    return this.store.find('band');
+                }
+            });
+
+
+            Tunefish.BandRoute = Ember.Route.extend({
+                model: function (params) {
+                    return this.store.find('band', params.band_id);
+                }
+            });
+
+
+            Tunefish.MainController = Ember.ObjectController.extend({
+                tracks: [],
+                currentIndex: -1,
+                current: null,
+                currentTime: 0,
+                currentDuration: 0,
+                playerState: 'idle',
+                player: function () {
+                    return document.getElementById('#tunefishPlayer');
+                },
+                actions: {
+                    vote: function (vote) {
+                        var current = this.get('current');
+                        if (current === null) {
+                            return;
+                        }
+                        var band = current.get('band');
+                        band.set('ownVote', vote);
+                        band.save();
+                    },
+                    addTrack: function (track) {
+                        var currentIndex = this.get('currentIndex');
+                        var tracks = this.get('tracks');
+
+                        tracks.pushObject({
+                            'index': tracks.length,
+                            'track': track
+                        });
+                        if (currentIndex < 0 && tracks.length > 0) {
+                            this.send('next');
+                            this.send('play');
+                        }
+                    },
+                    jumpTo: function (index) {
+                        var tracks = this.get('tracks');
+
+                        if (index >= 0 && index < tracks.length) {
+                            this.set('currentIndex', index);
+                            this.set('current', tracks.get(index).track);
+                        }
+                    },
+                    play: function () {
+                        var self = this;
+                        var currentIndex = this.get('currentIndex');
+                        var $player = $('#tunefishPlayer');
+                        if (currentIndex === -1) {
+                            return;
+                        }
+
+                        this.set('playerState', 'playing');
+                        $player.attr('autoplay', 'autoplay');
+                        $player.get(0).play();
+                        $player.on('ended', function () {
+                            self.send('next');
+                        });
+                        $player.on('timeupdate', function() {
+                            self.set('currentTime', Math.ceil($player.get(0).currentTime));
+                            self.set('currentDuration', Math.ceil($player.get(0).duration));
+                        });
+
+                    },
+                    pause: function () {
+                        var $player = $('#tunefishPlayer');
+
+                        $player.removeAttr('autoplay');
+                        $player.get(0).pause();
+                        $player.off('ended');
+                        $player.off('timeupdate');
+                        this.set('playerState', 'idle');
+                    },
+                    next: function () {
+                        var currentIndex = this.get('currentIndex');
+                        var tracks = this.get('tracks');
+
+                        if (currentIndex < tracks.length - 1) {
+                            this.set('currentIndex', currentIndex + 1);
+                            this.set('current', tracks.get(currentIndex + 1).track);
+                        }
+                    },
+                    prev: function () {
+                        var currentIndex = this.get('currentIndex');
+                        var tracks = this.get('tracks');
+
+                        if (currentIndex > 0) {
+                            this.set('currentIndex', currentIndex - 1);
+                            this.set('current', tracks.get(currentIndex - 1).track);
+                        }
+                    }
+
+                }
+            });
+
+
+            Tunefish.BandController = Ember.ObjectController.extend({
+                needs: ['main'],
+                comment: '',
+
+                actions: {
+                    vote: function (vote) {
+                        var band = this.get('model');
+                        band.set('ownVote', vote);
+                        band.save();
+                    },
+
+                    addComment: function () {
+                        var comment = this.store.createRecord('comment', {
+                            message: this.get('comment'),
+                            band: this.get('model')
+                        });
+                        comment.save();
+                    },
+                    addTrack: function (track) {
+                        this.get('controllers.main').send('addTrack', track);
+                    },
+                    calcDistance: function () {
+                        $.post('/vote/ajax/distance', {
+                                'band_id': this.get('model.id')
+                            }
+                        ).then(function (result) {
+                                $('button#calcDist').text(result.distance);
+                            });
+                    }
+                }
+            });
 
           Tunefish.BandgridView = Ember.View.extend({
               didInsertElement: function() {
@@ -142,7 +281,8 @@ var helper = (function ($) {
                   });
               }
           });
-      }
+
+        }
     };
 
     var Login = {
@@ -153,14 +293,14 @@ var helper = (function ($) {
     };
 
     var Messages = {
-        init: function initMessages(){
+        init: function initMessages() {
             var messageContainer = $('#messages'),
                 messages = $('div', messageContainer);
 
             messages
-                .velocity('transition.slideDownIn',{stagger:250})
+                .velocity('transition.slideDownIn', {stagger: 250})
                 .delay(5000)
-                .velocity('transition.slideUpOut',{stagger: 250, backwards:true});
+                .velocity('transition.slideUpOut', {stagger: 250, backwards: true});
 
         }
     };
