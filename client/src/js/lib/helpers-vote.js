@@ -156,6 +156,17 @@ var helper = (function ($) {
                         band.set('ownVote', vote);
                         band.save();
                     },
+                    clear: function() {
+                        var tracks = this.get('tracks');
+
+                        this.send('pause');
+                        this.set('current', null);
+                        this.set('currentIndex', -1);
+                        this.set('currentTime', '0');
+                        this.set('currentDuration', '0');
+                        tracks.clear();
+
+                    },
                     addTrack: function (track) {
                         var currentIndex = this.get('currentIndex');
                         var tracks = this.get('tracks');
@@ -223,10 +234,53 @@ var helper = (function ($) {
                             this.set('currentIndex', currentIndex - 1);
                             this.set('current', tracks.get(currentIndex - 1).track);
                         }
-                    }
+                    },
 
+                    addUnvotedTracks: function () {
+                        var self = this;
+                        var bands = this.store.all('band');
+
+                        bands.forEach(function(band) {
+                            var voted = band.get('voted');
+                            if(!voted) {
+                                var tracks = band.get('tracks');
+                                tracks.forEach(function(track) {
+                                    self.send('addTrack', track);
+                                });
+                            }
+                        });
+                    },
+
+                    shuffle: function() {
+                        var tracks = this.get('tracks');
+                        alert('sorry, doesn\'t work so far; fix the TODO! :P');
+
+                        // see http://stackoverflow.com/a/2450976
+                        var currentIndex = tracks.length, temporaryValue, randomIndex ;
+
+                        // While there remain elements to shuffle...
+                        while (0 !== currentIndex) {
+
+                            // Pick a remaining element...
+                            randomIndex = Math.floor(Math.random() * currentIndex);
+                            currentIndex -= 1;
+
+                            // And swap it with the current element.
+                            temporaryValue = tracks[currentIndex];
+                            tracks[currentIndex] = tracks[randomIndex];
+                            tracks[randomIndex] = temporaryValue;
+                        }
+
+                        // TODO have to set/update the list?
+                        this.set('tracks', tracks);
+
+                    }
                 }
+
             });
+
+
+
 
 
             Tunefish.BandController = Ember.ObjectController.extend({

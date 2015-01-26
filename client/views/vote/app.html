@@ -16,6 +16,7 @@
 <script type="text/x-handlebars" id="main">
     <div style="position:fixed; top: 50px; right:0; width: 300px; height: 500px; background-color: #f0f0f0; z-index:9001;">
 
+        {{#if current }}
         {{#link-to "band" current.band.id }}
         <div style="width: 200px; height: 200px; display: inline-block; margin: 10px; position: relative;" class="player">
             <image {{ bind-attr src=current.band.thumbnail }} />
@@ -30,7 +31,9 @@
         <a href="#" {{action "vote" 3}}>3</a>
         <a href="#" {{action "vote" 4}}>4</a>
         <a href="#" {{action "vote" 5}}>5</a>
-
+        {{else }}
+        <div style="height: 240px;"><!-- or do something else here if theres no track playing --></div>
+        {{/if}}
         <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
         <div id="playCtrls" {{bind-attr class="playerState"}} >
         <a href="#" {{action "pause"}}>pause</a> ({{currentTime}} / {{currentDuration}})
@@ -42,6 +45,10 @@
 
         <a href="#" {{action "prev"}}>prev</a>
         <a href="#" {{action "next"}}>next</a>
+        <a href="#" {{action "clear"}}>clear</a>
+        <a href="#" {{action "shuffle"}}>shuffle</a>
+        <br />
+        <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a>
 
         <div id="" style="overflow-y: scroll; height:200px;">
             <ul>
