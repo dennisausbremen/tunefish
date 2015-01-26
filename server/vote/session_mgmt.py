@@ -70,19 +70,24 @@ class LogoutUser(MethodView):
 class RestrictedInactiveUserPage(MethodView):
     def initialize_user(self):
         if not 'userId' in session:
-            return redirect(url_for('vote.session.index'))
+            return False
         else:
             self.user = User.query.get(session['userId'])
             if not self.user:
                 del session['userId']
-                return redirect(url_for('vote.session.index'))
+                return False
             else:
                 return True
+
+    def redirect_to_login(self):
+        return redirect(url_for('vote.session.index'))
 
     def dispatch_request(self, *args, **kwargs):
         if self.initialize_user():
             g.user = self.user
             return super(RestrictedInactiveUserPage, self).dispatch_request(*args, **kwargs)
+        else:
+            return self.redirect_to_login()
 
 
 class RestrictedUserPage(RestrictedInactiveUserPage):
@@ -93,6 +98,8 @@ class RestrictedUserPage(RestrictedInactiveUserPage):
                 return redirect(url_for('vote.home.inactive'))
             else:
                 return super(RestrictedUserPage, self).dispatch_request(*args, **kwargs)
+        else:
+            return self.redirect_to_login()
 
 
 class RestrictedModAdminPage(RestrictedUserPage):
