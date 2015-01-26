@@ -247,9 +247,20 @@ var helper = (function ($) {
                         });
                         comment.save();
                     },
+
+                    addAllTracks: function () {
+                        var self = this;
+                        var tracks = this.get('tracks');
+
+                        tracks.forEach(function(track){
+                            self.get('controllers.main').send('addTrack', track);
+                        });
+                    },
+
                     addTrack: function (track) {
                         this.get('controllers.main').send('addTrack', track);
                     },
+
                     calcDistance: function () {
                         $.post('/vote/ajax/distance', {
                                 'band_id': this.get('model.id')
