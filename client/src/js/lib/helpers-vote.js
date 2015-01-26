@@ -52,30 +52,20 @@ var helper = (function ($) {
 
 
     var App = {
-      init: function initAmberApp () {
+        init: function initAmberApp() {
 
-          //INIT MESSAGES
-          $(document).on('ajaxComplete messageChange', Messages.init);
+            //INIT MESSAGES
+            $(document).on('ajaxComplete messageChange', Messages.init);
 
-          if ($('#messages div').length) {
-              $(document).trigger('messageChange');
-          }
+            if ($('#messages div').length) {
+                $(document).trigger('messageChange');
+            }
 
 
             window.Tunefish = Ember.Application.create({
                 rootElement: '#app_container'
             });
 
-          Ember.LinkView.reopen({
-              attributeBindings: ['data-sort','data-voted']
-          });
-
-          Tunefish.ApplicationStore = DS.Store.extend();
-
-          Tunefish.Router.map(function () {
-              this.resource('bands', { path: '/' });
-              this.resource('band', { path: '/:band_id'});
-          });
 
             Tunefish.ApplicationAdapter = DS.RESTAdapter.extend({
                 namespace: 'vote/ajax'
@@ -111,6 +101,11 @@ var helper = (function ($) {
                 url: DS.attr('string'),
                 band: DS.belongsTo('band')
             });
+
+            Ember.LinkView.reopen({
+                attributeBindings: ['data-sort', 'data-voted']
+            });
+
 
             Tunefish.QueueitemView = Ember.View.extend({
                 tagName: 'li',
@@ -196,7 +191,7 @@ var helper = (function ($) {
                         $player.on('ended', function () {
                             self.send('next');
                         });
-                        $player.on('timeupdate', function() {
+                        $player.on('timeupdate', function () {
                             self.set('currentTime', Math.ceil($player.get(0).currentTime));
                             self.set('currentDuration', Math.ceil($player.get(0).duration));
                         });
@@ -266,21 +261,21 @@ var helper = (function ($) {
                 }
             });
 
-          Tunefish.BandgridView = Ember.View.extend({
-              didInsertElement: function() {
-                  this.$().mixItUp({
-                      selectors: {
-                          target: '.band-tile'
-                      },
-                      animation: {
-                          duration: 700,
-                          effects: 'fade translateY(50px) rotateX(-30deg) stagger(35ms)',
-                          //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
-                          reverseOut: true
-                      }
-                  });
-              }
-          });
+            Tunefish.BandgridView = Ember.View.extend({
+                didInsertElement: function () {
+                    this.$().mixItUp({
+                        selectors: {
+                            target: '.band-tile'
+                        },
+                        animation: {
+                            duration: 700,
+                            effects: 'fade translateY(50px) rotateX(-30deg) stagger(35ms)',
+                            //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
+                            reverseOut: true
+                        }
+                    });
+                }
+            });
 
         }
     };
