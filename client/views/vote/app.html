@@ -77,7 +77,11 @@
 </script>
 
 <script type="text/x-handlebars" id="band">
+
     <h2>Band {{ name }} ({{ voteCount }} Votes, {{ voteAverage }})</h2>
+
+    <p>{{#link-to 'bands' }}Bands{{/link-to}} / Band "{{ name }}"</p>
+
     <a href="#" {{action "vote" 1}}>1</a>
     <a href="#" {{action "vote" 2}}>2</a>
     <a href="#" {{action "vote" 3}}>3</a>
