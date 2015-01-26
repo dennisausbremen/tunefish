@@ -66,10 +66,10 @@
 
         {{#link-to "band" band.id classNames="band-tile" data-sort=band.name data-voted=band.own_vote}}
         <div class="band-tile-content">
-            {{#if band.own_vote}}<i class="i-done band-voted"></i>{{/if}}
+            {{#if band.voted}}<i class="i-done band-voted"></i>{{/if}}
             <img class="band-tile-img" src="{{unbound band.thumbnail}}" alt="foo"/>
             <div class="band-tile-desc">
-                {{ band.name }} ({{ band.own_vote }})
+                {{ band.name }} ({{ band.ownVote }})
             </div>
         </div>
         {{/link-to}}
