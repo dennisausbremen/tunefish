@@ -4,6 +4,7 @@ var helper = (function ($) {
     /*
      PRIVATE FUNCTIONS
      */
+
     /**
      * Login Page
      */
@@ -50,9 +51,16 @@ var helper = (function ($) {
     };
 
 
+    var initScriptsAfterLoad = function initScriptsAfterLoad(){
+        //MIXITUP!
+        alert('foo');
+        $('#container').mixItUp();
+    };
+
 
     var App = {
       init: function initAmberApp () {
+
           //INIT MESSAGES
           $(document).on('ajaxComplete messageChange', Messages.init);
 
@@ -61,8 +69,14 @@ var helper = (function ($) {
           }
 
 
+          $('.band-tile').velocity('transition.slideUpIn',500,{stagger: true});
+
           window.Tunefish = Ember.Application.create({
               rootElement: '#app_container'
+          });
+
+          Ember.LinkView.reopen({
+              attributeBindings: ['data-sort','data-voted']
           });
 
           Tunefish.Router.map(function () {
@@ -110,6 +124,22 @@ var helper = (function ($) {
                           self.set('comment', ' ');
                       });
                   }
+              }
+          });
+
+          Tunefish.BandgridView = Ember.View.extend({
+              didInsertElement: function() {
+                  this.$().mixItUp({
+                      selectors: {
+                          target: '.band-tile'
+                      },
+                      animation: {
+                          duration: 700,
+                          effects: 'fade translateY(50px) rotateX(-30deg) stagger(35ms)',
+                          //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
+                          reverseOut: true
+                      },
+                  });
               }
           });
       }

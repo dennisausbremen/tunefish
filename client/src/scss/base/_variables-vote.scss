@@ -1,0 +1,89 @@
+/* COLORS */
+$bg-primary: #fff;
+$bg-sec: #f0f4f5;
+$bg-ter: #363b4a;
+
+$dark: #545a6a;
+$light: #d4d4db;
+
+$text-light: $bg-primary;
+$text-dark: #545a6a;
+$text-action: $bg-ter;
+$text-muted: $light;
+
+$error: #ef5350;
+$success: #50b87f;
+
+$step1: #c62828;
+$step2: #AD1457;
+$step3: #6A1B9A;
+$step4: #4527A0;
+$step5: #283593;
+$step-finish: #0277BD;
+
+$border-light: $bg-sec;
+
+/* GRID */
+$grid-padding: 1.5rem;
+$grid-gutter: 0.5rem;
+
+/* PADDINGS */
+$pad: 1.25rem;
+$pad-half: $pad / 2;
+$pad-and-half: $pad * 1.5;
+
+/* SPACING */
+$space: 1.625rem;
+$space-half: $space / 2;
+$space-and-half: $space * 1.5;
+$space-double: $space * 2;
+
+
+
+/* FONT */
+$font-family: "Source Sans Pro", Arial, sans-serif;
+
+$base-font-size: 1rem;
+$base-line-height: 1.625rem;
+$measure: 768px;
+
+$h1-font-size: 4.25rem;
+$h1-line: 1.625rem;
+$h1-lines: 3;
+$h1-line-height: $h1-line * $h1-lines;
+$h1-margin-top: 2 * $h1-line;
+$h1-margin-bottom: 1 * $h1-line;
+
+$h2-font-size: 2.625rem;
+$h2-line: 1.625rem;
+$h2-lines: 2;
+$h2-line-height: $h2-line * $h2-lines;
+$h2-margin-top: 2 * $h2-line;
+$h2-margin-bottom: 1 * $h2-line;
+
+$h3-font-size: 1.625rem;
+$h3-line: 1.625rem;
+$h3-lines: 1;
+$h3-line-height: $h3-line * $h3-lines;
+$h3-margin-top: 1 * $h3-line;
+$h3-margin-bottom: 1 * $h3-line;
+
+$h4-font-size: 1.625rem;
+$h4-line: 1.625rem;
+$h4-lines: 1;
+$h4-line-height: $h4-line * $h4-lines;
+$h4-margin-top: 1 * $h4-line;
+$h4-margin-bottom: 1 * $h4-line;
+
+// Variables are rounded to pixels
+// It's safe to multiply with integers
+// eg. h1 {margin: 2*$h1-line 0;}
+// The grid will stay aligned
+
+/*BREAKPOINTS*/
+$breakpoints: (
+    "(max-width: 479px)" "xs",
+    "(min-width: 480px)" "s",
+    "(min-width: 737px)" "m",
+    "(min-width: 1024px)" "l"
+);

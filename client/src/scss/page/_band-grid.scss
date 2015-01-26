@@ -1,0 +1,127 @@
+.main {
+    margin-bottom: -2rem;
+}
+
+footer {
+    margin-top: 0;
+}
+
+.vote {
+    margin-top: 52px;
+}
+
+.band-grid {
+    max-height: 900px;
+    padding: 2% 2% 0;
+    text-align: justify;
+    font-size: 0;
+    background: #68b8c4;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+
+    &:after{
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+}
+
+.band-tile,
+.band-grid-gap {
+    display: inline-block;
+    width: 50%;
+}
+
+.band-tile {
+    display: none;
+    text-align: left;
+    padding: 2%;
+    vertical-align: top;
+    
+    a {
+        display: inline-block;
+    }
+}
+
+.band-tile-content {
+    position: relative;
+
+    &:after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+        linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0.6)
+        )
+    }
+}
+
+.band-voted {
+    &:before {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        background-color: $success;
+        border-radius: 50%;
+        line-height: 50px;
+        text-align: center;
+        color: $bg-sec;
+        font-size: 32px;
+
+        z-index: 10;
+    }
+}
+
+
+.band-tile-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.band-tile-desc {
+    color: $bg-sec;
+    font-weight: 300;
+    text-align: center;
+
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    padding: 5px;
+
+    z-index: 2;
+}
+
+
+@include breakpoint(s) {
+    .band-tile,
+    .band-grid-gap {
+        width: 33.333%;
+    }
+}
+
+@include breakpoint(m) {
+    .band-tile,
+    .band-grid-gap {
+        width: 25%;
+    }
+}
+
+@include breakpoint(l) {
+    .band-tile,
+    .band-grid-gap {
+        width: 20%;
+    }
+}

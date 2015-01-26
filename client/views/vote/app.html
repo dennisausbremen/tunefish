@@ -5,29 +5,33 @@
 {{ renderMessages() }}
 
 
-<section class="main-content profile finish">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="form-action" id="step-finish">
-                <div class="step-content" id="app_container">
-                </div>
-            </div>
-        </div>
+<section class="main-content vote">
+    <div id="app_container">
+
     </div>
 </section>
 
 
 {% raw %}
 <script type="text/x-handlebars" id="bands">
-    {{#each band in this }}
-    {{#link-to "band" band.id }}
-    <div style="width: 200px; height: 200px; background: url('{{ unbound band.thumbnail }}'); display: inline-block; margin: 10px; position: relative;">
-        <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
-            {{ band.name }} ( {{ band.own_vote }})
+    {{#view "bandgrid"}}
+    <div id="band-grid">
+        {{#each band in this }}
+
+        {{#link-to "band" band.id classNames="band-tile" data-sort=band.name data-voted=band.own_vote}}
+        <div class="band-tile-content">
+            {{#if band.own_vote}}<i class="i-done band-voted"></i>{{/if}}
+            <img class="band-tile-img" src="{{unbound band.thumbnail}}" alt="foo"/>
+            <div class="band-tile-desc">
+                {{ band.name }} ({{ band.own_vote }})
+            </div>
         </div>
+        {{/link-to}}
+
+        {{/each}}
+        <div class="band-grid-gap"></div>
     </div>
-    {{/link-to}}
-    {{/each}}
+    {{/view}}
 </script>
 
 <script type="text/x-handlebars" id="band">

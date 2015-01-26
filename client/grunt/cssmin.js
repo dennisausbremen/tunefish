@@ -4,7 +4,7 @@ module.exports = {
             {
                 expand: true,
                 cwd: '<%= dirs.tmp %>/<%= dirs.css %>/',
-                src: ['*.css', '!*.min.css'],
+                src: ['*.css'],
                 dest: '<%= dirs.dist %>/<%= dirs.css %>/',
                 ext: '.min.css'
             }
