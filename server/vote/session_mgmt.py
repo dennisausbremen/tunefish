@@ -22,7 +22,7 @@ class LoginAndRegisterUser(MethodView):
 
     def get(self):
         if 'userId' in session:
-            return redirect(url_for('vote.bands.app'))
+            return redirect(url_for('vote.bands.app', _anchor='/bands'))
         else:
             return self.render()
 
@@ -52,7 +52,7 @@ class LoginUser(LoginAndRegisterUser):
                 if user.is_inactive:
                     return redirect(url_for('vote.home.inactive'))
                 else:
-                    return redirect(url_for('vote.bands.app'))
+                    return redirect(url_for('vote.bands.app', _anchor='/bands'))
             else:
                 self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
                 self.login_form.password.errors.append("Passwort eingeben")
@@ -108,7 +108,7 @@ class RestrictedModAdminPage(RestrictedUserPage):
             return super(RestrictedModAdminPage, self).dispatch_request(*args, **kwargs)
         else:
             flash('Du hast hier keinen Zugriff.', 'error')
-            return redirect(url_for('vote.bands.app'))
+            return redirect(url_for('vote.bands.app', _anchor='/bands'))
 
 
 class RestrictedAdminPage(RestrictedUserPage):
@@ -117,7 +117,7 @@ class RestrictedAdminPage(RestrictedUserPage):
             return super(RestrictedAdminPage, self).dispatch_request(*args, **kwargs)
         else:
             flash('Du hast hier keinen Zugriff.', 'error')
-            return redirect(url_for('vote.bands.app'))
+            return redirect(url_for('vote.bands.app', _anchor='/bands'))
 
 
 class RestrictedUserAjaxForm(RestrictedUserPage, AjaxForm):
