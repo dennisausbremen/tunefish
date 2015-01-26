@@ -62,7 +62,7 @@
 <script type="text/x-handlebars" id="bands">
     {{#view "bandgrid"}}
     <div id="band-grid">
-        {{#each band in this }}
+        {{#each band in this}}
 
         {{#link-to "band" band.id classNames="band-tile" data-sort=band.name data-voted=band.own_vote}}
         <div class="band-tile-content">

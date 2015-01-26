@@ -277,7 +277,7 @@ var helper = (function ($) {
                           effects: 'fade translateY(50px) rotateX(-30deg) stagger(35ms)',
                           //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
                           reverseOut: true
-                      },
+                      }
                   });
               }
           });
