@@ -1,26 +1,20 @@
-.main {
-    margin-bottom: -2rem;
-}
-
-footer {
-    margin-top: 0;
-}
-
-.vote {
-    margin-top: 52px;
-}
 
 .band-grid {
-    max-height: 900px;
-    padding: 2% 2% 0;
+    height: auto !important;
+    padding: 2%;
     text-align: justify;
     font-size: 0;
-    background: #68b8c4;
 
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
     align-content: flex-start;
+
+    @include breakpoint(m) {
+        height: auto;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
 
     &:after{
         content: '';
@@ -40,7 +34,7 @@ footer {
     text-align: left;
     padding: 2%;
     vertical-align: top;
-    
+
     a {
         display: inline-block;
     }

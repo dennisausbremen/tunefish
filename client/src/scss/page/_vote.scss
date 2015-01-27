@@ -1,0 +1,47 @@
+footer {
+    display: none;
+}
+
+.main-area {
+    padding: 52px 0 60px;
+
+    @include breakpoint(m) {
+        display: flex;
+        padding: 52px 0 0;
+        height: 100vh;
+
+        flex-direction: row;
+    }
+}
+
+.main-area,
+.content-area {
+    @include breakpoint(m) {
+        flex: 1;
+    }
+}
+
+.sidebar-area {
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: $bg-sec;
+    z-index: 10;
+
+    @include shadow(-1);
+
+    @include breakpoint(m) {
+        position: relative;
+        flex: 0 0 12em;
+        height: 100vh;
+    }
+}
+
+.content-area {
+    @include breakpoint(m) {
+        order: -1;
+    }
+}

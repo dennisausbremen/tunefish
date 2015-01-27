@@ -327,6 +327,8 @@ var helper = (function ($) {
             });
 
             Tunefish.BandgridView = Ember.View.extend({
+                tagName: 'div',
+                classNames: ['content-area band-grid'],
                 didInsertElement: function () {
                     this.$().mixItUp({
                         selectors: {

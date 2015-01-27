@@ -11,7 +11,7 @@ module.exports = {
             'vendor/voters/01-handlebars.min.js': 'handlebars/handlebars.min.js',
             'vendor/voters/02-mixitup.min.js': 'mixitup2/build/jquery.mixitup.min.js',
             'vendor/voters/03-ember.min.js': 'ember/ember.min.js',
-            'vendor/voters/04-ember.min.js': 'ember-data/ember-data.min.js'
+            'vendor/voters/04-ember-data.min.js': 'ember-data/ember-data.min.js'
 
         }
     }
