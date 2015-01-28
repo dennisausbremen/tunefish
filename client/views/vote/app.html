@@ -15,58 +15,56 @@
 {% raw %}
 <script type="text/x-handlebars" id="main">
     <div class="main-area">
-        {{render "player" player}}
-        {{ outlet }}
-    </div>
-</script>
 
-<script type="text/x-handlebars" data-template-name='player'>
-    <div class="sidebar-area player">
-        {{#if current }}
-        {{#link-to "band" current.band.id }}
-        <div style="width: 200px; height: 200px; display: inline-block; margin: 10px; position: relative;" class="player">
-            <image {{ bind-attr src=current.band.thumbnail }} />
-            <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
-                {{ current.band.name }} ( {{ current.band.ownVote }})
+        <div class="sidebar-area player">
+            {{#if current }}
+            {{#link-to "band" current.band.id }}
+            <div style="width: 200px; height: 200px; display: inline-block; margin: 10px; position: relative;" class="player">
+                <image {{ bind-attr src=current.band.thumbnail }} />
+                <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
+                    {{ current.band.name }} ( {{ current.band.ownVote }})
+                </div>
             </div>
-        </div>
-        {{/link-to}}
-        <br> Vote
-        <a href="#" {{action "vote" 1}}>1</a>
-        <a href="#" {{action "vote" 2}}>2</a>
-        <a href="#" {{action "vote" 3}}>3</a>
-        <a href="#" {{action "vote" 4}}>4</a>
-        <a href="#" {{action "vote" 5}}>5</a>
-        {{else }}
-        <div style="height: 240px;"><!-- or do something else here if theres no track playing --></div>
-        {{/if}}
-        <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
-        <div id="playCtrls" {{bind-attr class="playerState"}} >
-            <a href="#" {{action "pause"}}>pause</a> ({{currentTime}} / {{currentDuration}})
-        </div>
-        <div id="idleCtrls" {{bind-attr class="playerState"}} >
-            <a href="#" {{action "play"}}>play</a>
-        </div>
+            {{/link-to}}
+            <br> Vote
+            <a href="#" {{action "vote" 1}}>1</a>
+            <a href="#" {{action "vote" 2}}>2</a>
+            <a href="#" {{action "vote" 3}}>3</a>
+            <a href="#" {{action "vote" 4}}>4</a>
+            <a href="#" {{action "vote" 5}}>5</a>
+            {{else }}
+            <div style="height: 240px;"><!-- or do something else here if theres no track playing --></div>
+            {{/if}}
+            <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
+            <div id="playCtrls" {{bind-attr class="playerState"}} >
+                <a href="#" {{action "pause"}}>pause</a> ({{currentTime}} / {{currentDuration}})
+            </div>
+            <div id="idleCtrls" {{bind-attr class="playerState"}} >
+                <a href="#" {{action "play"}}>play</a>
+            </div>
 
 
-        <a href="#" {{action "prev"}}>prev</a>
-        <a href="#" {{action "next"}}>next</a>
-        <a href="#" {{action "clear"}}>clear</a>
-        <a href="#" {{action "shuffle"}}>shuffle</a>
-        <br />
-        <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a>
+            <a href="#" {{action "prev"}}>prev</a>
+            <a href="#" {{action "next"}}>next</a>
+            <a href="#" {{action "clear"}}>clear</a>
+            <a href="#" {{action "shuffle"}}>shuffle</a>
+            <br />
+            <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a>
 
-        <div id="" style="overflow-y: scroll; height:200px;">
-            <ul>
-                {{#each item in tracks}}
-                {{#view "queueitem" item=item }}
-                <a href="#" {{action "jumpTo" item.index }}>{{ item.track.trackname }}</a>
-                by {{#link-to "band" item.track.band.id }}{{ item.track.band.name }} {{/link-to}}
-                {{/view}}
-                {{/each}}
-            </ul>
+            <div id="" style="overflow-y: scroll; height:200px;">
+                <ul>
+                    {{#each item in tracks}}
+                    {{#view "queueitem" item=item }}
+                    <a href="#" {{action "jumpTo" item.index }}>{{ item.track.trackname }}</a>
+                    by {{#link-to "band" item.track.band.id }}{{ item.track.band.name }} {{/link-to}}
+                    {{/view}}
+                    {{/each}}
+                </ul>
+            </div>
+
         </div>
 
+        {{ outlet }}
     </div>
 </script>
 
@@ -94,15 +92,28 @@
 <script type="text/x-handlebars" id="band">
 
     <div id="band-detail" class="content-area band-detail">
-        <h2>Band {{ name }} ({{ voteCount }} Votes, {{ voteAverage }})</h2>
+        <div class="breadcrumb">{{#link-to 'bands' }}Bands{{/link-to}} / "{{ name }}"</div>
 
-        <p>{{#link-to 'bands' }}Bands{{/link-to}} / Band "{{ name }}"</p>
+        <div class="voting">
+            <a href="#" {{action "vote" 1}}>1</a>
+            <a href="#" {{action "vote" 2}}>2</a>
+            <a href="#" {{action "vote" 3}}>3</a>
+            <a href="#" {{action "vote" 4}}>4</a>
+            <a href="#" {{action "vote" 5}}>5</a>
+        </div>
 
-        <a href="#" {{action "vote" 1}}>1</a>
-        <a href="#" {{action "vote" 2}}>2</a>
-        <a href="#" {{action "vote" 3}}>3</a>
-        <a href="#" {{action "vote" 4}}>4</a>
-        <a href="#" {{action "vote" 5}}>5</a>
+        <div class="row">
+            <h3>Mitglieder</h3>
+            <div>{{members}}</div>
+        </div>
+
+        <div class="row">
+            <h3>Herkunft</h3>
+            <div>{{city}}</div>
+            <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
+            <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
+        </div>
+
         <table style="width: 100%;">
             <tbody>
             <tr>

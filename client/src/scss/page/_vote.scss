@@ -1,3 +1,7 @@
+.main {
+    margin-bottom: 0;
+}
+
 footer {
     display: none;
 }
@@ -35,7 +39,7 @@ footer {
 
     @include breakpoint(m) {
         position: relative;
-        flex: 0 0 12em;
+        flex: 0 0 25%;
         height: 100vh;
     }
 }
@@ -43,5 +47,8 @@ footer {
 .content-area {
     @include breakpoint(m) {
         order: -1;
+        height: auto;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 }
