@@ -1,3 +1,20 @@
+//footer {
+//    z-index: auto;
+//    margin-bottom: 60px;
+//
+//
+//    @include breakpoint(m) {
+//        margin: 0;
+//        position: absolute;
+//        bottom: 0;
+//        left: 0;
+//        width: 100%;
+//
+//        background-color: #fff;
+//        border-top: 1px solid $bg-sec;
+//    }
+//}
+
 footer {
     display: none;
 }
