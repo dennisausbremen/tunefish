@@ -92,101 +92,110 @@
 <script type="text/x-handlebars" id="band">
 
     <div id="band-detail" class="content-area band-detail">
-        <div class="breadcrumb">{{#link-to 'bands' }}Bands{{/link-to}} / "{{ name }}"</div>
-
-        <div class="voting">
-            <a href="#" {{action "vote" 1}}>1</a>
-            <a href="#" {{action "vote" 2}}>2</a>
-            <a href="#" {{action "vote" 3}}>3</a>
-            <a href="#" {{action "vote" 4}}>4</a>
-            <a href="#" {{action "vote" 5}}>5</a>
+        <div class="detail-header" style="background-image: url('{{unbound image}}');">
+            <img class="header-image" {{bind-attr src=thumbnail }} width="100%"/>
+            <div class="header-breadcrumb">{{#link-to 'bands' }}Bands /{{/link-to}}
+                <span>
+                    {{ name }}
+                </span>
+            </div>
         </div>
 
-        <div class="row">
-            <h3>Mitglieder</h3>
-            <div>{{members}}</div>
+        <div class="detail-content">
+            <div class="voting">
+                <a href="#" {{action "vote" 1}}>1</a>
+                <a href="#" {{action "vote" 2}}>2</a>
+                <a href="#" {{action "vote" 3}}>3</a>
+                <a href="#" {{action "vote" 4}}>4</a>
+                <a href="#" {{action "vote" 5}}>5</a>
+            </div>
+
+            <div class="row">
+                <h3>Mitglieder</h3>
+                <div>{{members}}</div>
+            </div>
+
+            <div class="row">
+                <h3>Herkunft</h3>
+                <div>{{city}}</div>
+                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
+                <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
+            </div>
+
+            <table style="width: 100%;">
+                <tbody>
+                <tr>
+                    <td>Mitglieder:</td>
+                    <td>{{ members }}</td>
+                </tr>
+                <tr>
+                    <td>Herkunft:</td>
+                    <td>{{ city }}<br/>
+                        <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
+                        <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Webseite:</td>
+                    <td><a {{bind-attr href=website }}>{{ website }}</a>
+                        {{#if facebookUrl }},
+                        <a {{ bind-attr href=facebookUrl }}>facebook</a>
+                        {{/if }}
+                    </td>
+                </tr>
+                {{#if youtube_url }}
+                <tr>
+                    <td>YouTube:</td>
+                    <td>
+                        <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
+                        <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                {{ bind-attr src=youtubeUrl }}"
+                        frameborder="0"/>
+                    </td>
+                </tr>
+                {{/if }}
+
+                <tr>
+                    <td>Beschreibung:</td>
+                    <td>{{ descp }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3>Tracks</h3>     <a href="#" {{ action "addAllTracks" }}>Add all tracks to queue</a>
+            <ul>
+                {{#each track in tracks }}
+                <li ><a href="#" {{ action "addTrack" track }}>
+                    {{ track.trackname }}
+                    </a>
+                </li>
+                {{/each}}
+            </ul>
+
+            <h3>Bandfoto</h3>
+            <img {{bind-attr src=image }} width="100%"/>
+
+            <h3>Kommentare</h3>
+            <table style="width: 100%;">
+                <tbody>
+                {{#each comment in comments }}
+                <tr>
+                    <td>{{ comment.author }} <br> {{ comment.timestamp }}</td>
+                    <td>{{ comment.message }}</td>
+                </tr>
+                {{/each}}
+
+                </tbody>
+            </table>
+            <h3>Dein Kommentar:</h3>
+            <form {{action "addComment" on="submit"}}>
+
+            {{ textarea name="comment" value=comment id="new_comment" required="required" }}
+
+            <button type="submit">Add</button>
+
+            </form>
         </div>
-
-        <div class="row">
-            <h3>Herkunft</h3>
-            <div>{{city}}</div>
-            <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
-            <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
-        </div>
-
-        <table style="width: 100%;">
-            <tbody>
-            <tr>
-                <td>Mitglieder:</td>
-                <td>{{ members }}</td>
-            </tr>
-            <tr>
-                <td>Herkunft:</td>
-                <td>{{ city }}<br/>
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
-                    <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
-                </td>
-            </tr>
-            <tr>
-                <td>Webseite:</td>
-                <td><a {{bind-attr href=website }}>{{ website }}</a>
-                    {{#if facebookUrl }},
-                    <a {{ bind-attr href=facebookUrl }}>facebook</a>
-                    {{/if }}
-                </td>
-            </tr>
-            {{#if youtube_url }}
-            <tr>
-                <td>YouTube:</td>
-                <td>
-                    <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
-                    <iframe id="ytplayer" type="text/html" width="640" height="390"
-                            {{ bind-attr src=youtubeUrl }}"
-                    frameborder="0"/>
-                </td>
-            </tr>
-            {{/if }}
-
-            <tr>
-                <td>Beschreibung:</td>
-                <td>{{ descp }}</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <h3>Tracks</h3>     <a href="#" {{ action "addAllTracks" }}>Add all tracks to queue</a>
-        <ul>
-            {{#each track in tracks }}
-            <li ><a href="#" {{ action "addTrack" track }}>
-                {{ track.trackname }}
-                </a>
-            </li>
-            {{/each}}
-        </ul>
-
-        <h3>Bandfoto</h3>
-        <img {{bind-attr src=image }} width="100%"/>
-
-        <h3>Kommentare</h3>
-        <table style="width: 100%;">
-            <tbody>
-            {{#each comment in comments }}
-            <tr>
-                <td>{{ comment.author }} <br> {{ comment.timestamp }}</td>
-                <td>{{ comment.message }}</td>
-            </tr>
-            {{/each}}
-
-            </tbody>
-        </table>
-        <h3>Dein Kommentar:</h3>
-        <form {{action "addComment" on="submit"}}>
-
-        {{ textarea name="comment" value=comment id="new_comment" required="required" }}
-
-        <button type="submit">Add</button>
-
-        </form>
     </div>
 
 </script>

@@ -1,7 +1,76 @@
 .band-detail {
-    padding: 2%;
     img {
         max-width: 100%;
     }
+}
 
+.detail-header {
+    overflow: hidden;
+    background-size: cover;
+    background-position: center top;
+    padding: 50px 2% 4%;
+    position: relative;
+
+    @include breakpoint(m) {
+        padding-top: 100px;
+    }
+
+    &:before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+        z-index: 1;
+    }
+
+    color: $bg-sec;
+}
+
+.detail-content {
+    padding: 2%;
+}
+
+.header-image {
+
+    width: 50%;
+
+    border-radius: 50%;
+
+    display: block;
+    margin: 0 auto 25px;
+
+    @include breakpoint(m) {
+        width: 25%;
+        max-width: 150px;
+        margin-right: 15px;
+        margin-bottom: 0;
+    }
+}
+
+.header-breadcrumb {
+    a {
+        text-decoration: none;
+        font-size: $h3-font-size;
+        color: $bg-sec;
+    }
+    span {
+        display: block;
+        font-weight: 300;
+        font-size: $h2-font-size;
+        line-height: $h2-line-height;
+    }
+}
+
+.header-image,
+.header-breadcrumb {
+    position: relative;
+    z-index: 5;
+
+    @include breakpoint(m) {
+        display: inline-block;
+        vertical-align: bottom;
+    }
 }
