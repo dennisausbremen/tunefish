@@ -106,6 +106,29 @@ var helper = (function ($) {
                 attributeBindings: ['data-sort', 'data-voted']
             });
 
+            Tunefish.VotecontrolsView = Ember.View.extend({
+                templateName: 'votecontrols',
+                classNames: ['voting']
+            });
+
+            Tunefish.StarView = Ember.View.extend(Ember.ViewTargetActionSupport, {
+                tagName: 'a',
+                templateName: 'star',
+                classNameBindings: ['active'],
+                attributeBindings: ['href'],
+                href: '#',
+                active: function () {
+                    return this.get('band.ownVote') >= this.get('vote');
+                }.property('band.ownVote', 'vote'),
+                click: function() {
+                    this.triggerAction({
+                        action: 'vote',
+                        actionContext: this.get('vote')
+                    });
+                    return false;
+                }
+            });
+
 
             Tunefish.QueueitemView = Ember.View.extend({
                 tagName: 'li',
@@ -114,6 +137,25 @@ var helper = (function ($) {
                     return this.get('item.index') === this.get('controller.currentIndex');
                 }.property('item', 'controller.currentIndex')
             });
+
+            Tunefish.BandgridView = Ember.View.extend({
+                tagName: 'div',
+                classNames: ['content-area band-grid'],
+                didInsertElement: function () {
+                    this.$().mixItUp({
+                        selectors: {
+                            target: '.band-tile'
+                        },
+                        animation: {
+                            duration: 700,
+                            effects: 'fade',
+                            //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
+                            reverseOut: true
+                        }
+                    });
+                }
+            });
+
 
             Tunefish.Router.map(function () {
                 this.resource('main', {'path': '/'}, function () {
@@ -323,24 +365,6 @@ var helper = (function ($) {
                                 $('button#calcDist').text(result.distance);
                             });
                     }
-                }
-            });
-
-            Tunefish.BandgridView = Ember.View.extend({
-                tagName: 'div',
-                classNames: ['content-area band-grid'],
-                didInsertElement: function () {
-                    this.$().mixItUp({
-                        selectors: {
-                            target: '.band-tile'
-                        },
-                        animation: {
-                            duration: 700,
-                            effects: 'fade translateY(50px) rotateX(-30deg) stagger(35ms)',
-                            //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
-                            reverseOut: true
-                        }
-                    });
                 }
             });
 
