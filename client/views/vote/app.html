@@ -13,7 +13,20 @@
 
 
 {% raw %}
-<script type="text/x-handlebars" id="main">
+
+<script type="text/x-handlebars"  data-template-name="star">
+[{{view.vote}}]
+</script>
+
+<script type="text/x-handlebars"  data-template-name="votecontrols">
+    {{view "star" band=view.band vote=1}}
+    {{view "star" band=view.band vote=2}}
+    {{view "star" band=view.band vote=3}}
+    {{view "star" band=view.band vote=4}}
+    {{view "star" band=view.band vote=5}}
+</script>
+
+</script><script type="text/x-handlebars" id="main">
     <div class="main-area">
 
         <div class="sidebar-area player">
@@ -26,14 +39,13 @@
                 </div>
             </div>
             {{/link-to}}
+
             <br> Vote
-            <a href="#" {{action "vote" 1}}>1</a>
-            <a href="#" {{action "vote" 2}}>2</a>
-            <a href="#" {{action "vote" 3}}>3</a>
-            <a href="#" {{action "vote" 4}}>4</a>
-            <a href="#" {{action "vote" 5}}>5</a>
+                {{view "votecontrols" band=current.band }}
+            ( {{ current.band.ownVote }})
             {{else }}
             <div style="height: 240px;"><!-- or do something else here if theres no track playing --></div>
+
             {{/if}}
             <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
             <div id="playCtrls" {{bind-attr class="playerState"}} >
@@ -102,13 +114,7 @@
         </div>
 
         <div class="detail-content">
-            <div class="voting">
-                <a href="#" {{action "vote" 1}}>1</a>
-                <a href="#" {{action "vote" 2}}>2</a>
-                <a href="#" {{action "vote" 3}}>3</a>
-                <a href="#" {{action "vote" 4}}>4</a>
-                <a href="#" {{action "vote" 5}}>5</a>
-            </div>
+            {{view "votecontrols" band=this }}
 
             <div class="row">
                 <h3>Mitglieder</h3>
