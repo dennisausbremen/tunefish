@@ -16,11 +16,17 @@
 
                     <h2>Benutzerübersicht</h2>
 
+
+                    {% set sort = request.args.sort|default('login') %}
+                    {% set reverse = request.args.reverse|default(0)|int %}
+
+                    {% macro build_sort_url(field, reverse) %}{{url_for('vote.admin.users.list')}}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% endmacro %}
+
                     <table style="width: 100%;">
                         <thead>
                             <tr>
-                                <th>Benutzer</th>
-                                <th>Zugriff</th>
+                                <th><a href="{{ build_sort_url('login', reverse) }}">Benutzer</a></th>
+                                <th><a href="{{ build_sort_url('access_name', reverse) }}">Zugriff</a></th>
                                 <th>Status</th>
                                 {% if g.user.is_admin %}
                                     <th>Berechtigungen</th>
@@ -28,7 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in users %}
+                            {% for user in users|sort(attribute=sort, reverse=reverse) %}
                             <tr>
                                 <td>{{ user.login }}</td>
                                 <td>{{ user.access_name }}</td>

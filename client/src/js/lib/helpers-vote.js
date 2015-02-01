@@ -209,7 +209,9 @@ var helper = (function ($) {
                         tracks.clear();
 
                     },
-                    addTrack: function (track) {
+                    addTrack: function (track, autoplay) {
+                        autoplay = typeof autoplay !== 'undefined' ? autoplay : true;
+
                         var currentIndex = this.get('currentIndex');
                         var tracks = this.get('tracks');
 
@@ -219,7 +221,9 @@ var helper = (function ($) {
                         });
                         if (currentIndex < 0 && tracks.length > 0) {
                             this.send('next');
-                            this.send('play');
+                            if (autoplay) {
+                                this.send('play');
+                            }
                         }
                     },
                     jumpTo: function (index) {
@@ -280,16 +284,18 @@ var helper = (function ($) {
 
                     addUnvotedTracks: function () {
                         var self = this;
-                        var bands = this.store.all('band');
+                        this.store.findAll('band').then(function(bands) {
+                            bands.forEach(function(band) {
+                                var voted = band.get('voted');
+                                if(!voted) {
+                                    var tracks = band.get('tracks');
+                                    var length = tracks.get('length');
+                                    var idx = Math.floor(Math.random() * length);
+                                    var track = tracks.objectAt(idx);
 
-                        bands.forEach(function(band) {
-                            var voted = band.get('voted');
-                            if(!voted) {
-                                var tracks = band.get('tracks');
-                                tracks.forEach(function(track) {
-                                    self.send('addTrack', track);
-                                });
-                            }
+                                    self.send('addTrack', track, false);
+                                }
+                            });
                         });
                     },
 
@@ -346,7 +352,7 @@ var helper = (function ($) {
 
                     addAllTracks: function () {
                         var self = this;
-                        var tracks = this.get('tracks');
+                        var tracks = this.get('model.tracks');
 
                         tracks.forEach(function(track){
                             self.get('controllers.main').send('addTrack', track);
