@@ -148,7 +148,7 @@ var helper = (function ($) {
                         },
                         animation: {
                             duration: 700,
-                            effects: 'fade',
+                            effects: 'fade translateY(50px) stagger(25ms)',
                             //easing: 'cubic-bezier(0.86, 0, 0.07, 1)',
                             reverseOut: true
                         }
@@ -396,6 +396,7 @@ var helper = (function ($) {
 
         }
     };
+
 
 
     /*

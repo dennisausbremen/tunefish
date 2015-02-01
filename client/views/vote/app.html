@@ -32,9 +32,9 @@
         <div class="sidebar-area player">
             {{#if current }}
             {{#link-to "band" current.band.id }}
-            <div style="width: 200px; height: 200px; display: inline-block; margin: 10px; position: relative;" class="player">
+            <div class="band-tile-content player-image">
                 <image {{ bind-attr src=current.band.thumbnail }} />
-                <div style="background-color: rgba(0,0,0, .5); width: 100%; position: absolute; bottom: 0; padding: 5px; text-align: center;">
+                <div class="band-tile-desc">
                     {{ current.band.name }} ( {{ current.band.ownVote }})
                 </div>
             </div>
@@ -44,22 +44,28 @@
                 {{view "votecontrols" band=current.band }}
             ( {{ current.band.ownVote }})
             {{else }}
-            <div style="height: 240px;"><!-- or do something else here if theres no track playing --></div>
+            <div class="player-image"><i class="i-audio"></i></div>
 
             {{/if}}
+            {{input type="range" id="seek" class="player-seek" name="seek" min=0 max=currentDuration value=currentTime}}
             <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
-            <div id="playCtrls" {{bind-attr class="playerState"}} >
-                <a href="#" {{action "pause"}}>pause</a> ({{currentTime}} / {{currentDuration}})
-            </div>
-            <div id="idleCtrls" {{bind-attr class="playerState"}} >
-                <a href="#" {{action "play"}}>play</a>
+            <div class="player-controls-container">
+                <div id="playCtrls" class="player-controls"{{bind-attr class="playerState"}} >
+                    <a href="#" {{action "prev"}}><i class="i-prev"></i></a>
+
+                    <a href="#" {{action "pause"}}><i class="i-pause"></i></a>
+                    <a href="#" {{action "play"}}><i class="i-play"></i></a>
+
+                    <a href="#" {{action "next"}}><i class="i-next"></i></a>
+                </div>
+                <div class="player-controls-extra">
+                    <a href="#" {{action "shuffle"}}><i class="i-shuffle"></i></a>
+                    <a href="#" {{action "clear"}}><i class="i-close"></i></a>
+                </div>
             </div>
 
 
-            <a href="#" {{action "prev"}}>prev</a>
-            <a href="#" {{action "next"}}>next</a>
-            <a href="#" {{action "clear"}}>clear</a>
-            <a href="#" {{action "shuffle"}}>shuffle</a>
+
             <br />
             <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a>
 
