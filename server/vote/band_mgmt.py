@@ -28,10 +28,10 @@ class AdminBandState(RestrictedModAdminPage):
         if band:
             if band.state == State.IN_VOTE:
                 band.state = State.OUT_OF_VOTE
-                flash('Band aus dem Voting genommen', 'info')
+                flash('Band "' + band.name + '" aus dem Voting genommen', 'info')
             else:
                 band.state = State.IN_VOTE
-                flash('Band wieder in das Voting aufgenommen', 'info')
+                flash('Band "' + band.name + '" wieder in das Voting aufgenommen', 'info')
             db.session.commit()
             return redirect(url_for('vote.admin.bands.list'))
         else:

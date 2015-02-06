@@ -18,26 +18,40 @@
 
                     {% set sort = request.args.sort|default('name') %}
                     {% set reverse = request.args.reverse|default(0)|int %}
+                    {% set state = request.args.state|default(0)|int %}
 
-                    {% macro build_sort_url(field, reverse) %}{{url_for('vote.admin.bands.list')}}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% endmacro %}
+                    {% macro build_filter(stateNo, name) %}
+                        {% if state ==  stateNo %}{{ name }}{% else %}
+                        <a href="{{url_for('vote.admin.bands.list')}}?sort={{ sort }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if stateNo > 0 %}&amp;state={{ stateNo }}{% endif %}">{{ name }}</a>{% endif %}{% endmacro %}
+
+
+                    Filter:
+
+                    {{ build_filter(0, 'Alle Bands') }} | {{ build_filter(1, 'Im Voting') }} |
+                    {{ build_filter(2, 'Abgelehnt') }}  | {{ build_filter(3, 'Gebucht') }} |
+                    {{ build_filter(4, 'Aus dem Voting genommen') }}
+
+
+                    {% macro build_sort_url(field) %}{{url_for('vote.admin.bands.list')}}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if state > 0 %}&amp;state={{ state }}{% endif %}{% endmacro %}
 
                     <table style="width: 100%;">
                         <thead>
                             <tr>
-                                <th><a href="{{ build_sort_url('name', reverse) }}">Band</a></th>
-                                <th><a href="{{ build_sort_url('amount_members', reverse) }}">Mitgl.</a></th>
-                                <th><a href="{{ build_sort_url('city', reverse) }}">Herkunft</a></th>
-                                <th><a href="{{ build_sort_url('distance', reverse) }}">Entf.</a></th>
-                                <th><a href="{{ build_sort_url('state', reverse) }}">Status</a></th>
+                                <th><a href="{{ build_sort_url('name') }}">Band</a></th>
+                                <th><a href="{{ build_sort_url('amount_members') }}">Mitgl.</a></th>
+                                <th><a href="{{ build_sort_url('city') }}">Herkunft</a></th>
+                                <th><a href="{{ build_sort_url('distance') }}">Entf.</a></th>
+                                <th><a href="{{ build_sort_url('state') }}">Status</a></th>
                                 <th>
-                                    <a href="{{ build_sort_url('vote_count', reverse) }}">Voting</a>,
-                                    <a href="{{ build_sort_url('vote_average', reverse) }}">&#8960;</a>
+                                    <a href="{{ build_sort_url('vote_count') }}">Voting</a>,
+                                    <a href="{{ build_sort_url('vote_average') }}">&#8960;</a>
                                 </th>
                                 <th colspan="3">Optionen</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for band in bands|sort(attribute=sort, reverse=reverse) %}
+                                {% if band.state == state or state == 0 %}
                             <tr>
                                 <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name }}</a></td>
                                 <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
@@ -49,13 +63,14 @@
                                 <td>X</td>
                                 <td>{% if band.state == 1 %}
                                         <a href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">- Voting</a>
-                                    {% elif band.state == 2 %}
+                                    {% elif band.state == 4 %}
                                         <a href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">+ Voting</a>
                                     {% else %}
                                         [---]
                                     {% endif %}
                                 </td>
                             </tr>
+                                {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
