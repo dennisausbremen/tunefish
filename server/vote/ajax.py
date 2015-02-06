@@ -114,13 +114,20 @@ class JsonDistance(RestrictedUserPage):
         band_id = request.form["band_id"]
         band = Band.query.get_or_404(band_id)
         if band:
-            city = quote_plus(band.city)
-            distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
-            distance_json = distance_api.read()
-            distance = json.loads(str(distance_json))
-
-            if distance['status'] == "OK":
-                text = distance['rows'][0]['elements'][0]['distance']['text']
-                return jsonify({'distance': text})
+            if band.distance:
+                return jsonify({'distance': 'Cached: ' + band.distance})
             else:
-                return jsonify({'distance': 'failed'})
+                city = quote_plus(band.city)
+                distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
+                distance_json = distance_api.read()
+                distance = json.loads(str(distance_json))
+
+                if distance['status'] == "OK":
+                    text = distance['rows'][0]['elements'][0]['distance']['text']
+                    band.distance = text
+                    db.session.add(band)
+                    db.session.commit()
+
+                    return jsonify({'distance': text})
+                else:
+                    return jsonify({'distance': 'failed'})

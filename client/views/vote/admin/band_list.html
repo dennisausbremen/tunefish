@@ -27,6 +27,7 @@
                                 <th><a href="{{ build_sort_url('name', reverse) }}">Band</a></th>
                                 <th><a href="{{ build_sort_url('amount_members', reverse) }}">Mitgl.</a></th>
                                 <th><a href="{{ build_sort_url('city', reverse) }}">Herkunft</a></th>
+                                <th><a href="{{ build_sort_url('distance', reverse) }}">Entf.</a></th>
                                 <th><a href="{{ build_sort_url('state', reverse) }}">Status</a></th>
                                 <th>
                                     <a href="{{ build_sort_url('vote_count', reverse) }}">Voting</a>,
@@ -41,6 +42,7 @@
                                 <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name }}</a></td>
                                 <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
                                 <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
+                                <td>{% if band.distance != "NULL" %}{{ band.distance }}{% else %}?{% endif %}</td>
                                 <td>{{ band.state_label }}</td>
                                 <td>{{ band.vote_count }}, &#8960; {{ band.vote_average }}</td>
                                 <td>Edit</td>

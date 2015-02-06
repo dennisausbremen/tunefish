@@ -53,6 +53,7 @@ class Band(db.Model):
     techrider = db.Column(String(80))
     state = db.Column(Integer, default=State.NEW)
     apply_timestamp = db.Column(DateTime)
+    distance = db.Column(String(15))
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
     votes = db.relationship("Vote", backref="band")
