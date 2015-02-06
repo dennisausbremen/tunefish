@@ -27,7 +27,7 @@ class AdminBandState(RestrictedModAdminPage):
         band = Band.query.get(band_id)
         if band:
             if band.state == State.IN_VOTE:
-                band.state = State.DECLINED
+                band.state = State.OUT_OF_VOTE
                 flash('Band aus dem Voting genommen', 'info')
             else:
                 band.state = State.IN_VOTE
