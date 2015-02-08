@@ -12,6 +12,8 @@ module.exports = {
             '<%= dirs.tmp %>/<%= dirs.js %>/app.js': ['<%= dirs.src %>/<%= dirs.js %>/app.js'],
             '<%= dirs.tmp %>/<%= dirs.js %>/intro.js': ['<%= dirs.src %>/<%= dirs.js %>/intro.js'],
             '<%= dirs.tmp %>/<%= dirs.js %>/app-vote.js': ['<%= dirs.src %>/<%= dirs.js %>/app-vote.js'],
+            '<%= dirs.tmp %>/<%= dirs.js %>/app-vote-admin.js': ['<%= dirs.src %>/<%= dirs.js %>/app-vote-admin.js'],
+            '<%= dirs.tmp %>/<%= dirs.js %>/bootstrap.min.js': ['<%= dirs.src %>/<%= dirs.js %>/bootstrap.min.js'],
             '<%= dirs.tmp %>/<%= dirs.js %>/lib/helpers.js': ['<%= dirs.src %>/<%= dirs.js %>/lib/helpers.js'],
             '<%= dirs.tmp %>/<%= dirs.js %>/lib/helpers-vote.js': ['<%= dirs.src %>/<%= dirs.js %>/lib/helpers-vote.js']
         }
