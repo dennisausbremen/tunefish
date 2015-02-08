@@ -1,91 +1,151 @@
-{% extends "vote_layout/layout_vote.html" %}
+{% extends "vote_layout/layout_vote_admin.html" %}
 {% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
 
-<div id="messages" class="message-container">
-    {{ renderMessages() }}
-</div>
-
-<section class="main-content profile finish">
-    <div class="row">
-        <div class="profile-form-wrapper col-xs-12">
-            <div class="form-action" id="step-finish">
-                <div class="step-content">
-                    <a href="{{ url_for('vote.admin.index') }}">Administration</a> / <a href="{{ url_for('vote.admin.bands.list') }}">Bands</a> / Details "{{ band.name }}"
-
-                    <h2>Band {{ band.name }}</h2>
-
-
-                    <table style="width: 100%;">
-                        <tbody>
-                            <tr>
-                                <td>Kontakt:</td>
-                                <td>{{ band.email }}, {{ band.phone }}</td>
-                            </tr>
-                            <tr>
-                                <td>Mitglieder:</td>
-                                <td>{{ band.amount_members }}</td>
-                            </tr>
-                            <tr>
-                                <td>Herkunft:</td>
-                                <td>{{ band.city }}</td>
-                            </tr>
-                            <tr>
-                                <td>Webseite:</td>
-                                <td>{{ band.website }}</td>
-                            </tr>
-                            {% if band.youtube_id %}
-                            <tr>
-                                <td>YouTube:</td>
-                                <td>{{ band.youtube_id }}</td>
-                            </tr>
-                            {% endif %}
-                            {% if band.facebook_page %}
-                            <tr>
-                                <td>facebook:</td>
-                                <td>{{ band.facebook_page }}</td>
-                            </tr>
-                            {% endif %}
-                            <tr>
-                                <td>Bewerbungsstatus:</td>
-                                <td>{{ band.state_label }}</td>
-                            </tr>
-                            <tr>
-                                <td>Voting:</td>
-                                <td>&#8960; {{ band.vote_average }} von 5, {{ band.vote_count }} Stimme{% if band.vote_count == 1 %}n{% endif %}</td>
-                            </tr>
-                            <tr>
-                                <td>Techrider:</td>
-                                <td>{% if band.techrider_url %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else %}fehlt{% endif %}</td>
-                            </tr>
-                            <tr>
-                                <td>Beschreibung:</td>
-                                <td>{{ band.descp }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <h3>Tracks</h3>
-                    <ul>
-                    {% for track in band.tracks %}
-                        <li>
-                            <audio src="{{track.url}}" controls></audio>
-                            {{ track.trackname }}
-                        </li>
-                    {% endfor %}
+    <br/><br/><br/>
+    <section class="main-content profile finish">
+        <div class="container">
+            <div class="row">
+                <div class="profile-form-wrapper col-xs-12">
+                    <ul class="breadcrumb">
+                        <li><a href="{{ url_for('vote.admin.index') }}">Administration</a></li>
+                        <li class="active">Details "{{ band.name }}"</li>
                     </ul>
 
+                    <h1>Band {{ band.name }}
+                        <small>{{ band.vote_count }} Stimme{% if band.vote_count != 1 %}n{% endif %},
+                            &#8960; {{ band.vote_average }}</small>
+                    </h1>
+                </div>
+            </div>
+            <br/>
+
+            {% macro show(field) %}{% if field != 'NULL' %}{{ field }}{% else %}-{% endif %}{% endmacro %}
+
+            <div class="row details">
+                <div class="col-xs-2">
+                    {{ show(band.login) }}
+                    <span>Benutzername</span>
+                </div>
+
+                <div class="col-xs-2">
+                    {{ show(band.amount_members) }}
+                    <span>Mitglieder</span>
+                </div>
+
+
+                <div class="col-xs-2">
+                    {{ show(band.city) }} {% if band.distance != 'NULL' %}({{ band.distance }} km){% endif %}
+                    <span>Herkunft</span>
+                </div>
+
+                <div class="col-xs-2 col-xs-offset-4">
+                    {{ band.state_label }}
+                    <span>Bewerbungsstatus</span>
+                </div>
+
+            </div>
+
+            <br/>
+
+            <div class="row details">
+
+
+                <div class="col-xs-4">
+                    <a href="mailto:{{ band.email }}">
+                        {{ band.email }}{% if band.is_email_confirmed %} &#10003;{% endif %}</a>
+                    <span>E-Mail</span>
+                </div>
+
+                <div class="col-xs-3">
+                    {{ show(band.phone) }}
+                    <span>Telefon</span>
+                </div>
+
+                <div class="col-xs-2 col-xs-offset-3">
+                    {% if band.techrider != 'NULL' %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else %}
+                        fehlt{% endif %}
+                    <span>Techrider</span>
+                </div>
+
+
+            </div>
+            <br/>
+
+            <div class="row details">
+                <div class="col-xs-4">
+                    {% if band.website != 'NULL' %}
+                        <a href="{{ band.website }}">{{ band.website }}</a>
+                    {% else %} - {% endif %}
+                    <span>Website</span>
+                </div>
+
+                <div class="col-xs-4">
+                    {% if band.youtube_id != 'NULL' %}
+                        <a href="{{ band.youtube_url }}" target="youtube">{{ band.youtube_id }}</a>{% else %}
+                        - {% endif %}
+                    <span>YouTube</span>
+                </div>
+
+                <div class="col-xs-4">
+                    {% if band.facebook_page != 'NULL' %}
+                        <a href="{{ band.facebook_url }}" target="facebook">{{ band.facebook_page }}</a>{% else %}
+                        - {% endif %}
+                    <span>facebook</span>
+                </div>
+
+
+            </div>
+
+            <br/>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Tracks</h3>
+                    {% if band.tracks.count() == 0 %}
+                        <p>Noch keine Tracks hochgeladen</p>
+                    {% else %}
+                        <ul>
+                            {% for track in band.tracks %}
+                                <li>
+                                    <audio src="{{ track.url }}" controls></audio>
+                                    {{ track.trackname }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                </div>
+            </div>
+
+
+            <br/><br/>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Bandbeschreibung</div>
+                        <div class="panel-body">{{ show(band.descp) }}</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <br/>
+
+            <div class="row">
+                <div class="col-xs-12">
                     <h3>Bandfoto</h3>
-                    {% if band.image_url %}
-                        <img src="{{ band.image_url }}" alt="Band {{ band.name }}" width="100%" />
+                    {% if band.image != 'NULL' %}
+                        <a href="{{ band.image_url }}">
+                            <img src="{{ band.prev_image }}" alt="Band {{ band.name }}" width="100%"/>
+                        </a>
                     {% else %}
                         Noch kein Foto hochgeladen
                     {% endif %}
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+    </section>
 
 {% endblock %}

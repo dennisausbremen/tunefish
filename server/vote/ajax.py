@@ -17,7 +17,7 @@ def band2json(band):
         "descp": band.descp,
         "facebookUrl": band.facebook_url,
         "youtubeUrl": band.youtube_url,
-        "image": resized_img_src(band.image, mode="crop", width=1024, quality=60),
+        "image": band.prev_image,
         "thumbnail": resized_img_src(band.image, mode="crop", width=200, height=200, quality=60),
         "voteCount": band.vote_count,
         "voteAverage": band.vote_average,

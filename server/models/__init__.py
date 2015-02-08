@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
 from flask import session
+from flask.ext.images import resized_img_src
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -161,6 +162,13 @@ class Band(db.Model):
                 return 'http://www.youtube.com/embed/' + self.youtube_id
         else:
             return False
+
+    @property
+    def prev_image(self):
+        if self.image and self.image != 'NULL':
+            return resized_img_src(self.image, mode="crop", width=1024, quality=60)
+
+
 
 class Track(db.Model):
     id = db.Column(Integer, primary_key=True)
