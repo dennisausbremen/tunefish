@@ -1,0 +1,80 @@
+{% set sort = request.args.sort|default('name') %}
+{% set reverse = request.args.reverse|default(0)|int %}
+{% set state = request.args.state|default(0)|int %}
+
+{% macro build_filter(stateNo, name) %}
+    {% if state ==  stateNo %}<div class="btn btn-primary">{{ name }}</div>{% else %}
+        <a href="{{ url_for('vote.admin.index') }}?sort={{ sort }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if stateNo > 0 %}&amp;state={{ stateNo }}{% endif %}" class="btn btn-default">{{ name }}</a>
+    {% endif %}{% endmacro %}
+
+<div class="btn-group"  role="group" aria-label="Filter">
+    <div class="btn btn-default disabled">Filter:</div>
+    {{ build_filter(0, 'Alle Bands') }} {{ build_filter(1, 'Im Voting') }}
+    {{ build_filter(2, 'Abgelehnt') }} {{ build_filter(3, 'Gebucht') }}
+    {{ build_filter(4, 'Aus dem Voting genommen') }}
+</div>
+<br /><br />
+
+
+{% macro build_sort_url(field) %}{{ url_for('vote.admin.index') }}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if state > 0 %}&amp;state={{ state }}
+    {% endif %}{% endmacro %}
+
+<table id="bandsTable" class="table table-striped">
+    <thead>
+    <tr>
+        <th><a id="sortName" href="{{ build_sort_url('name') }}">Band</a></th>
+        <th><a id="sortMembers" href="{{ build_sort_url('amount_members') }}">Mitgl.</a></th>
+        <th><a id="sortCity" href="{{ build_sort_url('city') }}">Herkunft</a></th>
+        <th><a id="sortDistance" href="{{ build_sort_url('distance') }}">Entf.</a></th>
+        <th><a id="sortState" href="{{ build_sort_url('state') }}">Status</a></th>
+        <th colspan="2">
+            <a id="sortCount" href="{{ build_sort_url('vote_count') }}">Voting</a>,
+            <a id="sortAverage" href="{{ build_sort_url('vote_average') }}">&#8960;</a>
+        </th>
+        <th>Optionen</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for band in bands|sort(attribute=sort, reverse=reverse) %}
+        {% if band.state == state or state == 0 %}
+            <tr>
+                <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name|trim }}</a></td>
+                <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
+                <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
+                <td>{% if band.state > 0 %}
+                    <a href="{{ url_for('vote.ajax.distance', band_id=band.id) }}" class="distance btn btn-default btn-sm">
+                        {% if band.distance %}{{ band.distance }} km{% else %}Kalk.{% endif %}
+                    </a>
+                    {% endif %}
+                </td>
+                <td>{{ band.state_label }}</td>
+                <td>{{ band.vote_count }}</td>
+                <td>&#8960; {{ band.vote_average }}</td>
+                <td>
+                    <div class="dropdown">
+                      <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        Optionen
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Bearbeiten</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Löschen</a></li>
+                        {% if band.state == 1 %}
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <a class="voteState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">Aus dem Voting nehmen</a>
+                            </li>
+                        {% elif band.state == 4 %}
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <a class="voteState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">Ins Voting nehmen</a>
+                            </li>
+                        {% endif %}
+                      </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>

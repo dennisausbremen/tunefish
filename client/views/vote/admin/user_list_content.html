@@ -1,0 +1,43 @@
+{% set userSort = request.args.userSort|default('login') %}
+{% set reverse = request.args.reverse|default(0)|int %}
+
+{% macro build_sort_url(field, reverse) %}{{ url_for('vote.admin.index') }}?userSort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}#users{% endmacro %}
+
+<table id="usersTable" class="table table-striped">
+    <thead>
+    <tr>
+        <th><a id="sortLogin" href="{{ build_sort_url('login', reverse) }}">Benutzer</a></th>
+        <th><a id="sortAccess" href="{{ build_sort_url('access_name', reverse) }}">Zugriff</a></th>
+        <th>Status</th>
+        {% if g.user.is_admin %}
+            <th>Berechtigungen</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users|sort(attribute=userSort, reverse=reverse) %}
+        <tr>
+            <td>{{ user.login }}</td>
+            <td>{{ user.access_name }}</td>
+            <td><a class="access" href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}
+                aktivieren{% else %}deaktivieren{% endif %}</td>
+            {% if g.user.is_admin %}
+                <td>
+                    {% if user.is_admin %}-
+                    {% else %}
+                        <a class="mod" href="{{ url_for('vote.admin.users.access_mod', user_id=user.id) }}">
+                            {% if user.is_mod %}
+                                degradieren
+                            {% else %}
+                                befördern
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </td>
+            {% endif %}
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+

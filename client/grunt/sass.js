@@ -10,6 +10,7 @@ module.exports = {
         files: {
             '<%= dirs.tmp %>/<%= dirs.css %>/app.css': '<%= dirs.src %>/<%= dirs.scss %>/app.scss',
             '<%= dirs.tmp %>/<%= dirs.css %>/app-vote.css': '<%= dirs.src %>/<%= dirs.scss %>/app-vote.scss',
+            '<%= dirs.tmp %>/<%= dirs.css %>/app-vote-admin.css': '<%= dirs.src %>/<%= dirs.scss %>/app-vote-admin.scss',
             '<%= dirs.tmp %>/<%= dirs.css %>/intro.css': '<%= dirs.src %>/<%= dirs.scss %>/intro.scss',
             '<%= dirs.tmp %>/<%= dirs.css %>/source-sans-pro.css': '<%= dirs.src %>/<%= dirs.scss %>/source-sans-pro.woff.scss'
         }
@@ -23,6 +24,7 @@ module.exports = {
         files: {
             '<%= dirs.tmp %>/<%= dirs.css %>/app.min.css': '<%= dirs.src %>/<%= dirs.scss %>/app.scss',
             '<%= dirs.tmp %>/<%= dirs.css %>/app-vote.min.css': '<%= dirs.src %>/<%= dirs.scss %>/app-vote.scss',
+            '<%= dirs.tmp %>/<%= dirs.css %>/app-vote-admin.css': '<%= dirs.src %>/<%= dirs.scss %>/app-vote-admin.scss',
             '<%= dirs.tmp %>/<%= dirs.css %>/intro.min.css': '<%= dirs.src %>/<%= dirs.scss %>/intro.scss',
             '<%= dirs.tmp %>/<%= dirs.css %>/source-sans-pro.min.css': '<%= dirs.src %>/<%= dirs.scss %>/source-sans-pro.woff.scss'
         }

@@ -2,12 +2,12 @@
 
 from flask import Blueprint
 from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance
-from server.vote.band_mgmt import AdminBandList, AdminBandView, AdminBandState
+from server.vote.band_mgmt import AdminBandView, AdminBandState
 from server.vote.band_vote import BandApp
 
 from server.vote.profile import InactiveUserIndex, AdminIndex
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
-from server.vote.user_mgmt import AdminUserList, AdminUserActivation, AdminUserAccess
+from server.vote.user_mgmt import AdminUserActivation, AdminUserAccess
 
 
 vote_blueprint = Blueprint('vote', __name__, template_folder='../../client/views/vote')
@@ -20,11 +20,9 @@ vote_blueprint.add_url_rule('/logout', view_func=LogoutUser.as_view('session.log
 vote_blueprint.add_url_rule('/inactive', view_func=InactiveUserIndex.as_view('home.inactive'))
 
 vote_blueprint.add_url_rule('/admin', view_func=AdminIndex.as_view('admin.index'))
-vote_blueprint.add_url_rule('/admin/bands', view_func=AdminBandList.as_view('admin.bands.list'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>', view_func=AdminBandView.as_view('admin.bands.view'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/vote_state', view_func=AdminBandState.as_view('admin.bands.vote_state'))
 
-vote_blueprint.add_url_rule('/admin/users', view_func=AdminUserList.as_view('admin.users.list'))
 vote_blueprint.add_url_rule('/admin/users/<int:user_id>/activate', view_func=AdminUserActivation.as_view('admin.users.access'))
 vote_blueprint.add_url_rule('/admin/users/<int:user_id>/access_mod', view_func=AdminUserAccess.as_view('admin.users.access_mod'))
 
@@ -36,4 +34,4 @@ vote_blueprint.add_url_rule('/ajax/bands', view_func=JsonBandList.as_view('ajax.
 vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandDetails.as_view('ajax.bands.details'), methods=['GET'])
 vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandVote.as_view('ajax.bands.vote'), methods=['PUT'])
 vote_blueprint.add_url_rule('/ajax/comments', view_func=JsonCommentAdd.as_view('ajax.comment.add'))
-vote_blueprint.add_url_rule('/ajax/distance', view_func=JsonDistance.as_view('ajax.distance'))
+vote_blueprint.add_url_rule('/ajax/distance/<int:band_id>', view_func=JsonDistance.as_view('ajax.distance'))

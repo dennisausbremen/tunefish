@@ -1,15 +1,9 @@
 # coding=utf-8
-from flask import flash, url_for, redirect
+from flask import flash, url_for, redirect, jsonify
 from flask.templating import render_template
 
 from server.models import Band, State, db
 from server.vote.session_mgmt import RestrictedModAdminPage
-
-
-class AdminBandList(RestrictedModAdminPage):
-    def get(self):
-        bands = Band.query.all()
-        return render_template('admin/band_list.html', bands=bands)
 
 
 class AdminBandView(RestrictedModAdminPage):
@@ -28,12 +22,12 @@ class AdminBandState(RestrictedModAdminPage):
         if band:
             if band.state == State.IN_VOTE:
                 band.state = State.OUT_OF_VOTE
-                flash('Band "' + band.name + '" aus dem Voting genommen', 'info')
+                db.session.commit()
+                return jsonify({'success': True, 'state': False, 'message': 'Band %s aus dem Voting genommen' % band.name})
             else:
                 band.state = State.IN_VOTE
-                flash('Band "' + band.name + '" wieder in das Voting aufgenommen', 'info')
-            db.session.commit()
-            return redirect(url_for('vote.admin.bands.list'))
+                db.session.commit()
+                return jsonify({'success': True, 'state': True, 'message': 'Band %s wieder in das Voting aufgenommen' % band.name})
+
         else:
-            flash('Es existiert keine Band mit dieser ID', 'error')
-            return redirect(url_for('vote.admin.bands.list'))
+            return jsonify({'success': False, 'active': False, 'message': u'Es existiert keine Band mit dieser ID'})

@@ -1,16 +1,8 @@
 # coding=utf-8
-from flask import flash, url_for, redirect
-
-from flask.templating import render_template
+from flask import jsonify
 
 from server.models import Access, User, db
 from server.vote.session_mgmt import RestrictedAdminPage, RestrictedModAdminPage
-
-
-class AdminUserList(RestrictedModAdminPage):
-    def get(self):
-        users = User.query.all()
-        return render_template('admin/user_list.html', users=users)
 
 
 class AdminUserActivation(RestrictedModAdminPage):
@@ -18,20 +10,18 @@ class AdminUserActivation(RestrictedModAdminPage):
         user = User.query.get(user_id)
 
         if not user:
-            flash('Kein Benutzer mit dieser ID', 'error')
+            return jsonify({'success': False, 'active': False, 'message': 'Kein Benutzer mit dieser ID'})
         else:
             if user.is_inactive:
                 user.access = Access.USER
                 db.session.commit()
-                flash(u'Benutzer %s ist jetzt aktiviert' % user.login, 'info')
+                return jsonify({'success': True, 'active': True, 'message': u'Benutzer %s ist jetzt aktiviert' % user.login})
             elif user.is_user:
                 user.access = Access.INACTIVE
                 db.session.commit()
-                flash(u'Benutzer %s ist jetzt deaktiviert' % user.login, 'info')
+                return jsonify({'success': True, 'active': False, 'message': u'Benutzer %s ist jetzt deaktiviert' % user.login})
             else:
-                flash(u'Du kannst keine Berechtigungen von Moderatoren/Admins ändern', 'error')
-
-        return redirect(url_for('vote.admin.users.list'))
+                return jsonify({'success': False, 'active': True, 'message': u'Du kannst keine Berechtigungen von Moderatoren/Admins ändern'})
 
 
 class AdminUserAccess(RestrictedAdminPage):
@@ -39,18 +29,17 @@ class AdminUserAccess(RestrictedAdminPage):
         user = User.query.get(user_id)
 
         if not user:
-            flash('Kein Benutzer mit dieser ID', 'error')
+            return jsonify({'success': False, 'mod': False, 'message': 'Kein Benutzer mit dieser ID'})
         else:
             if user.is_mod:
                 user.access = Access.USER
                 db.session.commit()
-                flash(u'Benutzerzugriff auf "Benutzer" geändert', 'info')
+                return jsonify({'success': True, 'mod': False, 'message': u'Benutzer %s hat jetzt Zugriff "Benutzer"' % user.login})
             elif user.is_user:
                 user.access = Access.MODERATOR
                 db.session.commit()
-                flash(u'Benutzerzugriff auf "Moderator" geändert', 'info')
+                return jsonify({'success': True, 'mod': True, 'message': u'Benutzer %s hat jetzt Zugriff "Moderator"' % user.login})
             else:
-                flash(u'Du kannst keine Berechtigungen von Benutzern ändern', 'error')
+                return jsonify({'success': False, 'active': False, 'message': u'Du kannst keine Berechtigungen ändern'})
 
-        return redirect(url_for('vote.admin.users.list'))
 

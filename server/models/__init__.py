@@ -55,7 +55,7 @@ class Band(db.Model):
     techrider = db.Column(String(80))
     state = db.Column(Integer, default=State.NEW)
     apply_timestamp = db.Column(DateTime)
-    distance = db.Column(String(15))
+    distance = db.Column(Integer)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
     votes = db.relationship("Vote", backref="band")
@@ -121,7 +121,7 @@ class Band(db.Model):
     @property
     def vote_average(self):
         if self.vote_count == 0:
-            return 0
+            return 0.0
         else:
             return sum([x.vote for x in self.votes]) / float(len(self.votes))
 

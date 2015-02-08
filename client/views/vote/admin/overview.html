@@ -1,29 +1,231 @@
-{% extends "vote_layout/layout_vote.html" %}
+{% extends "vote_layout/layout_vote_admin.html" %}
 {% from "_formhelpers.html" import renderMessages %}
 
 {% block body %}
 
-<div id="messages" class="message-container">
-    {{ renderMessages() }}
-</div>
+    <br/><br/><br />
 
-
-
-<section class="main-content profile finish">
-    <div class="row">
-        <div class="profile-form-wrapper col-xs-12">
-            <div class="form-action" id="step-finish">
-                <div class="step-content">
-                    Administration
-                    <h2>Administration</h2>
-
-                    <a href="{{ url_for('vote.admin.bands.list') }}">Bands</a><br />
-                    <a href="{{ url_for('vote.admin.users.list') }}">Benutzer</a>
+    <section class="main-content profile">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4" style="margin: 15px 0;">
+                    <h2>tunefish Administration</h2>
+                </div>
+                <div class="col-xs-offset-1 col-xs-6" id="messages">
 
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
 
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- Navigation Tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#bands" aria-controls="bands" role="tab" data-toggle="tab">Bands</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#users" aria-controls="users" role="tab" data-toggle="tab">Benutzer</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#settings" aria-controls="settings" role="tab"
+                               data-toggle="tab">Einstellungen</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" style="margin: 20px 0;">
+                        <div role="tabpanel" class="tab-pane active" id="bands">
+                            {% include "vote/admin/band_list_content.html" %}
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="users">
+                            {% include "vote/admin/user_list_content.html" %}
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="settings">
+                            <div class="alert alert-info">
+                                Momentan noch nicht implementiert.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block inlinejs %}
+
+    <script type="text/javascript">
+    $(function() {
+
+        function changeText(text, field) {
+            $(field).fadeOut(200, function() {
+                $(field).html(text).fadeIn(500);
+            });
+        }
+
+        function setErrorMessage(type, message) {
+            $('#messages').html('<div class="alert alert-' + type + '">' + message + '</div>').find('div').show().delay(2500).slideUp(500);
+        }
+
+
+        function ajaxFunction(self, event, success) {
+            event.preventDefault();
+
+            console.log($(self).attr('href'));
+            $.ajax({
+                url: $(self).attr('href')
+            }).done(function( data ) {
+                if (data.success) {
+                    console.log('success');
+                    success(data, self);
+
+                    if (data.message) {
+                        setErrorMessage('success', data.message);
+                    }
+                } else {
+                    if (data.message) {
+                        setErrorMessage('danger', data.message);
+                    }
+                }
+            });
+        };
+
+
+        $('a.access').on('click', function(event) {
+            ajaxFunction(this, event, function(data, self) {
+                var accessCol = $(self).parent().parent().find('td:nth-child(2)');
+                if (data.active) {
+                    changeText('deaktivieren', self);
+                    changeText('Benutzer', accessCol);
+                } else {
+                    changeText('aktivieren', self);
+                    changeText('Inaktiv', accessCol);
+                }
+            });
+        });
+
+        $('a.mod').on('click', function(event) {
+            ajaxFunction(this, event, function(data, self) {
+                var accessCol = $(self).parent().parent().find('td:nth-child(2)');
+                if (data.mod) {
+                    changeText('degradieren', self);
+                    changeText('Moderator', accessCol);
+                } else {
+                    changeText('befördern', self);
+                    changeText('Benutzer', accessCol);
+                }
+            });
+        });
+
+        $('a.voteState').on('click', function(event) {
+            ajaxFunction(this, event, function(data, self) {
+                var stateCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(5)');
+                if (data.state) {
+                    changeText('Aus dem Voting nehmen', self);
+                    changeText('Im Voting', stateCol);
+                } else {
+                    changeText('Ins Voting nehmen', self);
+                    changeText('Aus Voting genommen', stateCol);
+                }
+            });
+        });
+
+        $('a.distance').on('click', function(event) {
+            ajaxFunction(this, event, function(data, self) {
+                console.log(data);
+                if (data.distance) {
+                    changeText(data.distance + ' km', self);
+                }
+            });
+        });
+
+
+        /* Sort Users */
+        var order = 2;
+
+        /**
+         * Generic handler for sorting a table by clicking on the column
+         *
+         * @param string table the id of the table
+         * @param string elem the id of the elem the onclick-Listener should be registered on
+         * @param int num the order-number (0,2,4, ...)
+         * @param int col the nth-col (0,1,2,...)
+         *
+         * @return void
+         * */
+        function sortLinkHandler(table, elem, num, col) {
+            $(elem).on('click', function (event) {
+                event.preventDefault();
+                order = (order < num) ? num : (num - 1);
+                sortTable(col, order, table);
+            });
+        }
+
+        /** Sort users */
+        sortLinkHandler('#usersTable', '#sortLogin', 2, 0);
+        sortLinkHandler('#usersTable', '#sortAccess', 4, 1);
+
+
+        function sortBandTable(elem, num, col) {
+            sortLinkHandler("#bandsTable", elem, num, col);
+        }
+
+        sortBandTable("#sortName", 2, 0);
+        sortBandTable("#sortMembers", 4, 1);
+        sortBandTable("#sortCity", 6, 2);
+        sortBandTable("#sortDistance", 8, 3);
+        sortBandTable("#sortState", 10, 4);
+        sortBandTable("#sortCount", 12, 5);
+        sortBandTable("#sortAverage", 14, 6);
+
+
+
+        function sortTable(index, order, table) {
+            var rows = $(table).find('tbody tr').get();
+
+                rows.sort(function (a, b) {
+
+                var A = $(a).children('td').eq(index).text().toLowerCase().trim();
+                var B = $(b).children('td').eq(index).text().toLowerCase().trim();
+
+                if (table == '#bandsTable') {
+                       if (index == 1) {
+                        A = (A == '?') ? 100 : parseInt(A);
+                        B = (B == '?') ? 100 : parseInt(B);
+                    } else if (index == 3) {
+                        var matchesA = A.match(/(\d{1,4}) km/);
+                        var matchesB = B.match(/(\d{1,4}) km/);
+                        A = (matchesA) ? parseInt(matchesA[1]) : 20000;
+                        B = (matchesB) ? parseInt(matchesB[1]) : 20000;
+                    } else if (index == 5) {
+                        A = parseInt(A);
+                        B = parseInt(B);
+                    } else if (index == 6) {
+                        var matchesA = A.match(/⌀ (\d\.\d)/);
+                        var matchesB = B.match(/⌀ (\d\.\d)/);
+                        A = (matchesA) ? parseInt(matchesA[1]) : 0.0;
+                        B = (matchesB) ? parseInt(matchesB[1]) : 0.0;
+                    }
+                }
+
+                if (A < B) {
+                    return (order % 2 == 1) ? 1 : -1;
+                }
+
+                if (A > B) {
+                    return (order % 2 == 1) ? -1 : 1;
+                }
+
+                return 0;
+
+            });
+
+            $.each(rows, function (index, row) {
+                $(table).children('tbody').append(row);
+            });
+        }
+    });
+    </script>
 {% endblock %}

@@ -2,6 +2,8 @@
 from flask import url_for, redirect
 
 from flask.templating import render_template
+from server.models import User
+from server.models import Band
 
 from server.vote.session_mgmt import RestrictedInactiveUserPage, RestrictedModAdminPage
 
@@ -16,4 +18,7 @@ class InactiveUserIndex(RestrictedInactiveUserPage):
 
 class AdminIndex(RestrictedModAdminPage):
     def get(self):
-        return render_template('admin/overview.html')
+        bands = Band.query.all()
+        users = User.query.all()
+
+        return render_template('admin/overview.html', bands=bands, users=users )

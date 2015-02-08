@@ -2,6 +2,7 @@ from urllib import quote_plus
 import urllib2
 from flask import jsonify, request, g, json
 from flask.ext.images import resized_img_src
+from math import ceil
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
 
@@ -110,24 +111,20 @@ class JsonCommentAdd(RestrictedUserPage):
 
 # damn Same-Origin-Rule ...
 class JsonDistance(RestrictedUserPage):
-    def post(self):
-        band_id = request.form["band_id"]
+    def get(self, band_id):
         band = Band.query.get_or_404(band_id)
         if band:
-            if band.distance:
-                return jsonify({'distance': 'Cached: ' + band.distance})
+            city = quote_plus(band.city.encode('utf-8'))
+            distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
+            distance_json = distance_api.read()
+            distance = json.loads(str(distance_json))
+
+            if distance['status'] == "OK":
+                value = float(distance['rows'][0]['elements'][0]['distance']['value'])
+                band.distance = int(ceil(value/1000))
+                db.session.add(band)
+                db.session.commit()
+
+                return jsonify({'success': True, 'distance': band.distance})
             else:
-                city = quote_plus(band.city)
-                distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
-                distance_json = distance_api.read()
-                distance = json.loads(str(distance_json))
-
-                if distance['status'] == "OK":
-                    text = distance['rows'][0]['elements'][0]['distance']['text']
-                    band.distance = text
-                    db.session.add(band)
-                    db.session.commit()
-
-                    return jsonify({'distance': text})
-                else:
-                    return jsonify({'distance': 'failed'})
+                return jsonify({'success': False, 'distance': 'failed'})

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="de">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>tunefish</title>
+
+   <link href="{{ url_for('static', filename='css/app-vote-admin.min.css') }}" type="text/css" rel="stylesheet"/>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- WEBFONT CACHING -->
+    <script type="text/javascript">
+        (function () {
+            function addFont() {
+                var style = document.createElement('style');
+                style.rel = 'stylesheet';
+                document.head.appendChild(style);
+                style.textContent = localStorage.sourceSansPro;
+            }
+
+            try {
+                if (localStorage.sourceSansPro) {
+//                    window.localStorage.clear();
+                    // The font is in localStorage, we can load it directly
+                    addFont();
+                } else {
+                    // We have to first load the font file asynchronously
+                    var request = new XMLHttpRequest();
+                    request.open('GET', '{{ url_for('static', filename='css/source-sans-pro.min.css') }}', true);
+
+                    request.onload = function () {
+                        if (request.status >= 200 && request.status < 400) {
+                            // We save the file in localStorage
+                            localStorage.sourceSansPro = request.responseText;
+
+                            // ... and load the font
+                            addFont();
+                        }
+                    };
+
+                    request.send();
+                }
+            } catch (ex) {
+                // maybe load the font synchronously for woff-capable browsers
+                // to avoid blinking on every request when localStorage is not available
+            }
+        }());
+    </script>
+    <!-- END WEBFONT CACHING -->
+
+</head>
+<body>
+
+{% include "vote_layout/header.html" %}
+
+<main class="grid main">
+
+    {% block body %}{% endblock %}
+    <!--<div class="footer-push"></div>-->
+
+</main>
+
+<footer>
+    &copy;2014 - Wohnpark am Fleet e.V.
+</footer>
+
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+{% block inlinejs %}{% endblock %}
+
+</body>
+</html>
