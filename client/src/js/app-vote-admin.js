@@ -15,12 +15,10 @@
         function ajaxFunction(self, event, success) {
             event.preventDefault();
 
-            console.log($(self).attr('href'));
             $.ajax({
                 url: $(self).attr('href')
             }).done(function( data ) {
                 if (data.success) {
-                    console.log('success');
                     success(data, self);
 
                     if (data.message) {
@@ -64,6 +62,20 @@
         $('a.voteState').on('click', function(event) {
             ajaxFunction(this, event, function(data, self) {
                 var stateCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(5)');
+                if (data.state) {
+                    changeText('Aus dem Voting nehmen', self);
+                    changeText('Im Voting', stateCol);
+                } else {
+                    changeText('Ins Voting nehmen', self);
+                    changeText('Aus Voting genommen', stateCol);
+                }
+            });
+        });
+
+        $('a.voteStateDetail').on('click', function(event) {
+            ajaxFunction(this, event, function(data, self) {
+                var stateCol = $('#voteState');
+                console.log(stateCol);
                 if (data.state) {
                     changeText('Aus dem Voting nehmen', self);
                     changeText('Im Voting', stateCol);

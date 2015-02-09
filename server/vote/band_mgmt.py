@@ -13,7 +13,7 @@ class AdminBandView(RestrictedModAdminPage):
             return render_template('admin/band_view.html', band=band)
         else:
             flash('Es existiert keine Band mit dieser ID', 'error')
-            return redirect(url_for('vote.admin.bands.list'))
+            return redirect(url_for('vote.admin.index'))
 
 
 class AdminBandState(RestrictedModAdminPage):

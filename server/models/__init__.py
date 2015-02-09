@@ -67,7 +67,7 @@ class Band(db.Model):
         self.password = password
 
     def __repr__(self):
-        return '<Band %r>' % (self.name)
+        return '<Band %r %s>' % (self.name, self.image)
 
     @property
     def is_tracks_valid(self):
@@ -139,7 +139,7 @@ class Band(db.Model):
 
     @property
     def facebook_url(self):
-        if self.facebook_page and self.facebook_page != 'None':
+        if self.facebook_page:
             if 'facebook.com' in self.facebook_page:
                 if not self.facebook_page.startswith('http'):
                     return 'https://' + self.facebook_page
@@ -152,7 +152,7 @@ class Band(db.Model):
 
     @property
     def youtube_url(self):
-        if self.youtube_id and self.youtube_id != 'None':
+        if self.youtube_id:
             if 'youtube' in self.youtube_id:
                 if not self.youtube_id.startswith('http'):
                     return 'https://' + self.youtube_id
@@ -165,13 +165,18 @@ class Band(db.Model):
 
     @property
     def prev_image(self):
-        if self.image and self.image != 'None':
+        if self.image:
             return resized_img_src(self.image, mode="crop", width=1024, quality=60)
+        else:
+            return False
+
 
     @property
     def thumbnail(self):
-        if self.image and self.image != 'None':
+        if self.image:
             return resized_img_src(self.image, mode="crop", width=200, height=200, quality=60)
+        else:
+            return False
 
 
 
