@@ -38,14 +38,10 @@ def comment2json(comment):
     }
 
 def track2json(track):
-    trackname = track.trackname
-
-    if trackname.endswith(".mp3"):
-        trackname = trackname[:-4]
 
     return {
         "id": track.id,
-        "trackname": trackname,
+        "trackname": track.nice_trackname,
         "url": track.url,
         "band": track.band_id
     }

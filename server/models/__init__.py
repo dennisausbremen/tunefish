@@ -187,6 +187,21 @@ class Track(db.Model):
     trackname = db.Column(String(100))
 
     @property
+    def nice_trackname(self):
+        track_name = self.trackname
+
+        while track_name[0].isdigit():
+            track_name = track_name[1:]
+
+        if track_name.endswith(".mp3"):
+            track_name = track_name[:-4]
+
+        track_name = track_name.replace('_', ' ').strip()
+
+        return track_name
+
+
+    @property
     def url(self):
         return trackPool.url(self.filename)
 
