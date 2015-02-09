@@ -11,6 +11,9 @@
             $('#messages').html('<div class="alert alert-' + type + '">' + message + '</div>').find('div').show().delay(2500).slideUp(500);
         }
 
+        // set the correct, current amount of bands
+        $('.bandsAmount').html($('#bandsTable').find('tbody tr').length + ' Bands');
+
 
         function ajaxFunction(self, event, success) {
             event.preventDefault();
@@ -151,11 +154,10 @@
         sortBandTable('#sortAverage', 14, 6);
 
 
-
         function sortTable(index, order, table) {
             var rows = $(table).find('tbody tr').get();
 
-                rows.sort(function (a, b) {
+            rows.sort(function (a, b) {
 
                 var A = $(a).children('td').eq(index).text().toLowerCase().trim();
                 var B = $(b).children('td').eq(index).text().toLowerCase().trim();
