@@ -139,7 +139,7 @@ class Band(db.Model):
 
     @property
     def facebook_url(self):
-        if self.facebook_page and self.facebook_page != 'NULL':
+        if self.facebook_page and self.facebook_page != 'None':
             if 'facebook.com' in self.facebook_page:
                 if not self.facebook_page.startswith('http'):
                     return 'https://' + self.facebook_page
@@ -152,7 +152,7 @@ class Band(db.Model):
 
     @property
     def youtube_url(self):
-        if self.youtube_id and self.youtube_id != 'NULL':
+        if self.youtube_id and self.youtube_id != 'None':
             if 'youtube' in self.youtube_id:
                 if not self.youtube_id.startswith('http'):
                     return 'https://' + self.youtube_id
@@ -165,12 +165,12 @@ class Band(db.Model):
 
     @property
     def prev_image(self):
-        if self.image and self.image != 'NULL':
+        if self.image and self.image != 'None':
             return resized_img_src(self.image, mode="crop", width=1024, quality=60)
 
     @property
     def thumbnail(self):
-        if self.image and self.image != 'NULL':
+        if self.image and self.image != 'None':
             return resized_img_src(self.image, mode="crop", width=200, height=200, quality=60)
 
 

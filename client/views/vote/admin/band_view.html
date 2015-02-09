@@ -21,7 +21,7 @@
             </div>
             <br/>
 
-            {% macro show(field) %}{% if field != 'NULL' %}{{ field }}{% else %}-{% endif %}{% endmacro %}
+            {% macro show(field) %}{% if field != 'None' %}{{ field }}{% else %}-{% endif %}{% endmacro %}
 
             <div class="row">
                 <div class="col-xs-3">
@@ -42,7 +42,7 @@
 
 
                         <div class="col-xs-2">
-                            {{ show(band.city) }} {% if band.distance != 'NULL' %}({{ band.distance }} km){% endif %}
+                            {{ show(band.city) }} {% if band.distance != 'None' %}({{ band.distance }} km){% endif %}
                             <span>Herkunft</span>
                         </div>
 
@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="col-xs-2 col-xs-offset-3">
-                            {% if band.techrider != 'NULL' %}<a href="{{ band.techrider_url }}" target="techrider">vorhanden</a>{% else %}
+                            {% if band.techrider != 'None' %}<a href="{{ band.techrider_url }}" target="techrider">vorhanden</a>{% else %}
                                 fehlt{% endif %}
                             <span>Techrider</span>
                         </div>
@@ -75,21 +75,21 @@
 
                     <div class="row details">
                         <div class="col-xs-4">
-                            {% if band.website != 'NULL' %}
+                            {% if band.website != 'None' %}
                                 <a href="{{ band.website }}">{{ band.website }}</a>
                             {% else %} - {% endif %}
                             <span>Website</span>
                         </div>
 
                         <div class="col-xs-4">
-                            {% if band.youtube_id != 'NULL' %}
+                            {% if band.youtube_id != 'None' %}
                                 <a href="{{ band.youtube_url }}" target="youtube">{{ band.youtube_id }}</a>{% else %}
                                 - {% endif %}
                             <span>YouTube</span>
                         </div>
 
                         <div class="col-xs-4">
-                            {% if band.facebook_page != 'NULL' %}
+                            {% if band.facebook_page != 'None' %}
                                 <a href="{{ band.facebook_url }}" target="facebook">{{ band.facebook_page }}</a>{% else %}
                                 - {% endif %}
                             <span>facebook</span>
@@ -160,7 +160,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h3>Bandfoto <small><a href="#top" name="bandfoto"></a></small></h3>
-                    {% if band.image != 'NULL' %}
+                    {% if band.image != 'None' %}
                         <a href="{{ band.image_url }}">
                             <img src="{{ band.prev_image }}" alt="Band {{ band.name }}" width="100%"/>
                         </a>
