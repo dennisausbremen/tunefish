@@ -32,7 +32,7 @@ def comment2json(comment):
     return {
         "id": comment.id,
         "author": comment.author.login,
-        "timestamp": comment.timestamp.strftime("%d.%m.%y - %H:%M"),
+        "timestamp": comment.date_time,
         "message": comment.message,
         "band": comment.band_id
     }

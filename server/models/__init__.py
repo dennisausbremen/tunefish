@@ -268,6 +268,7 @@ class Vote(db.Model):
 class Comment(db.Model):
     id = db.Column(Integer, primary_key=True)
     band_id = db.Column(Integer, db.ForeignKey('band.id'))
+    band = db.relationship("Band", backref=db.backref("comment", uselist=False))
     author_id = db.Column(Integer, db.ForeignKey('user.id'))
     author = db.relationship("User", backref=db.backref("comment", uselist=False))
 
@@ -277,6 +278,9 @@ class Comment(db.Model):
     def __init__(self):
         self.timestamp = datetime.datetime.now()
 
+    @property
+    def date_time(self):
+        return self.timestamp.strftime("%d.%m.%y - %H:%M")
 
 
 db.create_all()

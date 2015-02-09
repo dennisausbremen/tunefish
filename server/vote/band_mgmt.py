@@ -2,7 +2,7 @@
 from flask import flash, url_for, redirect, jsonify
 from flask.templating import render_template
 
-from server.models import Band, State, db
+from server.models import Band, State, db, Comment
 from server.vote.session_mgmt import RestrictedModAdminPage
 
 
@@ -31,3 +31,13 @@ class AdminBandState(RestrictedModAdminPage):
 
         else:
             return jsonify({'success': False, 'active': False, 'message': u'Es existiert keine Band mit dieser ID'})
+
+
+class AdminCommentRemove(RestrictedModAdminPage):
+    def get(self, comment_id):
+        comment = Comment.query.get(comment_id)
+        if comment:
+            db.session.delete(comment)
+            db.session.commit()
+            return jsonify({'success': True, 'message': u'Kommentar von "%s" gelöscht.' % comment.author.login})
+        return jsonify({'success': False, 'message': 'Kommentar nicht gefunden.'})

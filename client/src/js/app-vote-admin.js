@@ -91,11 +91,24 @@
 
         $('a.distance').on('click', function(event) {
             ajaxFunction(this, event, function(data, self) {
-                console.log(data);
                 if (data.distance) {
                     changeText(data.distance + ' km', self);
                 }
             });
+        });
+
+        $('a.comment-rm').on('click', function(event) {
+
+            if (confirm('Kommentar wirklich löschen?')) {
+            ajaxFunction(this, event, function(data, self) {
+                $(self).parent().parent().slideUp(function() {
+                    this.remove();
+                });
+            });
+            } else {
+                event.preventDefault();
+            }
+
         });
 
 

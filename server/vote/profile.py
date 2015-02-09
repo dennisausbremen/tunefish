@@ -2,7 +2,7 @@
 from flask import url_for, redirect
 
 from flask.templating import render_template
-from server.models import User
+from server.models import User, Comment
 from server.models import Band
 
 from server.vote.session_mgmt import RestrictedInactiveUserPage, RestrictedModAdminPage
@@ -20,5 +20,6 @@ class AdminIndex(RestrictedModAdminPage):
     def get(self):
         bands = Band.query.all()
         users = User.query.all()
+        comments = Comment.query.order_by(Comment.timestamp.desc()).all()
 
-        return render_template('admin/overview.html', bands=bands, users=users )
+        return render_template('admin/overview.html', bands=bands, users=users, comments=comments )

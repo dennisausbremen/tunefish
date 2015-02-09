@@ -22,13 +22,13 @@
                     <!-- Navigation Tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#bands" aria-controls="bands" role="tab" data-toggle="tab">Bands</a>
+                            <a href="#bands" aria-controls="bands" role="tab" data-toggle="tab">{{ bands|length }} Bands</a>
                         </li>
                         <li role="presentation">
-                            <a href="#users" aria-controls="users" role="tab" data-toggle="tab">Benutzer</a>
+                            <a href="#users" aria-controls="users" role="tab" data-toggle="tab">{{ users|length }} Benutzer</a>
                         </li>
                         <li role="presentation">
-                            <a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Kommentare</a>
+                            <a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">{{ comments|length }} Kommentare</a>
                         </li>
                         <li role="presentation">
                             <a href="#settings" aria-controls="settings" role="tab"
@@ -39,15 +39,13 @@
                     <!-- Tab panes -->
                     <div class="tab-content" style="margin: 20px 0;">
                         <div role="tabpanel" class="tab-pane active" id="bands">
-                            {% include "vote/admin/band_list_content.html" %}
+                            {% include "vote/admin/band_list.html" %}
                         </div>
                         <div role="tabpanel" class="tab-pane" id="users">
-                            {% include "vote/admin/user_list_content.html" %}
+                            {% include "vote/admin/user_list.html" %}
                         </div>
                         <div role="tabpanel" class="tab-pane" id="comments">
-                            <div class="alert alert-info">
-                                Momentan noch nicht implementiert.
-                            </div>
+                            {% include "vote/admin/comment_list.html" %}
                         </div>
                         <div role="tabpanel" class="tab-pane" id="settings">
                             <div class="alert alert-info">

@@ -1,0 +1,18 @@
+
+<div class="row">
+    {% for comment in comments %}
+
+        <div class="col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"> {{ comment.author.login }} zu <a href="{{ url_for('vote.admin.bands.view', band_id = comment.band.id) }}">{{ comment.band.name }}</a></div>
+                <div class="panel-body">
+                    {{ comment.message }}
+                </div>
+                <div class="panel-footer">
+                    {{ comment.date_time }}
+                    <a href="{{ url_for('vote.admin.comments.remove', comment_id = comment.id) }}" class="btn comment-rm btn-xs btn-default pull-right">Entfernen</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
