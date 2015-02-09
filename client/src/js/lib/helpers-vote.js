@@ -81,6 +81,7 @@ var helper = (function ($) {
                 descp: DS.attr('string'),
                 image: DS.attr('string'),
                 thumbnail: DS.attr('string'),
+                distance: DS.attr('number'),
                 voteCount: DS.attr('number'),
                 voteAverage: DS.attr('number'),
                 voted: DS.attr('boolean'),
@@ -364,10 +365,7 @@ var helper = (function ($) {
                     },
 
                     calcDistance: function () {
-                        $.post('/vote/ajax/distance', {
-                                'band_id': this.get('model.id')
-                            }
-                        ).then(function (result) {
+                        $.get('/vote/ajax/distance/' + this.get('model.id')).then(function (result) {
                                 $('button#calcDist').text(result.distance);
                             });
                     }

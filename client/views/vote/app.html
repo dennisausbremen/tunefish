@@ -14,9 +14,7 @@
 
 {% raw %}
 
-<script type="text/x-handlebars"  data-template-name="star">
-[{{view.vote}}]
-</script>
+<script type="text/x-handlebars"  data-template-name="star"></script>
 
 <script type="text/x-handlebars"  data-template-name="votecontrols">
     {{view "star" band=view.band vote=1}}
@@ -118,95 +116,128 @@
                 </span>
             </div>
         </div>
+        <div class="row band-info-row">
+                <div class="col-xs-offset-1 col-xs-2">
+                    <div>{{members}}</div>
+                    <span>Mitglieder</span>
+                </div>
+
+                <div class="col-xs-3">
+                    <div>{{city}}, {{distance}} km</div>
+                    <span>Herkunft</span>
+                </div>
+
+                <div class="col-xs-4">
+                    <div><a {{bind-attr href=website }}>{{ website }}</a></div>
+                    <span>Webseite</span>
+                </div>
+
+                <div class="col-xs-2">
+                    <div>{{#if facebookUrl }}<a {{ bind-attr href=facebookUrl }}>facebook</a>{{else}}-{{/if }}</div>
+                    <span>facebook</span>
+                </div>
+            </div>
+
 
         <div class="detail-content">
-            {{view "votecontrols" band=this }}
 
             <div class="row">
-                <h3>Mitglieder</h3>
-                <div>{{members}}</div>
+                <div class="col-md-7 col-xs-12">
+                    <div class="tracks-h3">
+                        <h3>Tracks</h3>
+                        <a href="#" {{ action "addAllTracks" }} class="addAllTracks">Add all tracks to queue</a>
+                    </div>
+
+                    <ul class="tracks">
+                        {{#each track in tracks }}
+                            <li>
+                                <a href="#" {{ action "addTrack" track }}>
+                                    <span>{{ name }}</span> {{ track.trackname }}
+                                </a>
+                            </li>
+                        {{/each}}
+                    </ul>
+
+                    <h3>Kommentare</h3>
+
+                    {{#each comment in comments }}
+                        <div class="row">
+                            <div class="col-xs-11">
+                                <div class="row comment-row">
+                                    <div class="col-xs-2 comment-author">
+                                        {{ comment.author }}<br />
+                                        <span>{{ comment.timestamp }}</span>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        {{ comment.message }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+
+
+                    <form {{action "addComment" on="submit"}} class="comment">
+                        <div class="row">
+                            <div class="col-xs-4 col-md-3">
+                                <h3>Dein<br />Kommentar</h3>
+                            </div>
+                            <div class="col-xs-7 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    {{ textarea name="comment" value=comment id="new_comment" required="required" }}
+                                </div>
+
+                                <div class="col-xs-12">
+                                    <button type="submit">Kommentieren</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="col-md-5 col-xs-12">
+
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="voting-row">
+                                {{view "votecontrols" band=this }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h3>Bandinfo</h3>
+                    <div class="band-description">
+                        {{ descp }}
+                    </div>
+
+                    <h3>Bandfoto</h3>
+                    <img {{bind-attr src=image }} width="100%"/>
+
+                    <br />
+
+                    <div>
+                    <br />
+                    <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=550x300&sensor=false"/>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="row">
-                <h3>Herkunft</h3>
-                <div>{{city}}</div>
-                <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
-                <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
+        <div class="row">
+            <div class="col-xs-8 col-xs-offset-2">
+                <div>
+                    {{#if youtubeUrl }}
+                    <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
+                            <iframe id="ytplayer" type="text/html" width="100%" height="100%"
+                                    {{ bind-attr src=youtubeUrl }}"
+                            frameborder="0"/>
+                    {{/if }}
+                </div>
             </div>
-
-            <table style="width: 100%;">
-                <tbody>
-                <tr>
-                    <td>Mitglieder:</td>
-                    <td>{{ members }}</td>
-                </tr>
-                <tr>
-                    <td>Herkunft:</td>
-                    <td>{{ city }}<br/>
-                        <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=600x300&sensor=false"/>
-                        <button {{ action "calcDistance" }} id="calcDist">Entfernung berechnen</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Webseite:</td>
-                    <td><a {{bind-attr href=website }}>{{ website }}</a>
-                        {{#if facebookUrl }},
-                        <a {{ bind-attr href=facebookUrl }}>facebook</a>
-                        {{/if }}
-                    </td>
-                </tr>
-                {{#if youtube_url }}
-                <tr>
-                    <td>YouTube:</td>
-                    <td>
-                        <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->
-                        <iframe id="ytplayer" type="text/html" width="640" height="390"
-                                {{ bind-attr src=youtubeUrl }}"
-                        frameborder="0"/>
-                    </td>
-                </tr>
-                {{/if }}
-
-                <tr>
-                    <td>Beschreibung:</td>
-                    <td>{{ descp }}</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <h3>Tracks</h3>     <a href="#" {{ action "addAllTracks" }}>Add all tracks to queue</a>
-            <ul>
-                {{#each track in tracks }}
-                <li ><a href="#" {{ action "addTrack" track }}>
-                    {{ track.trackname }}
-                    </a>
-                </li>
-                {{/each}}
-            </ul>
-
-            <h3>Bandfoto</h3>
-            <img {{bind-attr src=image }} width="100%"/>
-
-            <h3>Kommentare</h3>
-            <table style="width: 100%;">
-                <tbody>
-                {{#each comment in comments }}
-                <tr>
-                    <td>{{ comment.author }} <br> {{ comment.timestamp }}</td>
-                    <td>{{ comment.message }}</td>
-                </tr>
-                {{/each}}
-
-                </tbody>
-            </table>
-            <h3>Dein Kommentar:</h3>
-            <form {{action "addComment" on="submit"}}>
-
-            {{ textarea name="comment" value=comment id="new_comment" required="required" }}
-
-            <button type="submit">Add</button>
-
-            </form>
         </div>
     </div>
 
