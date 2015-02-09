@@ -168,6 +168,11 @@ class Band(db.Model):
         if self.image and self.image != 'NULL':
             return resized_img_src(self.image, mode="crop", width=1024, quality=60)
 
+    @property
+    def thumbnail(self):
+        if self.image and self.image != 'NULL':
+            return resized_img_src(self.image, mode="crop", width=200, height=200, quality=60)
+
 
 
 class Track(db.Model):
@@ -198,7 +203,7 @@ class User(db.Model):
         self._access = Access.INACTIVE
 
     def __repr__(self):
-        return '<User %r>' % (self.name)
+        return '<User %r>' % (self.login)
 
     @hybrid_property
     def access(self):

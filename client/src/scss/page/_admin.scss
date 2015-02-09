@@ -1,4 +1,29 @@
-.details div span {
-    color: #7F7F7F;
-    font-size: 0.9em;
-}
+  .details {
+
+    margin-bottom: 30px;
+
+    div span {
+      color: #7F7F7F;
+      font-size: 0.9em;
+    }
+  }
+
+  .track {
+    margin-bottom: 10px;
+  }
+
+  .details a {
+    float: left;
+  }
+
+  .details p {
+    padding: 0;
+    margin: 0;
+  }
+
+  .band-image {
+    width: 80%;
+    border-radius: 25%;
+    display: block;
+    margin: 0px auto 25px;
+  }

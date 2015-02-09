@@ -23,82 +23,81 @@
 
             {% macro show(field) %}{% if field != 'NULL' %}{{ field }}{% else %}-{% endif %}{% endmacro %}
 
-            <div class="row details">
-                <div class="col-xs-2">
-                    {{ show(band.login) }}
-                    <span>Benutzername</span>
-                </div>
-
-                <div class="col-xs-2">
-                    {{ show(band.amount_members) }}
-                    <span>Mitglieder</span>
-                </div>
-
-
-                <div class="col-xs-2">
-                    {{ show(band.city) }} {% if band.distance != 'NULL' %}({{ band.distance }} km){% endif %}
-                    <span>Herkunft</span>
-                </div>
-
-                <div class="col-xs-2 col-xs-offset-4">
-                    {{ band.state_label }}
-                    <span>Bewerbungsstatus</span>
-                </div>
-
-            </div>
-
-            <br/>
-
-            <div class="row details">
-
-
-                <div class="col-xs-4">
-                    <a href="mailto:{{ band.email }}">
-                        {{ band.email }}{% if band.is_email_confirmed %} &#10003;{% endif %}</a>
-                    <span>E-Mail</span>
-                </div>
-
+            <div class="row">
                 <div class="col-xs-3">
-                    {{ show(band.phone) }}
-                    <span>Telefon</span>
+                    <a href="#bandfoto"><img src="{{ band.thumbnail }}" alt="{{ band.name }}" class="band-image" /></a>
                 </div>
 
-                <div class="col-xs-2 col-xs-offset-3">
-                    {% if band.techrider != 'NULL' %}<a href="{{ band.techrider_url }}">vorhanden</a>{% else %}
-                        fehlt{% endif %}
-                    <span>Techrider</span>
+                <div class="col-xs-9">
+                    <div class="row details">
+                        <div class="col-xs-2">
+                            {{ show(band.login) }}
+                            <span>Benutzername</span>
+                        </div>
+
+                        <div class="col-xs-2">
+                            {{ show(band.amount_members) }}
+                            <span>Mitglieder</span>
+                        </div>
+
+
+                        <div class="col-xs-2">
+                            {{ show(band.city) }} {% if band.distance != 'NULL' %}({{ band.distance }} km){% endif %}
+                            <span>Herkunft</span>
+                        </div>
+
+                        <div class="col-xs-2 col-xs-offset-4">
+                            {{ band.state_label }}
+                            <span>Bewerbungsstatus</span>
+                        </div>
+                    </div>
+
+                    <div class="row details">
+                        <div class="col-xs-4">
+                            <p>
+                                <a href="mailto:{{ band.email }}">{{ band.email }}</a>
+                                {% if band.is_email_confirmed %} &nbsp; &#10003;{% endif %}
+                            </p>
+                            <span>E-Mail</span>
+                        </div>
+
+                        <div class="col-xs-3">
+                            {{ show(band.phone) }}
+                            <span>Telefon</span>
+                        </div>
+
+                        <div class="col-xs-2 col-xs-offset-3">
+                            {% if band.techrider != 'NULL' %}<a href="{{ band.techrider_url }}" target="techrider">vorhanden</a>{% else %}
+                                fehlt{% endif %}
+                            <span>Techrider</span>
+                        </div>
+                    </div>
+
+                    <div class="row details">
+                        <div class="col-xs-4">
+                            {% if band.website != 'NULL' %}
+                                <a href="{{ band.website }}">{{ band.website }}</a>
+                            {% else %} - {% endif %}
+                            <span>Website</span>
+                        </div>
+
+                        <div class="col-xs-4">
+                            {% if band.youtube_id != 'NULL' %}
+                                <a href="{{ band.youtube_url }}" target="youtube">{{ band.youtube_id }}</a>{% else %}
+                                - {% endif %}
+                            <span>YouTube</span>
+                        </div>
+
+                        <div class="col-xs-4">
+                            {% if band.facebook_page != 'NULL' %}
+                                <a href="{{ band.facebook_url }}" target="facebook">{{ band.facebook_page }}</a>{% else %}
+                                - {% endif %}
+                            <span>facebook</span>
+                        </div>
+
+                    </div>
                 </div>
-
-
             </div>
-            <br/>
-
-            <div class="row details">
-                <div class="col-xs-4">
-                    {% if band.website != 'NULL' %}
-                        <a href="{{ band.website }}">{{ band.website }}</a>
-                    {% else %} - {% endif %}
-                    <span>Website</span>
-                </div>
-
-                <div class="col-xs-4">
-                    {% if band.youtube_id != 'NULL' %}
-                        <a href="{{ band.youtube_url }}" target="youtube">{{ band.youtube_id }}</a>{% else %}
-                        - {% endif %}
-                    <span>YouTube</span>
-                </div>
-
-                <div class="col-xs-4">
-                    {% if band.facebook_page != 'NULL' %}
-                        <a href="{{ band.facebook_url }}" target="facebook">{{ band.facebook_page }}</a>{% else %}
-                        - {% endif %}
-                    <span>facebook</span>
-                </div>
-
-
-            </div>
-
-            <br/>
 
             <div class="row">
                 <div class="col-xs-12">
@@ -106,19 +105,23 @@
                     {% if band.tracks.count() == 0 %}
                         <p>Noch keine Tracks hochgeladen</p>
                     {% else %}
-                        <ul>
+                        <div class="row">
                             {% for track in band.tracks %}
-                                <li>
-                                    <audio src="{{ track.url }}" controls></audio>
-                                    {{ track.trackname }}
-                                </li>
+                                <div class="col-xs-4 track">
+                                    <div class="list-group-item ">
+                                        <div class="list-group-item-heading">
+                                            <audio src="{{ track.url }}" controls></audio>
+                                        </div>
+                                        <p class="list-group-item-text">
+                                            {{ track.trackname }}
+                                        </p>
+                                    </div>
+                                </div>
                             {% endfor %}
-                        </ul>
+                        </div>
                     {% endif %}
-
                 </div>
             </div>
-
 
             <br/><br/>
 
@@ -126,17 +129,37 @@
                 <div class="col-xs-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">Bandbeschreibung</div>
-                        <div class="panel-body">{{ show(band.descp) }}</div>
+                        <div class="panel-body text-justify">{{ show(band.descp) }}</div>
                     </div>
                 </div>
             </div>
-
 
             <br/>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <h3>Bandfoto</h3>
+                    <h3>Kommentare</h3>
+                </div>
+            </div>
+
+            {% if band.comments.count() > 0 %}
+                {% for comment in band.comments %}
+                    <div class="row details">
+                        <div class="col-xs-12">
+                            {{ comment.message }}
+                            <span>{{ comment.author.login }}, {{ comment.timestamp }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="row">
+                    <div class="col-xs-12">Es wurden noch keine Kommentare zu dieser Band verfasst</div>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Bandfoto <small><a href="#top" name="bandfoto"></a></small></h3>
                     {% if band.image != 'NULL' %}
                         <a href="{{ band.image_url }}">
                             <img src="{{ band.prev_image }}" alt="Band {{ band.name }}" width="100%"/>
