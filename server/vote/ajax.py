@@ -1,7 +1,7 @@
+from datetime import datetime
 from urllib import quote_plus
 import urllib2
 from flask import jsonify, request, g, json
-from flask.ext.images import resized_img_src
 from math import ceil
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
@@ -22,6 +22,7 @@ def band2json(band):
         "voteCount": band.vote_count,
         "voteAverage": band.vote_average,
         "ownVote": band.get_user_vote(g.user),
+        "distance": band.distance,
         "comments": [comment.id for comment in band.comments],
         'voted': band.get_user_vote(g.user) > 0
     }
@@ -31,15 +32,20 @@ def comment2json(comment):
     return {
         "id": comment.id,
         "author": comment.author.login,
-        "timestamp": comment.timestamp,
+        "timestamp": comment.timestamp.strftime("%d.%m.%y - %H:%M"),
         "message": comment.message,
         "band": comment.band_id
     }
 
 def track2json(track):
+    trackname = track.trackname
+
+    if trackname.endswith(".mp3"):
+        trackname = trackname[:-4]
+
     return {
         "id": track.id,
-        "trackname": track.trackname,
+        "trackname": trackname,
         "url": track.url,
         "band": track.band_id
     }
