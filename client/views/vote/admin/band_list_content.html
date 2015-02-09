@@ -13,7 +13,16 @@
     {{ build_filter(2, 'Abgelehnt') }} {{ build_filter(3, 'Gebucht') }}
     {{ build_filter(4, 'Aus dem Voting genommen') }}
 </div>
+
 <br /><br />
+
+<ul class="list-inline">
+    <li>Legende:</li>
+    <li><div class="dot dot-red"></div> Bewerbung unvollständig</li>
+    <li><div class="dot dot-yellow"></div> Band nicht im Voting (trotz vollständiger Bewerbung)</li>
+    <li><div class="dot dot-green"></div> Band im Voting</li>
+</ul>
+<br />
 
 
 {% macro build_sort_url(field) %}{{ url_for('vote.admin.index') }}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if state > 0 %}&amp;state={{ state }}
@@ -38,7 +47,7 @@
     {% for band in bands|sort(attribute=sort, reverse=reverse) %}
         {% if band.state == state or state == 0 %}
             <tr>
-                <td><a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name|trim }}</a></td>
+                <td><div class="dot dot-{% if band.state == 0 %}red{% elif band.state == 4 %}yellow{% else %}green{% endif %}"></div> <a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name|trim }}</a></td>
                 <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
                 <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
                 <td>{% if band.state > 0 %}

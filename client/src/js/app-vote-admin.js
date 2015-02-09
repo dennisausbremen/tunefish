@@ -62,12 +62,15 @@
         $('a.voteState').on('click', function(event) {
             ajaxFunction(this, event, function(data, self) {
                 var stateCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(5)');
+                var stateDotCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(1) div.dot');
                 if (data.state) {
                     changeText('Aus dem Voting nehmen', self);
                     changeText('Im Voting', stateCol);
+                    stateDotCol.fadeOut(200, function() {stateDotCol.removeClass('dot-yellow').addClass('dot-green').fadeIn(500);});
                 } else {
                     changeText('Ins Voting nehmen', self);
                     changeText('Aus Voting genommen', stateCol);
+                    stateDotCol.fadeOut(200, function() {stateDotCol.removeClass('dot-green').addClass('dot-yellow').fadeIn(500);});
                 }
             });
         });

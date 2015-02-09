@@ -27,3 +27,24 @@
     display: block;
     margin: 0px auto 25px;
   }
+
+  .dot {
+    margin-top: 7px;
+    margin-right: 10px;
+    float: left;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-red {
+    background-color: #d43f3a;
+  }
+
+  .dot-green {
+    background-color: #449d44;
+  }
+
+  .dot-yellow {
+    background-color: #f0ad4e;
+  }
