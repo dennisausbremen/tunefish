@@ -117,36 +117,44 @@
             </div>
         </div>
         <div class="row band-info-row">
-                <div class="col-xs-offset-1 col-xs-2">
-                    <div>{{members}}</div>
-                    <span>Mitglieder</span>
-                </div>
-
                 <div class="col-xs-3">
-                    <div>{{city}}, {{distance}} km</div>
-                    <span>Herkunft</span>
+                    <div> {{members}} Mitglieder</div>
                 </div>
 
-                <div class="col-xs-4">
-                    <div><a {{bind-attr href=website }}>{{ website }}</a></div>
-                    <span>Webseite</span>
+                <div class="col-xs-5">
+                    <div>{{city}}, {{distance}} km</div>
+                </div>
+
+                <div class="col-xs-2">
+                    <div><a {{bind-attr href=website }}>Webseite</a></div>
                 </div>
 
                 <div class="col-xs-2">
                     <div>{{#if facebookUrl }}<a {{ bind-attr href=facebookUrl }}>facebook</a>{{else}}-{{/if }}</div>
-                    <span>facebook</span>
                 </div>
             </div>
 
 
         <div class="detail-content">
 
-            <div class="row">
-                <div class="col-md-7 col-xs-12">
-                    <div class="tracks-h3">
-                        <h3>Tracks</h3>
-                        <a href="#" {{ action "addAllTracks" }} class="addAllTracks">Add all tracks to queue</a>
+            <div class="row reverse">
+                <div class="col-xs-12 col-md-6">
+                    <div class="voting-row">
+                        {{view "votecontrols" band=this }}
                     </div>
+                </div>
+
+                <div class="col-md-6 col-xs-12">
+                    <h3 class="tracks-h3">
+                        Tracks
+                        <a href="#" {{ action "addAllTracks" }}" class="addAllTracks">Alle Tracks der Liste hinzufügen</a>
+                    </h3>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
 
                     <ul class="tracks">
                         {{#each track in tracks }}
@@ -179,56 +187,37 @@
 
                     <form {{action "addComment" on="submit"}} class="comment">
                         <div class="row">
-                            <div class="col-xs-4 col-md-3">
-                                <h3>Dein<br />Kommentar</h3>
+                            <div class="col-xs-12 col-md-3">
+                                <label for="new_comment">Dein Kommentar</label>
                             </div>
-                            <div class="col-xs-7 col-md-8">
-                            <div class="row">
-                                <div class="col-xs-12">
+                            <div class="col-xs-12 col-md-8">
                                     {{ textarea name="comment" value=comment id="new_comment" required="required" }}
-                                </div>
-
-                                <div class="col-xs-12">
+                                <br />
                                     <button type="submit">Kommentieren</button>
-                                </div>
-                                </div>
                             </div>
                         </div>
                     </form>
 
                 </div>
                 <div class="col-md-5 col-xs-12">
-
-                    <div class="row">
-                        <div class="col-xs-12">
-
-                            <div class="voting-row">
-                                {{view "votecontrols" band=this }}
-                            </div>
-                        </div>
-                    </div>
-
-
                     <h3>Bandinfo</h3>
                     <div class="band-description">
                         {{ descp }}
                     </div>
 
-                    <h3>Bandfoto</h3>
-                    <img {{bind-attr src=image }} width="100%"/>
-
                     <br />
 
-                    <div>
-                    <br />
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=550x300&sensor=false"/>
-                    </div>
-                </div>
+
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-8 col-xs-offset-2">
+        <div class="row xs-hidden">
+            <div class="col-md-8 col-md-offset-2">
+
+                <div>
+                    <img src="http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers={{ unbound city }}&zoom=10&size=550x300&sensor=false"/>
+                </div>
+
                 <div>
                     {{#if youtubeUrl }}
                     <!-- Feel free to use some JS hacks to avoid this iframe, Dennis -->

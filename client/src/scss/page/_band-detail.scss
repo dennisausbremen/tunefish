@@ -14,7 +14,16 @@
 
 .voting-row {
   text-align: center;
-  margin: 2rem 0;
+
+  @include breakpoint(s) {
+    margin: 1.5rem 0 1rem;
+  }
+
+  @include breakpoint(m) {
+    margin: 2.5rem 0 1rem;
+  }
+
+
 }
 
 
@@ -72,16 +81,11 @@
 .band-info-row {
   padding-top: 0;
   margin-top: 0;
+  padding: 5px;
   background: #5e5e5e;
   color: #ffffff;
   a {
     color: #ffffff;
-  }
-
-  span {
-    font-size: 0.85em;
-    padding-top: 0px;
-    margin-top: 0px;
   }
 
   div {
@@ -96,7 +100,11 @@
   padding: 25px 25px;
   margin: 10px 0px 40px;
   border-radius: 5px;
-  background-color: #D3D3D3;
+  border: 2px solid #D3D3D3;
+  background-color: #FCFCFC;
+  -moz-box-shadow: 5px 3px 3px #D3D3D3;
+  -webkit-box-shadow: 5px 3px 3px #D3D3D3;
+  box-shadow: 5px 3px 3px #D3D3D3;
 }
 
 div.comment-row {
@@ -112,10 +120,15 @@ div.comment-row {
   }
 
   &:hover {
-    background-color: #D8D8D8;
+    background-color: #F7F7F7;
   }
 }
 
+div.xs-hidden {
+  @include breakpoint(s) {
+    display: none;
+  }
+}
 form.comment {
   margin-top: 2rem;
 
@@ -137,33 +150,37 @@ form.comment {
     color: #000000;
   }
 }
-
-.tracks-h3 {
-  margin-bottom: 0;
-  margin-right: 52px;
-  margin-left: 10px;
-
-  h3 {
-    margin-bottom: 0;
-    float: left;
-    width: 150px;
-  }
-
-  a {
-    background-color: #545A6A;
-    color: #fff;
-    text-decoration: none;
-    padding: 8px;
-    margin-top: 10px;
-    margin-left: 20px;
-    font-weight: normal;
-    float: right;
-  }
+a.addAllTracks {
+  background-color: #545A6A;
+  float: right;
+  font-size: 15px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: normal;
+  padding: 8px;
 }
+
+.comment label {
+    font-weight: bold;
+    font-size: 1.2rem;
+
+    @include breakpoint(l) {
+      margin-top: 5px;
+      text-align: right;
+      /** hack for a break after each word */
+      word-spacing: 9999px;
+    }
+
+    @include breakpoint(s) {
+      margin-left: 5px;
+    }
+}
+
+
 
 ul.tracks {
   width: 100%;
-  margin: 1rem 1rem 3rem;
+  margin: 0rem 1rem 3rem;
 
   li {
     width: 90%;
