@@ -37,14 +37,11 @@
                 </div>
             </div>
             {{/link-to}}
-            <br />
-                {{view "votecontrols" band=current.band }}
-            <br />
+            <div class="vote-control">{{view "votecontrols" band=current.band }}</div>
             {{else }}
             <div class="player-image"><i class="i-audio"></i></div>
 
             {{/if}}
-            {{input type="range" id="seek" class="player-seek" name="seek" min=0 max=currentDuration value=currentTime}}
             <audio {{bind-attr src=current.url }} id="tunefishPlayer"></audio>
             <div class="player-controls-container">
                 <div id="playCtrls" class="player-controls"{{bind-attr class="playerState"}} >
@@ -61,6 +58,7 @@
                 </div>
             </div>
 
+            {{input type="range" id="seek" class="player-seek" name="seek" min=0 max=currentDuration value=currentTime}}
 
 
             <br />

@@ -114,6 +114,7 @@
 
 .voting-row {
   text-align: center;
+  font-size: 36px;
 
   @include breakpoint(sm) {
     margin: 25px 0 15px;
@@ -125,7 +126,6 @@
 }
 
 .voting {
-  font-size: 36px;
 
   a {
     text-decoration: none;

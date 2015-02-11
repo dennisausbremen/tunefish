@@ -5,7 +5,13 @@
 }
 
 .player-image {
+    @include breakpoint(sm) {
+      display: none;
+    }
+
     position: relative;
+
+    margin-bottom: 15px;
 
     img {
         display: inline-block;
