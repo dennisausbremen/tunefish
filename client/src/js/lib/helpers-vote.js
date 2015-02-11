@@ -131,6 +131,34 @@ var helper = (function ($) {
             });
 
 
+            Tunefish.MainView = Ember.View.extend({
+                 didInsertElement: function () {
+                     var seek = document.getElementById('seek');
+                     var audio = document.getElementById('tunefishPlayer');
+
+                     var seekBlocked, audioPaused = false;
+
+                     function onSeek() {
+                         if (!seekBlocked) {
+                             seekBlocked = true;
+                             audioPaused = audio.paused;
+                             audio.pause();
+                         }
+                         audio.currentTime = seek.value;
+                     }
+
+                     function onSeekRelease() {
+                         if (!audioPaused) {
+                             audio.play();
+                         }
+                         seekBlocked = false;
+                     }
+
+                     seek.addEventListener('input', onSeek, false);
+                     seek.addEventListener('change', onSeekRelease, false);
+                 }
+            });
+
             Tunefish.QueueitemView = Ember.View.extend({
                 tagName: 'li',
                 classNameBindings: ['isPlaying:playing'],
