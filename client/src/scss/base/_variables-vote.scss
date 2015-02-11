@@ -84,6 +84,7 @@ $h4-margin-bottom: 1 * $h4-line;
 $breakpoints: (
     "(max-width: 479px)" "xs",
     "(min-width: 480px)" "s",
+    "(max-width: 736px)" "sm",
     "(min-width: 737px)" "m",
     "(min-width: 1024px)" "l"
 );

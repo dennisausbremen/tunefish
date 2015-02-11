@@ -1,3 +1,63 @@
+
+.xs-hidden {
+  @include breakpoint(sm) {
+    display: none;
+  }
+}
+
+.md-hidden {
+  @include breakpoint(m) {
+    display: none;
+  }
+}
+
+.detail-content {
+  padding: 2%;
+}
+
+.header-image {
+
+  width: 50%;
+
+  border-radius: 50%;
+
+  display: block;
+  margin: 0 auto 25px;
+
+  @include breakpoint(sm) {
+    width: 25%;
+    max-width: 150px;
+    margin-right: 15px;
+    margin-bottom: 0;
+  }
+}
+
+.header-breadcrumb {
+
+  a {
+    text-decoration: none;
+    font-size: $h3-font-size;
+    color: $bg-sec;
+  }
+  span {
+    display: block;
+    font-weight: 300;
+    font-size: $h2-font-size;
+    line-height: $h2-line-height;
+  }
+}
+
+.header-image,
+.header-breadcrumb {
+  position: relative;
+  z-index: 5;
+
+  @include breakpoint(m) {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+}
+
 .band-detail {
   img {
     max-width: 100%;
@@ -12,47 +72,6 @@
   }
 }
 
-.voting-row {
-  text-align: center;
-
-  @include breakpoint(s) {
-    margin: 1.5rem 0 1rem;
-  }
-
-  @include breakpoint(m) {
-    margin: 2.5rem 0 1rem;
-  }
-
-
-}
-
-
-.voting {
-
-  font-size: 2.75rem;
-
-  a {
-    text-decoration: none;
-    font-weight: bold;
-    padding: 0px 0px;
-    font-family: 'starfont';
-    color: #545A6A;
-    content: "\2729";
-    outline: 0;
-
-    &:before{
-      content: '\2729';
-    }
-    &.active{
-      color: #EFDB43;
-
-      &:before{
-        content: '\272e';
-      }
-    }
-  }
-
-}
 .detail-header {
   overflow: hidden;
   background-size: cover;
@@ -79,9 +98,8 @@
 }
 
 .band-info-row {
-  padding-top: 0;
   margin-top: 0;
-  padding: 5px;
+  padding: 5px 10px;
   background: #5e5e5e;
   color: #ffffff;
   a {
@@ -94,62 +112,43 @@
   }
 }
 
-.band-description {
-  text-align: justify;
-  line-height: 1.3em;
-  padding: 25px 25px;
-  margin: 10px 0px 40px;
-  border-radius: 5px;
-  border: 2px solid #D3D3D3;
-  background-color: #FCFCFC;
-  -moz-box-shadow: 5px 3px 3px #D3D3D3;
-  -webkit-box-shadow: 5px 3px 3px #D3D3D3;
-  box-shadow: 5px 3px 3px #D3D3D3;
+.voting-row {
+  text-align: center;
+
+  @include breakpoint(sm) {
+    margin: 25px 0 15px;
+  }
+
+  @include breakpoint(m) {
+    margin: 2.5rem 0 1rem;
+  }
 }
 
-div.comment-row {
-  padding: 10px;
-  border-bottom: 0.5px solid #D6D6D6;
+.voting {
+  font-size: 2.75rem;
 
-  .comment-author {
-    padding-left: 15px;
-  }
-  span {
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0;
+    font-family: 'starfont';
     color: #545A6A;
-    font-size: 0.75rem;
-  }
+    content: "\2729";
+    outline: 0;
 
-  &:hover {
-    background-color: #F7F7F7;
+    &:before {
+      content: '\2729';
+    }
+    &.active {
+      color: #EFDB43;
+
+      &:before {
+        content: '\272e';
+      }
+    }
   }
 }
 
-div.xs-hidden {
-  @include breakpoint(s) {
-    display: none;
-  }
-}
-form.comment {
-  margin-top: 2rem;
-
-  h3 {
-    text-align: right;
-  }
-  button {
-    padding: 5px;
-    color: #fff;
-    background-color: #545A6A;
-    vertical-align: bottom;
-    border: 0;
-
-  }
-
-  textarea {
-    border: 3px solid $bg-primary;
-    background-color: $bg-sec;
-    color: #000000;
-  }
-}
 a.addAllTracks {
   background-color: #545A6A;
   float: right;
@@ -159,24 +158,6 @@ a.addAllTracks {
   font-weight: normal;
   padding: 8px;
 }
-
-.comment label {
-    font-weight: bold;
-    font-size: 1.2rem;
-
-    @include breakpoint(l) {
-      margin-top: 5px;
-      text-align: right;
-      /** hack for a break after each word */
-      word-spacing: 9999px;
-    }
-
-    @include breakpoint(s) {
-      margin-left: 5px;
-    }
-}
-
-
 
 ul.tracks {
   width: 100%;
@@ -193,70 +174,100 @@ ul.tracks {
       padding-bottom: 2px;
       padding-right: 5px;
     }
+
+    &:hover {
+      background-color: #D8D8D8;
+    }
+
+    &:nth-of-type(2n) {
+      background-color: #F7F7F7;
+    }
+
+    a {
+      color: #545A6A;
+      text-decoration: none;
+      font-weight: normal;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 8px 20px;
+    }
+  }
+}
+
+div.comment-row {
+  padding: 10px;
+  border-bottom: 0.5px solid #D6D6D6;
+
+  .comment-author {
+    padding-left: 15px;
+
+    span {
+      color: #545A6A;
+      font-size: 0.75rem;
+      @include breakpoint(m) {
+        display: block;
+      }
+
+      @include breakpoint(sm) {
+        float: right;
+      }
+    }
   }
 
-
-
-  li:nth-of-type(2n) {
+  &:hover {
     background-color: #F7F7F7;
   }
-  li:hover {
-    background-color: #D8D8D8;
-  }
-
-  li a {
-    color: #545A6A;
-    text-decoration: none;
-    font-weight: normal;
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 8px 20px;
-  }
 }
 
-.detail-content {
-  padding: 2%;
-}
+form.comment {
+  margin-top: 2rem;
 
-.header-image {
+  label {
+    font-weight: bold;
+    font-size: 1.2rem;
 
-  width: 50%;
+    @include breakpoint(sm) {
+      margin-left: 5px;
+    }
 
-  border-radius: 50%;
-
-  display: block;
-  margin: 0 auto 25px;
-
-  @include breakpoint(m) {
-    width: 25%;
-    max-width: 150px;
-    margin-right: 15px;
-    margin-bottom: 0;
+    @include breakpoint(m) {
+      margin-top: 5px;
+      text-align: right;
+      /** hack for a break after each word */
+      word-spacing: 9999px;
+    }
   }
-}
 
-.header-breadcrumb {
-  a {
-    text-decoration: none;
-    font-size: $h3-font-size;
-    color: $bg-sec;
+  h3 {
+    text-align: right;
   }
-  span {
-    display: block;
-    font-weight: 300;
-    font-size: $h2-font-size;
-    line-height: $h2-line-height;
-  }
-}
 
-.header-image,
-.header-breadcrumb {
-  position: relative;
-  z-index: 5;
-
-  @include breakpoint(m) {
-    display: inline-block;
+  button {
+    padding: 5px;
+    color: #fff;
+    background-color: #545A6A;
     vertical-align: bottom;
+    border: 0;
+
   }
+
+  textarea {
+    border: 3px solid $bg-primary;
+    background-color: $bg-sec;
+    color: #000000;
+  }
+}
+
+.band-description {
+  text-align: justify;
+  line-height: 1.3em;
+  padding: 25px 25px;
+  margin: 10px 0px 40px;
+  border-radius: 5px;
+  border: 2px solid #D3D3D3;
+  background-color: #FCFCFC;
+  -moz-box-shadow: 5px 3px 3px #D3D3D3;
+  -webkit-box-shadow: 5px 3px 3px #D3D3D3;
+  box-shadow: 5px 3px 3px #D3D3D3;
 }
