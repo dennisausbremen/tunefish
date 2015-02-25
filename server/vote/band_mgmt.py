@@ -19,7 +19,7 @@ class AdminBandView(RestrictedModAdminPage):
 
 class AdminRemindBands(RestrictedModAdminPage):
     def get(self):
-        bands = Band.query.filter(Band.id == 11) #Band.state == State.NEW
+        bands = Band.query.filter(Band.state == State.NEW)
         for band in bands:
             send_reminder_mail(band)
 
