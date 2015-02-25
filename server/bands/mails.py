@@ -30,3 +30,8 @@ def __prepare_mail(recipient, subject, message_template, *args, **kwargs):
 def send_registration_mail(band):
     msg = __prepare_mail(band.email, "Willkommen %s" % band.name, "mails/registration.txt", band=band)
     __sendmail.delay(msg)
+
+
+def send_reminder_mail(band):
+    msg = __prepare_mail(band.email, "[tunefish] Reminder: Eure Bewerbung ist noch nicht abgeschlossen", "mails/reminder_state_new.txt", band=band)
+    __sendmail.delay(msg)
