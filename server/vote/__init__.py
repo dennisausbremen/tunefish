@@ -28,7 +28,7 @@ vote_blueprint.add_url_rule('/admin/users/<int:user_id>/access_mod', view_func=A
 
 vote_blueprint.add_url_rule('/admin/comments/<int:comment_id>/remove', view_func=AdminCommentRemove.as_view('admin.comments.remove'))
 
-vote_blueprint.add_url_rule('/admin/reminder', view_func=AdminRemindBands.as_view('admin.remind'))
+#vote_blueprint.add_url_rule('/admin/reminder', view_func=AdminRemindBands.as_view('admin.remind'))
 
 
 
