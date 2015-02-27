@@ -2,7 +2,7 @@
 
 from flask import Blueprint
 from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance
-from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands
+from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands, AdminBandDelete
 from server.vote.band_vote import BandApp
 
 from server.vote.profile import InactiveUserIndex, AdminIndex
@@ -22,6 +22,7 @@ vote_blueprint.add_url_rule('/inactive', view_func=InactiveUserIndex.as_view('ho
 vote_blueprint.add_url_rule('/admin', view_func=AdminIndex.as_view('admin.index'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>', view_func=AdminBandView.as_view('admin.bands.view'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/vote_state', view_func=AdminBandState.as_view('admin.bands.vote_state'))
+vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/delete', view_func=AdminBandDelete.as_view('admin.bands.delete'))
 
 vote_blueprint.add_url_rule('/admin/users/<int:user_id>/activate', view_func=AdminUserActivation.as_view('admin.users.access'))
 vote_blueprint.add_url_rule('/admin/users/<int:user_id>/access_mod', view_func=AdminUserAccess.as_view('admin.users.access_mod'))
