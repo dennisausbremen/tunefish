@@ -1,9 +1,16 @@
 Hallo {{ band.name }},
 
+willkommen bei tunefish, dem Bandbewerbungsportal des Sommerfest Vorstraße feat. Spittaler Straße. 
 
-willkommnen bei der Sommerfest Auswahl. Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail
-bestätigen. Klick hierzu einfach auf folgenden Link: {{ url_for('bands.profile.confirm', token=band.email_confirmation_token, _external=True) }}
+Um deine Bewerbung abschließen zu können, musst du zuerst deine E-Mail bestätigen. Klick hierzu einfach auf folgenden Link: {{ url_for('bands.profile.confirm', token=band.email_confirmation_token, _external=True) }}
 
 
-Viele Grüße
-SoFe Orga '15
+Viele Grüße,
+Sommerfest Orga 2015
+
+
+Sommerfest Vorstraße feat. Spittaler Straße
+12. und 13. Juni 2015
+
+http://www.vorstrasse-bremen.de
+http://tunefish.vorstrasse-bremen.de
