@@ -171,6 +171,8 @@ var helper = (function ($) {
                 tagName: 'div',
                 classNames: ['content-area band-grid'],
                 didInsertElement: function () {
+                    // TODO add me for funky animations
+                    /*
                     this.$().mixItUp({
                         selectors: {
                             target: '.band-tile'
@@ -182,6 +184,7 @@ var helper = (function ($) {
                             reverseOut: true
                         }
                     });
+                    */
                 }
             });
 
