@@ -5,7 +5,15 @@
 
     li.playing:before {
       content: ">"
+    }
 
+    .queue {
+      overflow-y: scroll;
+      height: 50%;
+    }
+
+  li:nth-child(2n) {
+    background-color: $bg-primary;
   }
 
 }
