@@ -133,10 +133,59 @@ var helper = (function ($) {
 
             Tunefish.MainView = Ember.View.extend({
                  didInsertElement: function () {
-                     var seek = document.getElementById('seek');
-                     var audio = document.getElementById('tunefishPlayer');
+                    var seek = document.getElementById('seek');
+                    var audio = document.getElementById('tunefishPlayer');
 
-                     var seekBlocked, audioPaused = false;
+                    var seekBlocked, audioPaused = false;
+
+                    function createRangeInputChangeHelper(range, inputFn, changeFn) {
+                        var inputTimer, releaseTimer, isActive;
+
+                        var destroyRelease = functionp () {
+                            clearTimeout(releaseTimer);
+                            range.removeEventListener('blur', releaseRange, false);
+                            document.removeEventListener('mouseup', releaseRange, false);
+                        };
+
+                        var setupRelease = function () {
+                            if (!isActive) {
+                                destroyRelease();
+                                isActive = true;
+                                range.addEventListener('blur', releaseRange, false);
+                                document.addEventListener('mouseup', releaseRange, true);
+                            }
+                        };
+
+                        var _releaseRange = function () {
+                            if (isActive) {
+                                destroyRelease();
+                                isActive = false;
+                                if (changeFn) {
+                                    changeFn();
+                                }
+                            }
+                        };
+
+                        var releaseRange = function () {
+                            setTimeout(_releaseRange, 9);
+                        };
+
+                        var onInput = function () {
+                            if (inputFn) {
+                                clearTimeout(inputTimer);
+                                inputTimer = setTimeout(inputFn);
+                            }
+                            clearTimeout(releaseTimer);
+                            releaseTimer = setTimeout(releaseRange, 999);
+                            if (!isActive) {
+                                setupRelease();
+                            }
+                        };
+
+                        range.addEventListener('input', onInput, false);
+                        range.addEventListener('change', onInput, false);
+
+                    }
 
                      function onSeek() {
                          if (!seekBlocked) {
@@ -154,8 +203,7 @@ var helper = (function ($) {
                          seekBlocked = false;
                      }
 
-                     seek.addEventListener('input', onSeek, false);
-                     seek.addEventListener('change', onSeekRelease, false);
+                     createRangeInputChangeHelper(seek, onSeek, onSeekRelease);
                  }
             });
 
