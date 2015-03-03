@@ -5,8 +5,7 @@ from urllib import quote_plus
 import urllib2
 from math import ceil
 
-from flask import jsonify, request, g, json, send_file, Response
-from server import app
+from flask import jsonify, request, g, json, send_file, Response, url_for
 
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
@@ -47,7 +46,7 @@ def track2json(track):
     return {
         "id": track.id,
         "trackname": track.nice_trackname,
-        "url": '/vote/ajax/track/%s.mp3' % str(track.id),
+        "url": url_for('track.ajax.track', track_id=track.id),
         "band": track.band_id
     }
 
@@ -142,8 +141,6 @@ class TrackStreaming(RestrictedUserPage):
     def get(self, track_id):
         track = Track.query.get_or_404(track_id)
         return send_file_partial(track.path)
-
-
 
 
 # fix problems with google chrome
