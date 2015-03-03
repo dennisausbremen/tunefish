@@ -105,7 +105,7 @@
 <script type="text/x-handlebars" id="band">
 
     <div id="band-detail" class="content-area band-detail">
-        <div class="detail-header" style="background-image: url('{{unbound image}}');">
+        <div class="detail-header" {{ bind-attr style=bandBG }}>
             <img class="header-image" {{bind-attr src=thumbnail }} width="100%"/>
             <div class="header-breadcrumb">{{#link-to 'bands' }}Bands /{{/link-to}}
                 <span>

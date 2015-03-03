@@ -87,7 +87,10 @@ var helper = (function ($) {
                 voted: DS.attr('boolean'),
                 ownVote: DS.attr('number'),
                 comments: DS.hasMany('comment'),
-                tracks: DS.hasMany('track')
+                tracks: DS.hasMany('track'),
+                bandBG: function() {
+                    return 'background-image: url(\''+this.get('image') + '\');';
+                }.property('image')
             });
 
             Tunefish.Comment = DS.Model.extend({
