@@ -90,7 +90,10 @@ var helper = (function ($) {
                 tracks: DS.hasMany('track'),
                 bandBG: function() {
                     return 'background-image: url(\''+this.get('image') + '\');';
-                }.property('image')
+                }.property('image'),
+                map: function() {
+                     return 'http://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDRzrscCqKGd66mLS6jOayfUw9d4SICKOY&markers=' + this.get('city') + '&zoom=10&size=550x300&sensor=false';
+                }.property('city')
             });
 
             Tunefish.Comment = DS.Model.extend({
