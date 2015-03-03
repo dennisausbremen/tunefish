@@ -131,19 +131,19 @@
     text-decoration: none;
     font-weight: bold;
     padding: 0;
-    font-family: 'starfont';
+    font-family: 'tunefish';
     color: #545A6A;
-    content: "\2729";
+    content: "\e612";
     outline: 0;
 
     &:before {
-      content: '\2729';
+      content: '\e612';
     }
     &.active {
       color: #EFDB43;
 
       &:before {
-        content: '\272e';
+        content: '\e613';
       }
     }
   }

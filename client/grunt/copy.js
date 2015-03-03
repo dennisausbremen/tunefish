@@ -42,7 +42,19 @@ module.exports = {
                 expand: true,
                 cwd: '<%= dirs.tmp %>/<%= dirs.img %>/',
                 src: ['**'],
-                dest: '<%= dirs.dist %>/<%= dirs.js %>'
+                dest: '<%= dirs.dist %>/<%= dirs.img %>'
+            }
+        ]
+    },
+
+    //Copy Fonts
+    fonts: {
+        files: [
+            {
+                expand: true,
+                cwd: '<%= dirs.src %>/<%= dirs.fonts %>/',
+                src: ['**'],
+                dest: '<%= dirs.dist %>/<%= dirs.fonts %>'
             }
         ]
     },

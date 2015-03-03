@@ -10,6 +10,7 @@
         "concat:dist",
         "copy:js",
         "copy:css",
+        "copy:fonts",
         "copy:deploy",
         "watch"
     ],
@@ -24,6 +25,7 @@
         "concat:dist",
         "clean:jsTmp",
         "uglify:dist",
+        "copy:fonts",
         "copy:deploy",
         "clean:tmp"
     ]
