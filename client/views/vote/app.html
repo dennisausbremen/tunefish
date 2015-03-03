@@ -127,11 +127,11 @@
                     </div>
 
                     <div class="col-xs-3 col-md-2">
-                        <div><a {{bind-attr href=website }}>Webseite</a></div>
+                        <div><a {{bind-attr href=website }} target="website">Webseite</a></div>
                     </div>
 
                     <div class="col-md-2 col-xs-1">
-                        <div>{{#if facebookUrl }}<a {{ bind-attr href=facebookUrl }}><span class="md-hidden">fb</span><span class="xs-hidden">facebook</span></a>{{else}}-{{/if }}</div>
+                        <div>{{#if facebookUrl }}<a {{ bind-attr href=facebookUrl }} target="facebook"><span class="md-hidden">fb</span><span class="xs-hidden">facebook</span></a>{{else}}-{{/if }}</div>
                     </div>
                 </div>
 

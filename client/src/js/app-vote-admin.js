@@ -186,6 +186,13 @@
                     }
                 }
 
+                if (table === '#usersTable') {
+                    if (index === 4) {
+                        A = parseInt(A);
+                        B = parseInt(B);
+                    }
+                }
+
                 if (A < B) {
                     return (order % 2 === 1) ? 1 : -1;
                 }
