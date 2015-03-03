@@ -1,8 +1,13 @@
-from datetime import datetime
+import mimetypes
+import os
+import re
 from urllib import quote_plus
 import urllib2
-from flask import jsonify, request, g, json
 from math import ceil
+
+from flask import jsonify, request, g, json, send_file, Response
+from server import app
+
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
 
@@ -37,12 +42,12 @@ def comment2json(comment):
         "band": comment.band_id
     }
 
-def track2json(track):
 
+def track2json(track):
     return {
         "id": track.id,
         "trackname": track.nice_trackname,
-        "url": track.url,
+        "url": '/vote/ajax/track/' + str(track.id),
         "band": track.band_id
     }
 
@@ -66,7 +71,7 @@ class JsonBandDetails(RestrictedUserPage):
             return jsonify(band=band2json(band),
                            comments=[comment2json(comment) for comment in band.comments],
                            tracks=[track2json(track) for track in band.tracks]
-        )
+            )
 
 
 class JsonBandVote(RestrictedUserPage):
@@ -84,7 +89,7 @@ class JsonBandVote(RestrictedUserPage):
 
             voting.vote = vote
             db.session.commit()
-            band = Band.query.get(band_id) # reload because of new average
+            band = Band.query.get(band_id)  # reload because of new average
 
         return jsonify(band=band2json(band))
 
@@ -117,16 +122,69 @@ class JsonDistance(RestrictedUserPage):
         band = Band.query.get_or_404(band_id)
         if band:
             city = quote_plus(band.city.encode('utf-8'))
-            distance_api = urllib2.urlopen('http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
+            distance_api = urllib2.urlopen(
+                'http://maps.googleapis.com/maps/api/distancematrix/json?origins=' + city + '&destinations=Bremen,Spittaler%20Stra%C3%9Fe%201&language=de-DE&sensor=false')
             distance_json = distance_api.read()
             distance = json.loads(str(distance_json))
 
             if distance['status'] == "OK":
                 value = float(distance['rows'][0]['elements'][0]['distance']['value'])
-                band.distance = int(ceil(value/1000))
+                band.distance = int(ceil(value / 1000))
                 db.session.add(band)
                 db.session.commit()
 
                 return jsonify({'success': True, 'distance': band.distance})
             else:
                 return jsonify({'success': False, 'distance': 'failed'})
+
+
+class TrackStreaming(RestrictedUserPage):
+    def get(self, track_id):
+        track = Track.query.get_or_404(track_id)
+        return send_file_partial(track.path)
+
+
+
+
+# fix problems with google chrome
+# gist: https://gist.github.com/lizhiwei/7885684
+def after_request(response):
+    response.headers.add('Accept-Ranges', 'bytes')
+    return response
+
+
+def send_file_partial(path):
+    """
+        Simple wrapper around send_file which handles HTTP 206 Partial Content
+        (byte ranges)
+        TODO: handle all send_file args, mirror send_file's error handling
+        (if it has any)
+    """
+    range_header = request.headers.get('Range', None)
+    if not range_header: return send_file(path)
+
+    size = os.path.getsize(path)
+    byte1, byte2 = 0, None
+
+    m = re.search('(\d+)-(\d*)', range_header)
+    g = m.groups()
+
+    if g[0]: byte1 = int(g[0])
+    if g[1]: byte2 = int(g[1])
+
+    length = size - byte1
+    if byte2 is not None:
+        length = byte2 - byte1
+
+    data = None
+    with open(path, 'rb') as f:
+        f.seek(byte1)
+        data = f.read(length)
+
+    rv = Response(data,
+                  206,
+                  mimetype=mimetypes.guess_type(path)[0],
+                  direct_passthrough=True)
+    rv.headers.add('Content-Range', 'bytes {0}-{1}/{2}'.format(byte1, byte1 + length - 1, size))
+
+    return rv

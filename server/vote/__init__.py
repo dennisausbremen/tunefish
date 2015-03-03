@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from flask import Blueprint
-from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance
+from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance, TrackStreaming
 from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands, AdminBandDelete
 from server.vote.band_vote import BandApp
 
@@ -32,8 +32,6 @@ vote_blueprint.add_url_rule('/admin/comments/<int:comment_id>/remove', view_func
 #vote_blueprint.add_url_rule('/admin/reminder', view_func=AdminRemindBands.as_view('admin.remind'))
 
 
-
-
 vote_blueprint.add_url_rule('/app', view_func=BandApp.as_view('bands.app'))
 
 ### ajax
@@ -42,3 +40,5 @@ vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandDetai
 vote_blueprint.add_url_rule('/ajax/bands/<int:band_id>', view_func=JsonBandVote.as_view('ajax.bands.vote'), methods=['PUT'])
 vote_blueprint.add_url_rule('/ajax/comments', view_func=JsonCommentAdd.as_view('ajax.comment.add'))
 vote_blueprint.add_url_rule('/ajax/distance/<int:band_id>', view_func=JsonDistance.as_view('ajax.distance'))
+
+vote_blueprint.add_url_rule('/ajax/track/<int:track_id>', view_func=TrackStreaming.as_view('ajax.track'))
