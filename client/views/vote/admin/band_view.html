@@ -209,6 +209,19 @@
                 </div>
             {% endif %}
 
+            {% if g.user.is_admin %}
+                <br />
+                <h3>Voting &lt;admin only&gt;
+                    <small>{{ band.vote_count }} Stimme{% if band.vote_count != 1 %}n{% endif %},
+                                &#8960; {{ band.vote_average }}</small>
+                </h3>
+                <ul class="list-inline">
+                {% for vote in band.votes %}
+                    <li>{{ vote.user.login }}: {{ vote.vote }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
             <br />
             <div class="row">
                 <div class="col-xs-12">

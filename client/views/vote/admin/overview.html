@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- Navigation Tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs" role="tablist" id="adminTabs">
                         <li role="presentation" class="active">
                             <a href="#bands" aria-controls="bands" role="tab" data-toggle="tab" class="bandsAmount">{{ bands|length }} Bands</a>
                         </li>
@@ -57,5 +57,16 @@
                             </div>
         </div>
     </section>
+
+
+{% endblock %}
+
+{% block inlinejs %}
+    <script type="text/javascript">
+    $(function() {
+        var hash = window.location.hash;
+        $('#adminTabs').find('a[href="' + hash + '"]').tab('show');
+    });
+    </script>
 
 {% endblock %}

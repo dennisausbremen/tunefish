@@ -124,7 +124,7 @@ class Band(db.Model):
         if self.vote_count == 0:
             return 0.0
         else:
-            return sum([x.vote for x in self.votes]) / float(len(self.votes))
+            return round(sum([x.vote for x in self.votes]) / float(len(self.votes)), 2)
 
     @property
     def vote_count(self):
@@ -216,6 +216,7 @@ class User(db.Model):
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
     name = db.Column(String(60))
     _access = db.Column(Integer)
+    votes = db.relationship('Vote', backref='user', lazy='dynamic')
 
     def __init__(self, login, password):
         self.login = login
@@ -258,6 +259,16 @@ class User(db.Model):
     def is_user(self):
         return self.access == Access.USER
 
+    @property
+    def vote_count(self):
+        return self.votes.count()
+
+    @property
+    def vote_average(self):
+        if self.vote_count == 0:
+            return 0.0
+        else:
+            return round(sum([x.vote for x in self.votes]) / float(self.votes.count()), 2)
 
 class Vote(db.Model):
     band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
