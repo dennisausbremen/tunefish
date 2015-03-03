@@ -210,6 +210,22 @@ var helper = (function ($) {
             });
 
 
+            function shuffleArray(array) {
+            // see http://stackoverflow.com/a/2450976
+                var currentIndex = array.length, temporaryValue, randomIndex;
+                while (0 !== currentIndex) {
+
+                    // Pick a remaining element...
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex -= 1;
+
+                    // And swap it with the current element.
+                    temporaryValue = array[currentIndex];
+                    array[currentIndex] = array[randomIndex];
+                    array[randomIndex] = temporaryValue;
+                }
+            }
+
             Tunefish.MainController = Ember.ObjectController.extend({
                 tracks: [],
                 currentIndex: -1,
@@ -332,27 +348,22 @@ var helper = (function ($) {
                     },
 
                     shuffle: function() {
-                        var tracks = this.get('tracks');
-                        alert('sorry, doesn\'t work so far; fix the TODO! :P');
+                        var tracks = [];
+                        var shuffledTracks = [];
+                        this.get('tracks').forEach(function(track) {
+                            shuffledTracks.pushObject(track.track);
+                        });
 
-                        // see http://stackoverflow.com/a/2450976
-                        var currentIndex = tracks.length, temporaryValue, randomIndex ;
-
-                        // While there remain elements to shuffle...
-                        while (0 !== currentIndex) {
-
-                            // Pick a remaining element...
-                            randomIndex = Math.floor(Math.random() * currentIndex);
-                            currentIndex -= 1;
-
-                            // And swap it with the current element.
-                            temporaryValue = tracks[currentIndex];
-                            tracks[currentIndex] = tracks[randomIndex];
-                            tracks[randomIndex] = temporaryValue;
+                        shuffleArray(shuffledTracks);
+                        for (var i = 0; i < shuffledTracks.length; i++) {
+                            tracks.pushObject({
+                                index: i,
+                                track: shuffledTracks[i]
+                            });
                         }
 
-                        // TODO have to set/update the list?
                         this.set('tracks', tracks);
+                        this.send('jumpTo', 0);
 
                     }
                 }
