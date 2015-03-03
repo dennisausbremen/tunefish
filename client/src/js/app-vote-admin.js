@@ -139,6 +139,8 @@
         /** Sort users */
         sortLinkHandler('#usersTable', '#sortLogin', 2, 0);
         sortLinkHandler('#usersTable', '#sortAccess', 4, 1);
+        sortLinkHandler('#usersTable', '#sortVotes', 6, 4);
+        sortLinkHandler('#usersTable', '#sortVoteAverage', 8, 5);
 
 
         function sortBandTable(elem, num, col) {
