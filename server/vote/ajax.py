@@ -47,7 +47,7 @@ def track2json(track):
     return {
         "id": track.id,
         "trackname": track.nice_trackname,
-        "url": '/vote/ajax/track/' + str(track.id),
+        "url": '/vote/ajax/track/%s.mp3' % str(track.id),
         "band": track.band_id
     }
 

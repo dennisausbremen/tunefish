@@ -45,5 +45,5 @@ vote_blueprint.add_url_rule('/ajax/distance/<int:band_id>', view_func=JsonDistan
 
 # own blueprint, because of the after request
 track_blueprint = Blueprint('track', __name__, template_folder='../../client/views/vote')
-track_blueprint.add_url_rule('/ajax/track/<int:track_id>', view_func=TrackStreaming.as_view('ajax.track'))
+track_blueprint.add_url_rule('/ajax/track/<int:track_id>.mp3', view_func=TrackStreaming.as_view('ajax.track'))
 track_blueprint.after_request(after_request)
