@@ -64,12 +64,12 @@
             <br />
             <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a>
 
-            <div id="" style="overflow-y: scroll; height:200px;">
+            <div class="queue">
                 <ul>
                     {{#each item in tracks}}
                     {{#view "queueitem" item=item }}
-                    <a href="#" {{action "jumpTo" item.index }}>{{ item.track.trackname }}</a>
-                    by {{#link-to "band" item.track.band.id }}{{ item.track.band.name }} {{/link-to}}
+                    <a href="#" {{action "jumpTo" item.index }}>{{ item.track.trackname }}</a><br>
+                    <small>by {{#link-to "band" item.track.band.id }}{{ item.track.band.name }} {{/link-to}}</small>
                     {{/view}}
                     {{/each}}
                 </ul>

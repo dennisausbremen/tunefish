@@ -30,22 +30,3 @@
 
 @import "page/login";
 @import "page/messages";
-
-// TODO move somewhere else
-  li.playing {
-    color: fuchsia;
-  }
-
-  #idleCtrls.playing {
-    display: none;
-  }
-  #idleCtrls.idle {
-    display: block;
-  }
-
-  #playCtrls.playing {
-    display: block;
-  }
-  #playCtrls.idle {
-    display: none;
-  }
