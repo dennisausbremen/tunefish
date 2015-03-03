@@ -221,10 +221,20 @@ var helper = (function ($) {
                 }.property('item', 'controller.currentIndex')
             });
 
+            Tunefish.BandsingleView = Ember.View.extend({
+                tagName: 'div',
+                classNames: ['content-area band-view'],
+                didInsertElement: function () {
+                    $('#tunefish_loading').hide();
+                }
+            });
+
             Tunefish.BandgridView = Ember.View.extend({
                 tagName: 'div',
                 classNames: ['content-area band-grid'],
                 didInsertElement: function () {
+                    $('#tunefish_loading').hide();
+
                     // TODO add me for funky animations
                     /*
                     this.$().mixItUp({
@@ -458,12 +468,6 @@ var helper = (function ($) {
 
                     addTrack: function (track) {
                         this.get('controllers.main').send('addTrack', track);
-                    },
-
-                    calcDistance: function () {
-                        $.get('/vote/ajax/distance/' + this.get('model.id')).then(function (result) {
-                                $('button#calcDist').text(result.distance);
-                            });
                     }
                 }
             });
