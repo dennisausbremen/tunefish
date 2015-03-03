@@ -141,7 +141,7 @@ var helper = (function ($) {
                     function createRangeInputChangeHelper(range, inputFn, changeFn) {
                         var inputTimer, releaseTimer, isActive;
 
-                        var destroyRelease = functionp () {
+                        var destroyRelease = function() {
                             clearTimeout(releaseTimer);
                             range.removeEventListener('blur', releaseRange, false);
                             document.removeEventListener('mouseup', releaseRange, false);
