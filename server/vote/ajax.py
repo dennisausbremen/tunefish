@@ -101,7 +101,7 @@ class JsonCommentAdd(RestrictedUserPage):
         comment = data["comment"]
 
         band_id = int(comment["band"])
-        comment_text = str(comment["message"])
+        comment_text = comment["message"]
 
         band = Band.query.get_or_404(band_id)
         if band and 0 < len(comment_text) < 1001:
