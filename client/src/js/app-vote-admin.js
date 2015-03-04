@@ -179,10 +179,10 @@
                         A = parseInt(A);
                         B = parseInt(B);
                     } else if (index === 6) {
-                        matchesA = A.match(/⌀ (\d\.\d)/);
-                        matchesB = B.match(/⌀ (\d\.\d)/);
-                        A = (matchesA) ? parseInt(matchesA[1]) : 0.0;
-                        B = (matchesB) ? parseInt(matchesB[1]) : 0.0;
+                        matchesA = A.match(/⌀ (\d\.\d{1,2})/);
+                        matchesB = B.match(/⌀ (\d\.\d{1,2})/);
+                        A = (matchesA) ? parseFloat(matchesA[1]) : 0.0;
+                        B = (matchesB) ? parseFloat(matchesB[1]) : 0.0;
                     }
                 }
 
