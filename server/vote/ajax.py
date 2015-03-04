@@ -6,6 +6,7 @@ import urllib2
 from math import ceil
 
 from flask import jsonify, request, g, json, send_file, Response, url_for
+from sqlalchemy import func
 
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
@@ -53,7 +54,8 @@ def track2json(track):
 
 class JsonBandList(RestrictedUserPage):
     def get(self):
-        bands = Band.query.filter(Band.state == State.IN_VOTE)
+        # random for sqlite, rand for mysql
+        bands = Band.query.order_by(func.rand()).filter(Band.state == State.IN_VOTE)
         return jsonify(bands=[band2json(band) for band in bands],
                        tracks=[track2json(track) for track in Track.query.join(Band).filter(
                            Band.state == State.IN_VOTE)],
