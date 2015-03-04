@@ -4,7 +4,7 @@
 
 {% macro build_filter(stateNo, name) %}
     {% if state ==  stateNo %}<div class="btn btn-primary">{{ name }}</div>{% else %}
-        <a href="{{ url_for('vote.admin.index') }}?sort={{ sort }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if stateNo > 0 %}&amp;state={{ stateNo }}{% endif %}" class="btn btn-default">{{ name }}</a>
+        <a href="{{ url_for('vote.admin.index') }}?sort={{ sort }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if stateNo >= 0 %}&amp;state={{ stateNo }}{% endif %}" class="btn btn-default">{{ name }}</a>
     {% endif %}{% endmacro %}
 
 <div class="btn-group"  role="group" aria-label="Filter">
