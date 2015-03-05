@@ -151,10 +151,10 @@
         sortBandTable('#sortMembers', 4, 1);
         sortBandTable('#sortCity', 6, 2);
         sortBandTable('#sortDistance', 8, 3);
-        sortBandTable('#sortState', 10, 4);
-        sortBandTable('#sortCount', 12, 5);
-        sortBandTable('#sortAverage', 14, 6);
-        sortBandTable('#sortVariance', 16, 7);
+        sortBandTable('#sortCount', 12, 4);
+        sortBandTable('#sortAverage', 14, 5);
+        sortBandTable('#sortVariance', 16, 6);
+        sortBandTable('#sortState', 10, 7);
 
         function sortTable(index, order, table) {
             var rows = $(table).find('tbody tr').get();
@@ -175,15 +175,15 @@
                         matchesB = B.match(/(\d{1,4}) km/);
                         A = (matchesA) ? parseInt(matchesA[1]) : 20000;
                         B = (matchesB) ? parseInt(matchesB[1]) : 20000;
-                    } else if (index === 5) {
+                    } else if (index === 4) {
                         A = parseInt(A);
                         B = parseInt(B);
-                    } else if (index === 6) {
+                    } else if (index === 5) {
                         matchesA = A.match(/⌀ (\d\.\d{1,2})/);
                         matchesB = B.match(/⌀ (\d\.\d{1,2})/);
                         A = (matchesA) ? parseFloat(matchesA[1]) : 0.0;
                         B = (matchesB) ? parseFloat(matchesB[1]) : 0.0;
-                    } else if (index === 7) {
+                    } else if (index === 6) {
                         A = parseFloat(A);
                         B = parseFloat(B);
                     }
