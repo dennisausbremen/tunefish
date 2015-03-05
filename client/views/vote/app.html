@@ -108,114 +108,119 @@
 <script type="text/x-handlebars" id="band">
     {{#view "bandsingle" id="band-view"}}
 
-        <div id="band-detail" class="content-area band-detail">
-            <div class="detail-header" {{ bind-attr style=bandBG }}>
-                <img class="header-image" {{bind-attr src=thumbnail }} width="100%"/>
-                <div class="header-breadcrumb">{{#link-to 'bands' }}Bands /{{/link-to}}
-                    <span>
-                        {{ name }}
-                    </span>
+    <div id="band-detail" class="content-area band-detail">
+        <div class="detail-header" {{ bind-attr style=bandBG }}>
+            <img class="header-image" {{bind-attr src=thumbnail }} {{ bind-attr alt=name }} width="100%"/>
+            <div class="header-breadcrumb">{{#link-to 'bands' }}Bands /{{/link-to}}
+                <span>
+                    {{ name }}
+                </span>
+            </div>
+        </div>
+        <div class="row band-info-row">
+            <div class="col-xs-3">
+                <div> {{members}} Mitglieder</div>
+            </div>
+
+            <div class="col-xs-5">
+                <div>{{city}}, {{distance}} km</div>
+            </div>
+
+            <div class="col-xs-3 col-md-2">
+                <div><a {{bind-attr href=website }} target="website">Webseite</a></div>
+            </div>
+
+            <div class="col-md-2 col-xs-1">
+                <div>{{#if facebookUrl }}<a {{ bind-attr href=facebookUrl }} target="facebook"><span class="md-hidden">fb</span><span class="xs-hidden">facebook</span></a>{{else}}-{{/if }}</div>
+            </div>
+        </div>
+
+
+        <div class="detail-content">
+<div class="row">
+                <div class="col-xs-12">
+                <h3>Voting</h3>
+                    <div class="voting-row">
+                        {{view "votecontrols" band=this }}
+                    </div>
                 </div>
             </div>
-            <div class="row band-info-row">
-                    <div class="col-xs-3">
-                        <div> {{members}} Mitglieder</div>
-                    </div>
 
-                    <div class="col-xs-5">
-                        <div>{{city}}, {{distance}} km</div>
-                    </div>
-
-                    <div class="col-xs-3 col-md-2">
-                        <div><a {{bind-attr href=website }} target="website">Webseite</a></div>
-                    </div>
-
-                    <div class="col-md-2 col-xs-1">
-                        <div>{{#if facebookUrl }}<a {{ bind-attr href=facebookUrl }} target="facebook"><span class="md-hidden">fb</span><span class="xs-hidden">facebook</span></a>{{else}}-{{/if }}</div>
-                    </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3 class="tracks-h3">
+                        Tracks
+                        <a href="#" {{ action "addAllTracks" }}" class="addAllTracks">Alle Tracks der Liste hinzufügen</a>
+                    </h3>
                 </div>
 
+            </div>
 
-            <div class="detail-content">
+            <div class="row">
+                <div class="col-xs-12">
 
-                <div class="row reverse">
-                    <div class="col-xs-12 col-md-5">
-                        <div class="voting-row">
-                            {{view "votecontrols" band=this }}
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 col-xs-12">
-                        <h3 class="tracks-h3">
-                            Tracks
-                            <a href="#" {{ action "addAllTracks" }}" class="addAllTracks">Alle Tracks der Liste hinzufügen</a>
-                        </h3>
-                    </div>
-
+                    <ul class="tracks">
+                        {{#each track in tracks }}
+                            <li>
+                                <a href="#" {{ action "addTrack" track }}>
+                                    <span>{{ name }}</span> {{ track.trackname }}
+                                </a>
+                            </li>
+                        {{/each}}
+                    </ul>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-md-7">
 
-                        <ul class="tracks">
-                            {{#each track in tracks }}
-                                <li>
-                                    <a href="#" {{ action "addTrack" track }}>
-                                        <span>{{ name }}</span> {{ track.trackname }}
-                                    </a>
-                                </li>
-                            {{/each}}
-                        </ul>
 
-                        <h3>Kommentare</h3>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Kommentare</h3>
 
-                        {{#each comment in comments }}
-                            <div class="row">
-                                <div class="col-xs-11">
-                                    <div class="row reverse comment-row">
-                                        <div class="col-md-9 col-xs-12">
-                                            {{ comment.message }}
-                                        </div>
-                                        <div class="col-xs-12 col-md-3 comment-author">
-                                            <div>{{ comment.author }}
-                                            <span>{{ comment.timestamp }}</span>
-                                            </div>
+                    {{#each comment in comments }}
+                        <div class="row">
+                            <div class="col-xs-11">
+                                <div class="row reverse comment-row">
+                                    <div class="col-md-9 col-xs-12">
+                                        {{ comment.message }}
+                                    </div>
+                                    <div class="col-xs-12 col-md-3 comment-author">
+                                        <div>{{ comment.author }}
+                                        <span>{{ comment.timestamp }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        {{/each}}
-
-
-                        <form {{action "addComment" on="submit"}} class="comment">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-3">
-                                    <label for="new_comment">Dein Kommentar</label>
-                                </div>
-                                <div class="col-xs-12 col-md-8">
-                                        {{ textarea name="comment" value=comment id="new_comment" required="required" }}
-                                    <br />
-                                        <button type="submit">Kommentieren</button>
-                                </div>
-                            </div>
-                        </form>
-
-                    </div>
-                    <div class="col-md-5 col-xs-12">
-                        <h3>Bandinfo</h3>
-                        <div class="band-description">
-                            {{ descp }}
                         </div>
+                    {{/each}}
 
-                        <br />
+
+                    <form {{action "addComment" on="submit"}} class="comment">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3">
+                                <label for="new_comment">Dein Kommentar</label>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                    {{ textarea name="comment" value=comment id="new_comment" required="required" }}
+                                <br />
+                                    <button type="submit">Kommentieren</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
 
+                <div class="col-xs-12">
+                    <h3>Bandinfo</h3>
+                    <div class="band-description">
+                        {{{ descp }}}
+                    </div>
                 </div>
             </div>
 
             <div class="row xs-hidden">
-                <div class="col-md-8">
-
+                <div class="col-md-12">
+                    <h3>Herkunft ({{ city }})</h3>
                     <div>
                         <img {{ bind-attr src=map }} />
                     </div>
@@ -223,7 +228,8 @@
                 </div>
             </div>
         </div>
-    {{/view}}
+    </div>
+{{/view}}
 
 </script>
 {% endraw %}
