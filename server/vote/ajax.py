@@ -19,7 +19,7 @@ def band2json(band):
         "members": band.amount_members,
         "city": band.city,
         "website": band.website,
-        "descp": band.descp,
+        "descp": band.nl2br_desc(),
         "facebookUrl": band.facebook_url,
         "youtubeUrl": band.youtube_url,
         "image": band.prev_image,
