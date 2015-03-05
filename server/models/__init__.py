@@ -188,18 +188,31 @@ class Track(db.Model):
 
     @property
     def nice_trackname(self):
-        track_name = self.trackname
+        # remove whitespace around the string
+        track_name = self.trackname.strip()
 
-        while track_name[0].isdigit():
-            track_name = track_name[1:]
+        # from here on from the beginning:
+        # remove starting digits, - and whitespaces
+        while track_name[0].isdigit() or track_name.startswith('-'):
+            track_name = track_name[1:].strip()
 
+        # remove the band name and whitespaces
+        if track_name.lower().startswith(self.band.name.lower()):
+            track_name = track_name[len(self.band.name):].strip()
+
+        # remove starting digits, - and whitespaces again
+        while track_name[0].isdigit() or track_name.startswith('-'):
+            track_name = track_name[1:].strip()
+
+        # let's get from the end
+        # remove .mp3
         if track_name.endswith(".mp3"):
             track_name = track_name[:-4]
 
+        # replace underscores through whitespaces
         track_name = track_name.replace('_', ' ').strip()
 
         return track_name
-
 
     @property
     def url(self):
