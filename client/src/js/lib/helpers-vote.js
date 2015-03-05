@@ -455,6 +455,7 @@ var helper = (function ($) {
                             band: this.get('model')
                         });
                         comment.save();
+                        this.set('comment', '');
                     },
 
                     addAllTracks: function () {
