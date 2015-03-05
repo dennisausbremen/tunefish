@@ -1,8 +1,10 @@
 # coding=utf-8
 import datetime
+
 from flask import session
 from flask.ext.images import resized_img_src
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
+from markupsafe import Markup
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils import URLType, PasswordType
@@ -148,6 +150,9 @@ class Band(db.Model):
         else:
             return vote[0]
 
+    def nl2br_desc(self):
+        return Markup(self.descp.replace('\n', '<br />\n'))
+
     @property
     def facebook_url(self):
         if self.facebook_page:
@@ -188,7 +193,6 @@ class Band(db.Model):
             return resized_img_src(self.image, mode="crop", width=200, height=200, quality=60)
         else:
             return False
-
 
 
 class Track(db.Model):
@@ -293,6 +297,7 @@ class User(db.Model):
             return 0.0
         else:
             return round(sum([x.vote for x in self.votes]) / float(self.votes.count()), 2)
+
 
 class Vote(db.Model):
     band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
