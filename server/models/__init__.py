@@ -127,6 +127,17 @@ class Band(db.Model):
             return round(sum([x.vote for x in self.votes]) / float(len(self.votes)), 2)
 
     @property
+    def vote_variance(self):
+        if self.vote_count == 0:
+            return 0.0
+        else:
+            variance = 0
+            average = self.vote_average
+            for i in self.votes:
+                variance += (average - i.vote) ** 2
+            return variance / len(self.votes)
+
+    @property
     def vote_count(self):
         return len(self.votes)
 

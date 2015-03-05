@@ -40,6 +40,7 @@
             <a id="sortCount" href="{{ build_sort_url('vote_count') }}">Voting</a>,
             <a id="sortAverage" href="{{ build_sort_url('vote_average') }}">&#8960;</a>
         </th>
+        <th><a id="sortVariance" href="{{ build_sort_url('vote_average') }}">&#8960;</a>Var.</th>
         <th>Optionen</th>
     </tr>
     </thead>
@@ -59,6 +60,7 @@
                 <td>{{ band.state_label }}</td>
                 <td>{{ band.vote_count }}</td>
                 <td>&#8960; {{ band.vote_average }}</td>
+                <td>{{ band.vote_variance }}</td>
                 <td>
                     <div class="dropdown">
                       <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">

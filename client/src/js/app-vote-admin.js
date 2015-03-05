@@ -154,7 +154,7 @@
         sortBandTable('#sortState', 10, 4);
         sortBandTable('#sortCount', 12, 5);
         sortBandTable('#sortAverage', 14, 6);
-
+        sortBandTable('#sortVariance', 16, 7);
 
         function sortTable(index, order, table) {
             var rows = $(table).find('tbody tr').get();
@@ -183,6 +183,9 @@
                         matchesB = B.match(/⌀ (\d\.\d{1,2})/);
                         A = (matchesA) ? parseFloat(matchesA[1]) : 0.0;
                         B = (matchesB) ? parseFloat(matchesB[1]) : 0.0;
+                    } else if (index === 7) {
+                        A = parseFloat(A);
+                        B = parseFloat(B);
                     }
                 }
 
