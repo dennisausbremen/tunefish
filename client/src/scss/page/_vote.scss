@@ -78,7 +78,8 @@ footer {
     @include breakpoint(m) {
         order: -1;
         height: auto;
-        overflow: scroll;
+        overflow-y: scroll;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
     }
 }
