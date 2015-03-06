@@ -11,6 +11,7 @@ from sqlalchemy_utils import URLType, PasswordType
 
 from server.app import app, trackPool, techriderPool, imagePool
 from server.bands.forms import BandForm
+from server.models.math import average, variance
 
 
 db = SQLAlchemy(app)
@@ -123,21 +124,11 @@ class Band(db.Model):
 
     @property
     def vote_average(self):
-        if self.vote_count == 0:
-            return 0.0
-        else:
-            return round(sum([x.vote for x in self.votes]) / float(len(self.votes)), 2)
+        return average(self.votes)
 
     @property
     def vote_variance(self):
-        if self.vote_count == 0:
-            return 0.0
-        else:
-            variance = 0
-            average = self.vote_average
-            for i in self.votes:
-                variance += (average - i.vote) ** 2
-            return round(variance / len(self.votes), 2)
+        return variance(self.votes)
 
     @property
     def vote_count(self):
@@ -293,11 +284,11 @@ class User(db.Model):
 
     @property
     def vote_average(self):
-        if self.vote_count == 0:
-            return 0.0
-        else:
-            return round(sum([x.vote for x in self.votes]) / float(self.votes.count()), 2)
+        return average(self.votes)
 
+    @property
+    def vote_variance(self):
+        return variance(self.votes)
 
 class Vote(db.Model):
     band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
