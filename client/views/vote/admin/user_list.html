@@ -13,6 +13,7 @@
             <th>Berechtigungen</th>
             <th><a id="sortVotes" href="{{ build_sort_url('vote_count', reverse) }}">Votes</a></th>
             <th><a id="sortVoteAverage" href="{{ build_sort_url('vote_average', reverse) }}">&#8960;</a></th>
+            <th><a id="sortVoteVariance" href="{{ build_sort_url('vote_variance', reverse) }}">Varianz</a></th>
         {% endif %}
     </tr>
     </thead>
@@ -38,6 +39,7 @@
                 </td>
                 <td>{{ user.vote_count }}</td>
                 <td>{{ user.vote_average }}</td>
+                <td>{{ user.vote_variance }}</td>
             {% endif %}
 
         </tr>

@@ -141,6 +141,7 @@
         sortLinkHandler('#usersTable', '#sortAccess', 4, 1);
         sortLinkHandler('#usersTable', '#sortVotes', 6, 4);
         sortLinkHandler('#usersTable', '#sortVoteAverage', 8, 5);
+        sortLinkHandler('#usersTable', '#sortVoteVariance', 10, 6);
 
 
         function sortBandTable(elem, num, col) {
@@ -183,9 +184,6 @@
                         matchesB = B.match(/⌀ (\d\.\d{1,2})/);
                         A = (matchesA) ? parseFloat(matchesA[1]) : 0.0;
                         B = (matchesB) ? parseFloat(matchesB[1]) : 0.0;
-                    } else if (index === 6) {
-                        A = parseFloat(A);
-                        B = parseFloat(B);
                     }
                 }
 
@@ -194,6 +192,11 @@
                         A = parseInt(A);
                         B = parseInt(B);
                     }
+                }
+
+                if (index === 6) {
+                    A = parseFloat(A);
+                    B = parseFloat(B);
                 }
 
                 if (A < B) {
