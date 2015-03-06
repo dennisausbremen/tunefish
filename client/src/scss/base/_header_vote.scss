@@ -1,0 +1,80 @@
+header {
+    @include clearfix();
+    @include shadow(1);
+
+    background: $bg-sec;
+    height: $base-line-height * 2.35;
+    padding: 0;
+
+    font-weight: 200;
+
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    > * {
+        height: $base-line-height * 2;
+    }
+}
+
+header .head-bar{
+      padding: 0 $pad;
+}
+
+.account {
+    float: right;
+    padding: $pad-half $pad-half $pad-half $pad-and-half;
+
+    .account-image,
+    span {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+   .account-image {
+       width: 32px;
+       height: 32px;
+       border-radius: 50%;
+       margin-right: $pad-half;
+       position: relative;
+
+       overflow: hidden;
+   }
+
+    img {
+        width: auto;
+        height: 100%;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%,-50%);
+
+    }
+
+    span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+        max-width: 205px;
+
+        @include breakpoint(m) {
+            display: inline-block;
+        }
+    }
+}
+
+.logout {
+    font-size: $h3-font-size;
+    text-decoration: none;
+
+    height: $base-line-height;
+    display: inline-block;
+    vertical-align: middle;
+
+    @include breakpoint(m) {
+        padding-left: $pad-half;
+    }
+}
