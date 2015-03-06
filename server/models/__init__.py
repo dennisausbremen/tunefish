@@ -235,7 +235,7 @@ class User(db.Model):
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
     name = db.Column(String(60))
     _access = db.Column(Integer)
-    votes = db.relationship('Vote', backref='user', lazy='dynamic')
+    votes = db.relationship('Vote', backref='user')
 
     def __init__(self, login, password):
         self.login = login
@@ -280,7 +280,7 @@ class User(db.Model):
 
     @property
     def vote_count(self):
-        return self.votes.count()
+        return len(self.votes)
 
     @property
     def vote_average(self):
