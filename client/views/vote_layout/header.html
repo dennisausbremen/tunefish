@@ -11,6 +11,7 @@
 
                 <span>Zugriff: {{ g.user.access_name }} &nbsp;</span>
                 {% if g.user.is_mod or g.user.is_admin %}
+                    <span><a href="{{ url_for('vote.bands.app', _anchor='/bands') }}">Voting</a>&nbsp;</span>
                     <span><a href="{{ url_for('vote.admin.index') }}">Administration</a>&nbsp;</span>
                 {% endif %}
 
