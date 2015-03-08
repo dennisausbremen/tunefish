@@ -5,7 +5,7 @@ from urllib import quote_plus
 import urllib2
 from math import ceil
 
-from flask import jsonify, request, g, json, send_file, Response, url_for
+from flask import jsonify, request, g, json, send_file, Response
 from sqlalchemy import func
 
 from server.models import Band, State, db, Vote, Comment, Track
@@ -47,7 +47,7 @@ def track2json(track):
     return {
         "id": track.id,
         "trackname": track.nice_trackname,
-        "url": url_for('track.ajax.track', track_id=track.id),
+        "url": track.get_track_url(),
         "band": track.band_id
     }
 

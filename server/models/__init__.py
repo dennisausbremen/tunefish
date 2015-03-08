@@ -1,7 +1,7 @@
 # coding=utf-8
 import datetime
 
-from flask import session
+from flask import session, url_for
 from flask.ext.images import resized_img_src
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from markupsafe import Markup
@@ -191,6 +191,14 @@ class Track(db.Model):
     band_id = db.Column(db.Integer, db.ForeignKey('band.id'))
     filename = db.Column(String(80))
     trackname = db.Column(String(100))
+
+    def get_track_url(self):
+        # try to fix for stefan by delievering the original mp3
+        user_id_stefanbo = 10
+        if session['userId'] == user_id_stefanbo:
+            return self.url
+        else:
+            return url_for('track.ajax.track', track_id=self.id)
 
     @property
     def nice_trackname(self):
