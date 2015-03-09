@@ -209,18 +209,16 @@
                 </div>
             {% endif %}
 
-            {% if g.user.is_admin %}
                 <br />
-                <h3>Voting &lt;admin only&gt;
+                <h3>Voting {% if g.user.is_admin %}&lt;names admin only&gt;{% endif %}
                     <small>{{ band.vote_count }} Stimme{% if band.vote_count != 1 %}n{% endif %},
-                                &#8960; {{ band.vote_average }}</small>
+                                &#8960; {{ band.vote_average }}, Varianz {{ band.vote_variance }}</small>
                 </h3>
                 <ul class="list-inline">
                 {% for vote in band.votes %}
-                    <li>{{ vote.user.login }}: {{ vote.vote }}</li>
+                    <li>{% if g.user.is_admin %}{{ vote.user.login }}: {% endif %}{{ vote.vote }}</li>
                 {% endfor %}
                 </ul>
-            {% endif %}
 
             <br />
             <div class="row">
