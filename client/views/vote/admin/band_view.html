@@ -216,7 +216,7 @@
                 </h3>
                 <ul class="list-inline">
                 {% for vote in band.votes %}
-                    <li>{% if g.user.is_admin %}{{ vote.user.login }}: {% endif %}{{ vote.vote }}</li>
+                    <li>{% if g.user.id == vote.user.id %}<strong>{% endif %}{% if g.user.is_admin %}{{ vote.user.login }}: {% endif %}{{ vote.vote }}{% if g.user.id == vote.user.id %}</strong>{% endif %}</li>
                 {% endfor %}
                 </ul>
 
