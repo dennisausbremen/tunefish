@@ -62,7 +62,7 @@ class Band(db.Model):
     distance = db.Column(Integer)
     tracks = db.relationship('Track', backref='band', lazy='dynamic')
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
-    votes = db.relationship("Vote", backref="band")
+    votes = db.relationship("Vote", backref="band", order_by="Vote.vote")
 
     def __init__(self, login, password):
         self.login = login
