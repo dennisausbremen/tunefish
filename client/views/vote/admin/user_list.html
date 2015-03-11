@@ -8,9 +8,9 @@
     <tr>
         <th><a id="sortLogin" href="{{ build_sort_url('login', reverse) }}">Benutzer</a></th>
         <th><a id="sortAccess" href="{{ build_sort_url('access_name', reverse) }}">Zugriff</a></th>
-        <th>Status</th>
+        <th class="hidden-print">Status</th>
         {% if g.user.is_admin %}
-            <th>Berechtigungen</th>
+            <th class="hidden-print">Berechtigungen</th>
             <th><a id="sortVotes" href="{{ build_sort_url('vote_count', reverse) }}">Votes</a></th>
             <th><a id="sortVoteAverage" href="{{ build_sort_url('vote_average', reverse) }}">&#8960;</a></th>
             <th><a id="sortVoteVariance" href="{{ build_sort_url('vote_variance', reverse) }}">Varianz</a></th>
@@ -22,10 +22,10 @@
         <tr>
             <td>{{ user.login }}</td>
             <td>{{ user.access_name }}</td>
-            <td><a class="access" href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}
+            <td class="hidden-print"><a class="access" href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}
                 aktivieren{% else %}deaktivieren{% endif %}</td>
             {% if g.user.is_admin %}
-                <td>
+                <td class="hidden-print">
                     {% if user.is_admin %}-
                     {% else %}
                         <a class="mod" href="{{ url_for('vote.admin.users.access_mod', user_id=user.id) }}">

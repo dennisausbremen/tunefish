@@ -41,7 +41,7 @@
             </th>
         <th><a id="sortVariance" href="{{ build_sort_url('vote_average') }}">Var{% if state == 0%}.{% else %}ianz{% endif %}</a></th>
         {% if state == 0 %} <th><a id="sortState" href="{{ build_sort_url('state') }}">Status</a></th> {% endif %}
-        <th>Optionen</th>
+        <th class="hidden-print">Optionen</th>
     </tr>
     </thead>
     <tbody>
@@ -61,7 +61,7 @@
                 <td>&#8960; {{ band.vote_average }}</td>
                 <td>{{ band.vote_variance }}</td>
                 {% if state == 0 %} <td>{{ band.state_label }}</td> {% endif %}
-                <td>
+                <td class="hidden-print">
                     <div class="dropdown">
                       <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                         Optionen
