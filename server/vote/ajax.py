@@ -24,8 +24,6 @@ def band2json(band):
         "youtubeUrl": band.youtube_url,
         "image": band.prev_image,
         "thumbnail": band.thumbnail,
-        "voteCount": band.vote_count,
-        "voteAverage": band.vote_average,
         "ownVote": band.get_user_vote(g.user),
         "distance": band.distance,
         "comments": [comment.id for comment in band.comments],
@@ -55,7 +53,7 @@ def track2json(track):
 class JsonBandList(RestrictedUserPage):
     def get(self):
         # random for sqlite, rand for mysql
-        bands = Band.query.order_by(func.rand()).filter(Band.state == State.IN_VOTE)
+        bands = Band.query.order_by(func.random()).filter(Band.state == State.IN_VOTE)
         return jsonify(bands=[band2json(band) for band in bands],
                        tracks=[track2json(track) for track in Track.query.join(Band).filter(
                            Band.state == State.IN_VOTE)],

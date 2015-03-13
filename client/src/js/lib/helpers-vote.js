@@ -82,8 +82,6 @@ var helper = (function ($) {
                 image: DS.attr('string'),
                 thumbnail: DS.attr('string'),
                 distance: DS.attr('number'),
-                voteCount: DS.attr('number'),
-                voteAverage: DS.attr('number'),
                 voted: DS.attr('boolean'),
                 ownVote: DS.attr('number'),
                 comments: DS.hasMany('comment'),
