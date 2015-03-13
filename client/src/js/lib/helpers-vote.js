@@ -409,6 +409,29 @@ var helper = (function ($) {
                         });
                     },
 
+
+                    showRandomUnvotedBand: function (router) {
+                        var self = this;
+                        this.store.findAll('band').then(function(bands) {
+                            var unvoted = [];
+                            bands.forEach(function(band) {
+                                var voted = band.get('voted');
+                                if(!voted) {
+                                    unvoted.push(band);
+                                }
+                            });
+
+                            if (unvoted.length === 0) {
+                                alert('Glückwunsch! Du hast bereits alle Bands bewertet!');
+                                return true;
+                            }
+
+                            var randomBand = Math.floor(Math.random()* unvoted.length);
+                            self.transitionToRoute('band', unvoted[randomBand].get('id'));
+
+                        });
+                    },
+
                     shuffle: function() {
                         var tracks = [];
                         var shuffledTracks = [];
