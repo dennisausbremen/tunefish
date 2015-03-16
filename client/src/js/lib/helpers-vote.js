@@ -313,6 +313,12 @@ var helper = (function ($) {
                 player: function () {
                     return document.getElementById('#tunefishPlayer');
                 },
+                setTitle: function () {
+                    var track = this.get('tracks').get(this.currentIndex).track;
+                    var trackname = track.get('trackname');
+                    var bandname = track.get('band').get('name');
+                    document.title = 'tunefish | "' + trackname + '" by ' + bandname;
+                },
                 actions: {
                     vote: function (vote) {
                         var current = this.get('current');
@@ -332,6 +338,7 @@ var helper = (function ($) {
                         this.set('currentTime', '0');
                         this.set('currentDuration', '0');
                         tracks.clear();
+                        document.title = 'tunefish';
 
                     },
                     addTrack: function (track, autoplay) {
@@ -357,6 +364,7 @@ var helper = (function ($) {
                         if (index >= 0 && index < tracks.length) {
                             this.set('currentIndex', index);
                             this.set('current', tracks.get(index).track);
+                            this.setTitle();
                         }
                     },
                     play: function () {
@@ -366,6 +374,7 @@ var helper = (function ($) {
                         if (currentIndex === -1) {
                             return;
                         }
+                        this.setTitle();
 
                         this.set('playerState', 'playing');
                         $player.attr('autoplay', 'autoplay');
@@ -387,6 +396,7 @@ var helper = (function ($) {
                         $player.off('ended');
                         $player.off('timeupdate');
                         this.set('playerState', 'idle');
+                        document.title = 'tunefish | paused';
                     },
                     next: function () {
                         var currentIndex = this.get('currentIndex');
@@ -395,6 +405,7 @@ var helper = (function ($) {
                         if (currentIndex < tracks.length - 1) {
                             this.set('currentIndex', currentIndex + 1);
                             this.set('current', tracks.get(currentIndex + 1).track);
+                            this.setTitle();
                         }
                     },
                     prev: function () {
@@ -404,6 +415,7 @@ var helper = (function ($) {
                         if (currentIndex > 0) {
                             this.set('currentIndex', currentIndex - 1);
                             this.set('current', tracks.get(currentIndex - 1).track);
+                            this.setTitle();
                         }
                     },
 
