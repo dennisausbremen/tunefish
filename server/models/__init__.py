@@ -298,10 +298,15 @@ class User(db.Model):
     def vote_variance(self):
         return variance(self.votes)
 
+
 class Vote(db.Model):
     band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
     user_id = db.Column(Integer, db.ForeignKey('user.id'), primary_key=True)
     vote = db.Column(Integer)
+    timestamp = db.Column(DateTime)
+
+    def __init__(self):
+        self.timestamp = datetime.datetime.now()
 
 
 class Comment(db.Model):
