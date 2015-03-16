@@ -243,7 +243,7 @@ class User(db.Model):
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
     name = db.Column(String(60))
     _access = db.Column(Integer)
-    votes = db.relationship('Vote', backref='user')
+    votes = db.relationship('Vote', backref='user', lazy='dynamic')
 
     def __init__(self, login, password):
         self.login = login
@@ -287,17 +287,25 @@ class User(db.Model):
         return self.access == Access.USER
 
     @property
+    def votes_list(self):
+        return self.votes.all()
+
+    @property
     def vote_count(self):
-        return len(self.votes)
+        return len(self.votes_list)
 
     @property
     def vote_average(self):
-        return average(self.votes)
+        return average(self.votes_list)
 
     @property
     def vote_variance(self):
-        return variance(self.votes)
+        return variance(self.votes_list)
 
+    @property
+    def vote_latest(self):
+        since = datetime.datetime.now() - datetime.timedelta(hours=24)
+        return self.votes.filter(Vote.timestamp > since).count()
 
 class Vote(db.Model):
     band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
