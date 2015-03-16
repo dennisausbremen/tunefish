@@ -137,6 +137,21 @@ var helper = (function ($) {
 
             Tunefish.MainView = Ember.View.extend({
                  didInsertElement: function () {
+
+                    // slide up the band image for a proper view of the queue on small screens
+                    var slidedUp = false;
+                    var slideUpElem = $('#playerSlideUp');
+
+                    slideUpElem.on('click', function() {
+                        if (slidedUp) {
+                            $('.player-image').slideDown();
+                            slidedUp = false;
+                        } else {
+                            $('.player-image').slideUp();
+                            slidedUp = true;
+                        }
+                    });
+
                     var seek = document.getElementById('seek');
                     var audio = document.getElementById('tunefishPlayer');
 

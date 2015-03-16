@@ -63,11 +63,10 @@
 
             {{input type="range" id="seek" class="player-seek" name="seek" min=0 max=currentDuration value=currentTime}}
 
-
             <br />
             <a href="#" {{ action "showRandomUnvotedBand" }}>Show a random unvoted band</a><br />
-            <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a>
-
+            <a href="#" {{ action "addUnvotedTracks" }}>Add all unvoted bands to queue</a><br />
+            <a id="playerSlideUp">Toggle band image</a><br />
             <div class="queue">
                 <ul>
                     {{#each item in tracks}}
