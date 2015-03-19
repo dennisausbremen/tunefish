@@ -196,7 +196,7 @@
                     }
                 }
 
-                if (index === 6 || index == 7) {
+                if (index === 6 || index === 7) {
                     A = parseFloat(A);
                     B = parseFloat(B);
                 }

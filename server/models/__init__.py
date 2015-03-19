@@ -137,7 +137,7 @@ class Band(db.Model):
 
     @property
     def vote_with_deviation(self):
-        return self.vote_average + math.sqrt(self.vote_variance)
+        return round(self.vote_average + math.sqrt(self.vote_variance), 2)
 
     def get_user_vote(self, user):
         vote = [vote.vote for vote in self.votes if vote.user_id == user.id]
