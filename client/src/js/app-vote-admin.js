@@ -156,7 +156,8 @@
         sortBandTable('#sortCount', 12, 4);
         sortBandTable('#sortAverage', 14, 5);
         sortBandTable('#sortVariance', 16, 6);
-        sortBandTable('#sortState', 10, 7);
+        sortBandTable('#sortDeviation', 18, 7);
+        sortBandTable('#sortState', 10, 8);
 
         function sortTable(index, order, table) {
             var rows = $(table).find('tbody tr').get();
@@ -195,7 +196,7 @@
                     }
                 }
 
-                if (index === 6) {
+                if (index === 6 || index == 7) {
                     A = parseFloat(A);
                     B = parseFloat(B);
                 }

@@ -5,13 +5,14 @@ from flask import session, url_for
 from flask.ext.images import resized_img_src
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from markupsafe import Markup
+import math
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils import URLType, PasswordType
 
 from server.app import app, trackPool, techriderPool, imagePool
 from server.bands.forms import BandForm
-from server.models.math import average, variance
+from server.models.simple_math import average, variance
 
 
 db = SQLAlchemy(app)
@@ -133,6 +134,10 @@ class Band(db.Model):
     @property
     def vote_count(self):
         return len(self.votes)
+
+    @property
+    def vote_with_deviation(self):
+        return self.vote_average + math.sqrt(self.vote_variance)
 
     def get_user_vote(self, user):
         vote = [vote.vote for vote in self.votes if vote.user_id == user.id]
