@@ -312,6 +312,10 @@ class User(db.Model):
         since = datetime.datetime.now() - datetime.timedelta(hours=24)
         return self.votes.filter(Vote.timestamp > since).count()
 
+    def anonymous_login(self):
+        return self.login[0] + '***' + self.login[-1]
+
+
 class Vote(db.Model):
     band_id = db.Column(Integer, db.ForeignKey('band.id'), primary_key=True)
     user_id = db.Column(Integer, db.ForeignKey('user.id'), primary_key=True)
