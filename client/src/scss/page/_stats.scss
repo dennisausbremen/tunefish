@@ -1,0 +1,30 @@
+.stats {
+  margin: 30px;
+
+  ul, ul li {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    div {
+      float: left;
+      width: 159px;
+      height: 12px;
+      background-color: $bg-primary;
+      border: 2px solid $bg-ter;
+      margin: 5px;
+
+      div {
+         margin: 0;
+         height: 8px;
+         border: 0;
+        background-color: #C1C6C9;
+    }
+    }
+
+
+
+  }
+
+}
