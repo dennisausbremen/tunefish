@@ -1,4 +1,5 @@
 # coding=utf-8
+from datetime import date
 from flask import url_for, redirect, jsonify
 from flask.templating import render_template
 from sqlalchemy import func
@@ -64,7 +65,14 @@ class VoteStatisticsJSON(RestrictedUserPage):
             func.day(Vote.timestamp) > 1).group_by(Vote.user_id, func.day(Vote.timestamp))
         votes = vote_query.all()
 
+        # initialize the dict with empty data
+        day = 16 # the starting day; set because previous data has no date!, must be beginning of vote period
+        today = date.today().day
         json_vote = {}
+        while day <= today:
+            json_vote[day] = {'user': 0, 'votes': 0}
+            day += 1
+
         for vote in votes:
             indicie = str(vote[0])
             if indicie in json_vote:
