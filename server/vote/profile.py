@@ -61,6 +61,9 @@ class VoteStatistics(RestrictedUserPage):
         dict['votes_avg_max'] = round(base_votes_avg.order_by('avg DESC').limit(1).all()[0][0], 2)
         dict['votes_avg'] = round(db.session.query(func.avg(Vote.vote)).limit(1).all()[0][0], 2)
 
+        dict['comments_count'] = Comment.query.count()
+        dict['comments_users'] = Comment.query.group_by(Comment.author_id).count()
+
         return render_template('statistics.html', dict=dict)
 
 
