@@ -3,7 +3,7 @@ from flask import url_for, redirect, jsonify
 from flask.templating import render_template
 from sqlalchemy import func
 
-from server.models import User, Comment, Vote, db
+from server.models import User, Comment, Vote, db, State
 from server.models import Band
 from server.vote.session_mgmt import RestrictedInactiveUserPage, RestrictedModAdminPage, RestrictedUserPage
 
@@ -27,7 +27,27 @@ class AdminIndex(RestrictedModAdminPage):
 
 class VoteStatistics(RestrictedUserPage):
     def get(self):
-        return render_template('statistics.html')
+
+        band_amount = int(Band.query.filter(Band.state == State.IN_VOTE).count())
+        print band_amount
+
+        users = User.query.all()
+        dict = {'user_count': 0, 'user_voted': 0, 'user_voted_2digit':0, 'user_voted_all': 0}
+
+        for user in users:
+            if user.vote_count > 0:
+                dict['user_count'] += 1
+                dict['user_voted'] += 1
+            if user.vote_count > 9:
+                dict['user_voted_2digit'] += 1
+            if user.vote_count >= band_amount:
+                dict['user_voted_all'] += 1
+
+        dict['vote_count'] = Vote.query.count()
+        dict['vote_average'] = round(dict['vote_count']/dict['user_voted'], 2)
+        dict['vote_average2'] = round(dict['vote_count']/dict['user_voted_2digit'], 2)
+
+        return render_template('statistics.html', dict=dict)
 
 
 class VoteStatisticsJSON(RestrictedUserPage):
