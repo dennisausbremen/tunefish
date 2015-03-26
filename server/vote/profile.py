@@ -32,11 +32,11 @@ class VoteStatistics(RestrictedUserPage):
         print band_amount
 
         users = User.query.all()
-        dict = {'user_count': 0, 'user_voted': 0, 'user_voted_2digit':0, 'user_voted_all': 0}
+        dict = {'user_count': 0, 'user_voted': 0, 'user_voted_2digit': 0, 'user_voted_all': 0}
 
         for user in users:
+            dict['user_count'] += 1
             if user.vote_count > 0:
-                dict['user_count'] += 1
                 dict['user_voted'] += 1
             if user.vote_count > 9:
                 dict['user_voted_2digit'] += 1
@@ -44,15 +44,16 @@ class VoteStatistics(RestrictedUserPage):
                 dict['user_voted_all'] += 1
 
         dict['vote_count'] = Vote.query.count()
-        dict['vote_average'] = round(dict['vote_count']/dict['user_voted'], 2)
-        dict['vote_average2'] = round(dict['vote_count']/dict['user_voted_2digit'], 2)
+        dict['vote_average'] = round(dict['vote_count'] / dict['user_voted'], 2)
+        dict['vote_average2'] = round(dict['vote_count'] / dict['user_voted_2digit'], 2)
 
         return render_template('statistics.html', dict=dict)
 
 
 class VoteStatisticsJSON(RestrictedUserPage):
     def get(self):
-        vote_query = db.session.query(func.day(Vote.timestamp), func.count(Vote.user_id)).filter(func.day(Vote.timestamp) > 1).group_by(Vote.user_id, func.day(Vote.timestamp))
+        vote_query = db.session.query(func.day(Vote.timestamp), func.count(Vote.user_id)).filter(
+            func.day(Vote.timestamp) > 1).group_by(Vote.user_id, func.day(Vote.timestamp))
         votes = vote_query.all()
 
         json_vote = {}
