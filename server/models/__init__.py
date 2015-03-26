@@ -1,11 +1,12 @@
 # coding=utf-8
 import datetime
+import math
+from string import lower
 
 from flask import session, url_for
 from flask.ext.images import resized_img_src
 from flask.ext.sqlalchemy import SQLAlchemy, iteritems
 from markupsafe import Markup
-import math
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils import URLType, PasswordType
@@ -313,7 +314,7 @@ class User(db.Model):
         return self.votes.filter(Vote.timestamp > since).count()
 
     def anonymous_login(self):
-        return self.login[0] + '***' + self.login[-1]
+        return lower(self.login[0]) + '***'
 
 
 class Vote(db.Model):
