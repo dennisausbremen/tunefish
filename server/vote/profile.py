@@ -33,12 +33,14 @@ class VoteStatistics(RestrictedUserPage):
         print band_amount
 
         users = User.query.all()
-        dict = {'user_count': 0, 'user_voted': 0, 'user_voted_2digit': 0, 'user_voted_all': 0}
+        dict = {'user_count': 0, 'user_voted': 0, 'user_voted_1': 0, 'user_voted_2digit': 0, 'user_voted_all': 0}
 
         for user in users:
             dict['user_count'] += 1
             if user.vote_count > 0:
                 dict['user_voted'] += 1
+            if user.vote_count == 1:
+                dict['user_voted_1'] += 1
             if user.vote_count > 9:
                 dict['user_voted_2digit'] += 1
             if user.vote_count >= band_amount:
