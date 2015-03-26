@@ -73,5 +73,5 @@ class VoteStatisticsJSON(RestrictedUserPage):
 
 class VotingOverview(RestrictedModAdminPage):
     def get(self):
-        users = User.query.all()
+        users = User.query.order_by(func.random()).all()
         return render_template('users_overview.html', users=users)
