@@ -46,6 +46,12 @@ class VoteStatistics(RestrictedUserPage):
         dict['vote_count'] = Vote.query.count()
         dict['vote_average'] = round(float(dict['vote_count']) / dict['user_voted'], 2)
         dict['vote_average2'] = round(float(dict['vote_count']) / dict['user_voted_2digit'], 2)
+        dict['votes_min'] = db.session.query(func.count(Vote.band_id).label('count')).group_by(Vote.band_id).order_by('count').limit(1).all()[0][0]
+        dict['votes_max'] = db.session.query(func.count(Vote.band_id).label('count')).group_by(Vote.band_id).order_by('count DESC').limit(1).all()[0][0]
+
+        dict['votes_avg_min'] = db.session.query(func.avg(Vote.vote).label('avg')).group_by(Vote.band_id).order_by('avg').limit(1).all()[0][0]
+        dict['votes_avg_max'] = db.session.query(func.avg(Vote.vote).label('avg')).group_by(Vote.band_id).order_by('avg DESC').limit(1).all()[0][0]
+        dict['votes_avg'] = db.session.query(func.avg(Vote.vote)).limit(1).all()[0][0]
 
         return render_template('statistics.html', dict=dict)
 
