@@ -13,6 +13,8 @@
             <h2>Statistiken</h2>
 
             <ul>
+                <li>{{ dict['band_amount'] }} Bands im Voting</li>
+                <li>&nbsp;</li>
                 <li>{{ dict['user_count'] }} Benutzer</li>
                 <li>{{ dict['user_voted'] }} Benutzer haben gevotet</li>
                 <li>{{ dict['user_voted_1'] }} Benutzer haben nur 1 Band bewertet</li>
@@ -24,9 +26,10 @@
                 <li>durchschnittlich {{ dict['vote_average2'] }} Votes pro Benutzer, der mindestens 10 Bands bewertet hat</li>
                 <li>durchschnittlich {{ dict['votes_per_day'] }} Votes pro Tag</li>
                 <li>&nbsp;</li>
-                <li>durchschnittliche Bandbewertung {{ dict['votes_avg'] }}</li>
                 <li>mindestens {{ dict['votes_min'] }} Bewertungen pro Band</li>
+                <li>durchschnittlich {{ dict['avg_votes_band'] }} Bewertungen pro Band</li>
                 <li>maximal {{ dict['votes_max'] }} Bewertungen pro Band</li>
+                <li>durchschnittliche Bandbewertung {{ dict['votes_avg'] }}</li>
                 <li>{{ dict['votes_avg_min'] }} schlechtestes Durchschnittsvoting einer Band</li>
                 <li>{{ dict['votes_avg_max'] }} bestes Durchschnittsvoting einer Band</li>
                 <li>&nbsp;</li>

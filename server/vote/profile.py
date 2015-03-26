@@ -30,7 +30,6 @@ class VoteStatistics(RestrictedUserPage):
     def get(self):
 
         band_amount = int(Band.query.filter(Band.state == State.IN_VOTE).count())
-        print band_amount
 
         users = User.query.all()
         dict = {'user_count': 0, 'user_voted': 0, 'user_voted_1': 0, 'user_voted_2digit': 0, 'user_voted_all': 0}
@@ -61,6 +60,8 @@ class VoteStatistics(RestrictedUserPage):
         dict['votes_avg_max'] = round(base_votes_avg.order_by('avg DESC').limit(1).all()[0][0], 2)
         dict['votes_avg'] = round(db.session.query(func.avg(Vote.vote)).limit(1).all()[0][0], 2)
 
+        dict['band_amount'] = band_amount
+        dict['avg_votes_band'] = round(float(dict['vote_count'])/band_amount, 2)
         dict['comments_count'] = Comment.query.count()
         dict['comments_users'] = Comment.query.group_by(Comment.author_id).count()
 
