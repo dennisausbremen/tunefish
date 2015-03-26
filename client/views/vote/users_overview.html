@@ -16,7 +16,7 @@
             <ul>
                 <li>{{ user.anonymous_login() }} ({% if user.vote_count >= 155 %}155{% else %}{{ user.vote_count }}{% endif %} Votes)
                     <div>
-                        <div style="width: {% if user.vote_count > 3 %}155{% else %}{{ user.vote_count }}{% endif %}px"></div>
+                        <div style="width: {% if user.vote_count >= 155 %}155{% else %}{{ user.vote_count }}{% endif %}px"></div>
                     </div>
                 </li>
             </ul>
