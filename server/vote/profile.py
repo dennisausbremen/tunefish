@@ -25,14 +25,14 @@ class AdminIndex(RestrictedModAdminPage):
         return render_template('admin/overview.html', bands=bands, users=users, comments=comments)
 
 
-class AdminStatistics(RestrictedUserPage):
+class VoteStatistics(RestrictedUserPage):
     def get(self):
         return render_template('statistics.html')
 
 
 class VoteStatisticsJSON(RestrictedUserPage):
     def get(self):
-        vote_query = db.session.query(func.strftime('%d', Vote.timestamp), func.count(Vote.user_id)).group_by(Vote.user_id, func.strftime('%d', Vote.timestamp))
+        vote_query = db.session.query(func.day(Vote.timestamp), func.count(Vote.user_id)).filter(func.day(Vote.timestamp) > 1).group_by(Vote.user_id, func.day(Vote.timestamp))
         votes = vote_query.all()
 
         json_vote = {}

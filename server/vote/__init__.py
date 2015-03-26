@@ -6,7 +6,7 @@ from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCo
 from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands, AdminBandDelete
 from server.vote.band_vote import BandApp
 
-from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON
+from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON, VoteStatistics
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
 from server.vote.user_mgmt import AdminUserActivation, AdminUserAccess
 
@@ -36,7 +36,8 @@ vote_blueprint.add_url_rule('/admin/comments/<int:comment_id>/remove', view_func
 vote_blueprint.add_url_rule('/app', view_func=BandApp.as_view('bands.app'))
 
 vote_blueprint.add_url_rule('/progress', view_func=VotingOverview.as_view('voting.overview'))
-vote_blueprint.add_url_rule('/stats/json', view_func=VoteStatisticsJSON.as_view('voting.stats.vote_json'))
+vote_blueprint.add_url_rule('/stats', view_func=VoteStatistics.as_view('stats.vote'))
+vote_blueprint.add_url_rule('/stats/json', view_func=VoteStatisticsJSON.as_view('stats.vote_json'))
 
 
 ### ajax

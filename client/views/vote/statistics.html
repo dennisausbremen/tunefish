@@ -1,0 +1,95 @@
+{% extends "vote_layout/layout_vote_no_ember.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+
+<div id="messages" class="message-container">
+    {{ renderMessages() }}
+</div>
+
+<section class="main-content stats">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Statistiken</h2>
+
+            <h3>Votes</h3>
+            <canvas id="myChart" width="400" height="400"></canvas>
+
+            <h3>Benutzer</h3>
+            <canvas id="myChartUsers" width="400" height="400"></canvas>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block inlinejs %}
+    <script src="{{ url_for('static', filename='js/vendor/voters/05-Chart.min.js') }}"></script>
+
+    <script type="text/javascript">
+        // Get context with jQuery - using jQuery's .get() method.
+        var ctx = $("#myChart").get(0).getContext("2d");
+        var ctxUsers = $("#myChartUsers").get(0).getContext("2d");
+
+        var json_users = [];
+        var json_labels = [];
+        var json_votes = [];
+        $.getJSON( "{{ url_for('vote.stats.vote_json') }}", function( data ) {
+            for (var day in data) {
+                var obj = data[day];
+                json_labels.push(day);
+                json_votes.push(obj.votes);
+                json_users.push(obj.user)
+            }
+
+            var data_json_votes = {
+                labels: json_labels,
+                datasets: [
+                    {
+                        label: "Votes",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: json_votes
+                    },
+                    {
+                        label: "Benutzer",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: json_users
+                    }
+                ]};
+
+                var data_json_users = {
+                    labels: json_labels,
+                    datasets: [{
+                        label: "Benutzer",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: json_users
+                    }]
+                };
+
+                var options = {
+                    {% raw %}
+                        multiTooltipTemplate: "<%= datasetLabel %>: <%= value %>",
+                    {% endraw %}
+                };
+
+                var myLineChart = new Chart(ctx).Line(data_json_votes, options);
+                var myLineUsersChart = new Chart(ctxUsers).Line(data_json_users, options);
+            });
+    </script>
+
+{% endblock %}

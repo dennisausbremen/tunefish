@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="de">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>tunefish</title>
+
+    <link href="{{ url_for('static', filename='css/app-vote.min.css') }}" type="text/css" rel="stylesheet"/>
+
+    <!-- WEBFONT CACHING -->
+    <script type="text/javascript">
+       try {
+            window.localStorage.clear();
+        } catch(ex) {}
+    </script>
+    <!-- END WEBFONT CACHING -->
+
+</head>
+<body>
+
+{% include "vote_layout/header.html" %}
+
+<main class="grid main">
+
+    {% block body %}{% endblock %}
+    <!--<div class="footer-push"></div>-->
+
+</main>
+
+<footer>
+    &copy;2014 - Wohnpark am Fleet e.V.
+</footer>
+
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+
+{% block inlinejs %}{% endblock %}
+</body>
+</html>
