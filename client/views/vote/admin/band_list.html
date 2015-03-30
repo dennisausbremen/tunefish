@@ -40,7 +40,7 @@
             <a id="sortCount" href="{{ build_sort_url('vote_count') }}">Voting</a>,
             <a id="sortAverage" href="{{ build_sort_url('vote_average') }}">&#8960;</a>
             </th>
-        <th><a id="sortVariance" href="{{ build_sort_url('vote_average') }}">Var{% if state == 0%}.{% else %}ianz{% endif %}</a></th>
+        <th title="Varianz"><a id="sortVariance" href="{{ build_sort_url('vote_average') }}">Var.</a></th>
         <th title="Durschnittsbewertung plus Standardabweichung (Wurzel der Varianz)"><a id="sortDeviation" href="{{ build_sort_url('vote_with_deviation') }}">&#8960; + Dev.</a></th>
         {% if state == 0 %} <th><a id="sortState" href="{{ build_sort_url('state') }}">Status</a></th> {% endif %}
         <th class="hidden-print">Optionen</th>
