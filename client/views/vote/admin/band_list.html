@@ -28,13 +28,14 @@
 {% macro build_sort_url(field) %}{{ url_for('vote.admin.index') }}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if state > 0 %}&amp;state={{ state }}
     {% endif %}{% endmacro %}
 
-<table id="bandsTable" class="table table-striped">
+<table id="bandsTable" class="table table-striped table-hover">
     <thead>
     <tr>
         <th><a id="sortName" href="{{ build_sort_url('name') }}">Band</a></th>
         <th><a id="sortMembers" href="{{ build_sort_url('amount_members') }}">Mitgl.</a></th>
         <th><a id="sortCity" href="{{ build_sort_url('city') }}">Herkunft</a></th>
         <th><a id="sortDistance" href="{{ build_sort_url('distance') }}">Entf.</a></th>
+        <th title="Platz">Pl.</th>
         <th colspan="2">
             <a id="sortCount" href="{{ build_sort_url('vote_count') }}">Voting</a>,
             <a id="sortAverage" href="{{ build_sort_url('vote_average') }}">&#8960;</a>
@@ -46,6 +47,7 @@
     </tr>
     </thead>
     <tbody>
+    {% set place = 1 %}
     {% for band in bands|sort(attribute=sort, reverse=reverse) %}
         {% if band.state == state or state == 0 %}
             <tr>
@@ -58,6 +60,7 @@
                     </a>
                     {% endif %}
                 </td>
+                <td>{{ place }}. {% set place = place + 1 %}</td>
                 <td>{{ band.vote_count }}</td>
                 <td>&#8960; {{ band.vote_average }}</td>
                 <td>{{ band.vote_variance }}</td>

@@ -153,11 +153,11 @@
         sortBandTable('#sortMembers', 4, 1);
         sortBandTable('#sortCity', 6, 2);
         sortBandTable('#sortDistance', 8, 3);
-        sortBandTable('#sortCount', 12, 4);
-        sortBandTable('#sortAverage', 14, 5);
-        sortBandTable('#sortVariance', 16, 6);
-        sortBandTable('#sortDeviation', 18, 7);
-        sortBandTable('#sortState', 10, 8);
+        sortBandTable('#sortCount', 12, 5);
+        sortBandTable('#sortAverage', 14, 6);
+        sortBandTable('#sortVariance', 16, 7);
+        sortBandTable('#sortDeviation', 18, 8);
+        sortBandTable('#sortState', 10, 9);
 
         function sortTable(index, order, table) {
             var rows = $(table).find('tbody tr').get();
@@ -178,10 +178,10 @@
                         matchesB = B.match(/(\d{1,4}) km/);
                         A = (matchesA) ? parseInt(matchesA[1]) : 20000;
                         B = (matchesB) ? parseInt(matchesB[1]) : 20000;
-                    } else if (index === 4) {
+                    } else if (index === 5) {
                         A = parseInt(A);
                         B = parseInt(B);
-                    } else if (index === 5) {
+                    } else if (index === 6) {
                         matchesA = A.match(/⌀ (\d\.\d{1,2})/);
                         matchesB = B.match(/⌀ (\d\.\d{1,2})/);
                         A = (matchesA) ? parseFloat(matchesA[1]) : 0.0;
@@ -193,10 +193,13 @@
                     if (index === 4) {
                         A = parseInt(A);
                         B = parseInt(B);
+                    } else if (index === 6) {
+                        A = parseFloat(A);
+                        B = parseFloat(B);
                     }
                 }
 
-                if (index === 6 || index === 7) {
+                if (index === 7 || index === 8) {
                     A = parseFloat(A);
                     B = parseFloat(B);
                 }
@@ -216,5 +219,13 @@
             $.each(rows, function (index, row) {
                 $(table).children('tbody').append(row);
             });
+
+            if (table === '#bandsTable') {
+                var i = 0;
+                $.each(rows, function(index, row) {
+                    ++i;
+                    $(row).find(':nth-child(5)').text(i + '.');
+                });
+            }
         }
     });
