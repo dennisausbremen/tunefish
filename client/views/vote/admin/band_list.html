@@ -55,9 +55,13 @@
                 <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
                 <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
                 <td>{% if band.state > 0 %}
-                    <a href="{{ url_for('vote.ajax.distance', band_id=band.id) }}" class="distance btn btn-default btn-sm">
-                        {% if band.distance %}{{ band.distance }} km{% else %}Kalk.{% endif %}
-                    </a>
+                        {% if band.distance %}
+                            {{ band.distance }} km
+                        {% else %}
+                            <a href="{{ url_for('vote.ajax.distance', band_id=band.id) }}" class="distance btn btn-default btn-sm">
+                                Kalk.
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td>{{ place }}. {% set place = place + 1 %}</td>
