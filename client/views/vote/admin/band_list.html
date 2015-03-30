@@ -1,5 +1,5 @@
-{% set sort = request.args.sort|default('name') %}
-{% set reverse = request.args.reverse|default(0)|int %}
+{% set sort = request.args.sort|default('vote_average') %}
+{% set reverse = request.args.reverse|default(1)|int %}
 {% set state = request.args.state|default(1)|int %}
 
 {% macro build_filter(stateNo, name) %}

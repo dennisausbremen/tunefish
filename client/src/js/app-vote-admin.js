@@ -125,39 +125,50 @@
          * @param string elem the id of the elem the onclick-Listener should be registered on
          * @param int num the order-number (0,2,4, ...)
          * @param int col the nth-col (0,1,2,...)
+         * @param bool desc whether the column should be ordered desc by default
          *
          * @return void
          * */
-        function sortLinkHandler(table, elem, num, col) {
+        function sortLinkHandler(table, elem, num, col, desc) {
             $(elem).on('click', function (event) {
                 event.preventDefault();
-                order = (order < num) ? num : (num - 1);
+
+                if (desc && order !== num && order !== num-1) {
+                    // default: desc
+                    order = num;
+                } else if (order !== num && order !== num-1) {
+                    // default: asc
+                    order = num-1;
+
+                } else {
+                    order = (order < num) ? num : (num - 1);
+                }
                 sortTable(col, order, table);
             });
         }
 
         /** Sort users */
-        sortLinkHandler('#usersTable', '#sortLogin', 2, 0);
-        sortLinkHandler('#usersTable', '#sortAccess', 4, 1);
-        sortLinkHandler('#usersTable', '#sortVotes', 6, 4);
-        sortLinkHandler('#usersTable', '#sortVotesLatest', 8, 5);
-        sortLinkHandler('#usersTable', '#sortVoteAverage', 10, 6);
-        sortLinkHandler('#usersTable', '#sortVoteVariance', 12, 7);
+        sortLinkHandler('#usersTable', '#sortLogin', 2, 0, 0);
+        sortLinkHandler('#usersTable', '#sortAccess', 4, 1, 0);
+        sortLinkHandler('#usersTable', '#sortVotes', 6, 4, 1);
+        sortLinkHandler('#usersTable', '#sortVotesLatest', 8, 5, 1);
+        sortLinkHandler('#usersTable', '#sortVoteAverage', 10, 6, 1);
+        sortLinkHandler('#usersTable', '#sortVoteVariance', 12, 7, 1);
 
 
-        function sortBandTable(elem, num, col) {
-            sortLinkHandler('#bandsTable', elem, num, col);
+        function sortBandTable(elem, num, col, desc) {
+            sortLinkHandler('#bandsTable', elem, num, col, desc);
         }
 
-        sortBandTable('#sortName', 2, 0);
-        sortBandTable('#sortMembers', 4, 1);
-        sortBandTable('#sortCity', 6, 2);
-        sortBandTable('#sortDistance', 8, 3);
-        sortBandTable('#sortCount', 12, 5);
-        sortBandTable('#sortAverage', 14, 6);
-        sortBandTable('#sortVariance', 16, 7);
-        sortBandTable('#sortDeviation', 18, 8);
-        sortBandTable('#sortState', 10, 9);
+        sortBandTable('#sortName', 2, 0, 0);
+        sortBandTable('#sortMembers', 4, 1, 0);
+        sortBandTable('#sortCity', 6, 2, 0);
+        sortBandTable('#sortDistance', 8, 3, 0);
+        sortBandTable('#sortCount', 12, 5, 1);
+        sortBandTable('#sortAverage', 14, 6, 1);
+        sortBandTable('#sortVariance', 16, 7, 1);
+        sortBandTable('#sortDeviation', 18, 8, 1);
+        sortBandTable('#sortState', 10, 9, 1);
 
         function sortTable(index, order, table) {
             var rows = $(table).find('tbody tr').get();
@@ -205,11 +216,11 @@
                 }
 
                 if (A < B) {
-                    return (order % 2 === 1) ? 1 : -1;
+                    return (order % 2 === 0) ? 1 : -1;
                 }
 
                 if (A > B) {
-                    return (order % 2 === 1) ? -1 : 1;
+                    return (order % 2 === 0) ? -1 : 1;
                 }
 
                 return 0;
@@ -221,10 +232,20 @@
             });
 
             if (table === '#bandsTable') {
-                var i = 0;
+                var i = 1;
+
+                if (order % 2 === 1) {
+                    i = rows.length;
+                }
+
                 $.each(rows, function(index, row) {
-                    ++i;
                     $(row).find(':nth-child(5)').text(i + '.');
+
+                    if (order % 2 === 1) {
+                        --i;
+                    } else {
+                        ++i;
+                    }
                 });
             }
         }
