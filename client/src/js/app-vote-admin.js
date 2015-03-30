@@ -189,9 +189,6 @@
                         matchesB = B.match(/(\d{1,4}) km/);
                         A = (matchesA) ? parseInt(matchesA[1]) : 20000;
                         B = (matchesB) ? parseInt(matchesB[1]) : 20000;
-                    } else if (index === 5) {
-                        A = parseInt(A);
-                        B = parseInt(B);
                     } else if (index === 6) {
                         matchesA = A.match(/⌀ (\d\.\d{1,2})/);
                         matchesB = B.match(/⌀ (\d\.\d{1,2})/);
@@ -208,6 +205,11 @@
                         A = parseFloat(A);
                         B = parseFloat(B);
                     }
+                }
+
+                if (index === 5) {
+                    A = parseInt(A);
+                    B = parseInt(B);
                 }
 
                 if (index === 7 || index === 8) {
