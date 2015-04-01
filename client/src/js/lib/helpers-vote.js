@@ -325,6 +325,16 @@ var helper = (function ($) {
                         if (current === null) {
                             return;
                         }
+
+                         // close voting
+                        var now = new Date().getTime();
+                        var end = new Date(2015,3,1,16).getTime();
+
+                        if(end < now) {
+                            alert('Das Voting ist beendet. Deine Stimme wird nicht mehr gezählt!');
+                            return;
+                        }
+
                         var band = current.get('band');
                         band.set('ownVote', vote);
                         band.save();
@@ -492,6 +502,15 @@ var helper = (function ($) {
 
                 actions: {
                     vote: function (vote) {
+                         // close voting
+                        var now = new Date().getTime();
+                        var end = new Date(2015,3,1,16).getTime(); // month -1!!!
+
+                        if(end < now) {
+                            alert('Das Voting ist beendet. Deine Stimme kann leider nicht mehr gezählt werden!');
+                            return;
+                        }
+
                         var band = this.get('model');
                         band.set('ownVote', vote);
                         band.save();

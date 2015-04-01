@@ -4,9 +4,11 @@ import re
 from urllib import quote_plus
 import urllib2
 from math import ceil
+from datetime import datetime
 
 from flask import jsonify, request, g, json, send_file, Response
 from sqlalchemy import func
+from server import app
 
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
@@ -77,6 +79,8 @@ class JsonBandVote(RestrictedUserPage):
     def put(self, band_id):
         data = json.loads(request.data)
         vote = int(data["band"]["ownVote"])
+        if datetime.strptime(app.SETTINGS['BAND_CANDIDATURE_END'], "%Y-%m-%d %H:%M:%S") < datetime.now():
+            return '', 404
         band = Band.query.get_or_404(band_id)
         if band and 0 < vote < 6:
             voting = Vote.query.filter(Vote.band_id == band_id, Vote.user_id == self.user.id).first()
