@@ -48,8 +48,9 @@ class VoteStatistics(RestrictedUserPage):
         dict['vote_count'] = Vote.query.count()
         dict['vote_average'] = round(float(dict['vote_count']) / dict['user_voted'], 2)
         dict['vote_average2'] = round(float(dict['vote_count']) / dict['user_voted_2digit'], 2)
-        start_day = 3
-        voting_time = date.today().day - start_day
+        start_day = 62 # 3.3. ist der 62. Tag des Jahres
+        voting_time = date.today().timetuple().tm_yday - start_day
+        print voting_time
         dict['votes_per_day'] = round(float(dict['vote_count']) / voting_time, 2)
         base_votes_min_max = db.session.query(func.count(Vote.band_id).label('count')).group_by(Vote.band_id)
         dict['votes_min'] = base_votes_min_max.order_by('count').limit(1).all()[0][0]
@@ -71,12 +72,12 @@ class VoteStatistics(RestrictedUserPage):
 class VoteStatisticsJSON(RestrictedUserPage):
     def get(self):
         vote_query = db.session.query(func.day(Vote.timestamp), func.count(Vote.user_id)).filter(
-            func.day(Vote.timestamp) > 1).group_by(Vote.user_id, func.day(Vote.timestamp))
+            func.dayofyear(Vote.timestamp) > 1).group_by(Vote.user_id, func.dayofyear(Vote.timestamp))
         votes = vote_query.all()
 
         # initialize the dict with empty data
-        day = 16 # the starting day; set because previous data has no date!, must be beginning of vote period
-        today = date.today().day
+        day = 75 # 16.3, the starting day; set because previous data has no date!, must be beginning of vote period
+        today = date.today().timetuple().tm_yday
         json_vote = {}
         while day <= today:
             json_vote[day] = {'user': 0, 'votes': 0}
