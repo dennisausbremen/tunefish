@@ -71,7 +71,7 @@ class VoteStatistics(RestrictedUserPage):
 
 class VoteStatisticsJSON(RestrictedUserPage):
     def get(self):
-        vote_query = db.session.query(func.day(Vote.timestamp), func.count(Vote.user_id)).filter(
+        vote_query = db.session.query(func.dayofyear(Vote.timestamp), func.count(Vote.user_id)).filter(
             func.dayofyear(Vote.timestamp) > 1).group_by(Vote.user_id, func.dayofyear(Vote.timestamp))
         votes = vote_query.all()
 
