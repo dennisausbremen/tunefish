@@ -23,7 +23,7 @@ class AdminIndex(RestrictedModAdminPage):
         users = User.query.all()
         comments = Comment.query.order_by(Comment.timestamp.desc()).all()
 
-        return render_template('admin/overview.html', bands=bands, users=users, comments=comments)
+        return render_template('admin/overview.html', bands=bands, users=users, comments=comments, states=State)
 
 
 class VoteStatistics(RestrictedUserPage):
@@ -49,7 +49,7 @@ class VoteStatistics(RestrictedUserPage):
         dict['vote_average'] = round(float(dict['vote_count']) / dict['user_voted'], 2)
         dict['vote_average2'] = round(float(dict['vote_count']) / dict['user_voted_2digit'], 2)
         start_day = 62 # 3.3. ist der 62. Tag des Jahres
-        voting_time = date.today().timetuple().tm_yday - start_day
+        voting_time = 91 - start_day
         print voting_time
         dict['votes_per_day'] = round(float(dict['vote_count']) / voting_time, 2)
         base_votes_min_max = db.session.query(func.count(Vote.band_id).label('count')).group_by(Vote.band_id)
@@ -77,7 +77,7 @@ class VoteStatisticsJSON(RestrictedUserPage):
 
         # initialize the dict with empty data
         day = 75 # 16.3, the starting day; set because previous data has no date!, must be beginning of vote period
-        today = date.today().timetuple().tm_yday
+        today = 91 # date.today().timetuple().tm_yday
         json_vote = {}
         while day <= today:
             json_vote[day] = {'user': 0, 'votes': 0}
