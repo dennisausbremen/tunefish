@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import session, redirect, url_for, flash, g
+from flask import session, redirect, url_for, flash, g, request
 from flask.templating import render_template
 from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
@@ -52,6 +52,8 @@ class LoginUser(LoginAndRegisterUser):
                 if user.is_inactive:
                     return redirect(url_for('vote.home.inactive'))
                 else:
+                    if 'target' in session:
+                        return redirect(session['target'])
                     return redirect(url_for('vote.bands.app', _anchor='/bands'))
             else:
                 self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
@@ -80,6 +82,7 @@ class RestrictedInactiveUserPage(MethodView):
                 return True
 
     def redirect_to_login(self):
+        session['target'] = request.full_path
         return redirect(url_for('vote.session.index'))
 
     def dispatch_request(self, *args, **kwargs):
