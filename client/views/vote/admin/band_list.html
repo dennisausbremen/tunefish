@@ -10,8 +10,8 @@
 <div class="btn-group"  role="group" aria-label="Filter">
     <div class="btn btn-default disabled">Filter:</div>
     {{ build_filter(0, 'Alle Bands') }} {{ build_filter(1, 'Im Voting') }}
-    {{ build_filter(2, 'Abgelehnt') }} {{ build_filter(3, 'Gebucht') }}
-    {{ build_filter(4, 'Aus dem Voting genommen') }}
+    {{ build_filter(2, 'Abgesagt') }} {{ build_filter(3, 'Gebucht') }}
+    {{ build_filter(4, 'Aus dem Voting genommen') }} {{ build_filter(5, 'Angefragt') }}
 </div>
 
 <br /><br />
@@ -79,17 +79,28 @@
                       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                         <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Bearbeiten</a></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.delete', band_id=band.id) }}" onclick="return confirm('Band &quot;{{ band.name }}&quot; wirklich löschen?')">Löschen</a></li>
-                        {% if band.state == 1 %}
-                            <li role="presentation" class="divider"></li>
+                        <li role="presentation" class="divider"></li>
+                        {% if band.state == states.IN_VOTE %}
                             <li role="presentation">
                                 <a class="voteState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">Aus dem Voting nehmen</a>
                             </li>
-                        {% elif band.state == 4 %}
-                            <li role="presentation" class="divider"></li>
+                        {% elif band.state != states.IN_VOTE and band.state != states.NEW %}
                             <li role="presentation">
                                 <a class="voteState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">Ins Voting nehmen</a>
                             </li>
                         {% endif %}
+                        <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <a class="bandState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.band_state', band_id=band.id, state=states.REQUESTED) }}">Status "angefragt"</a>
+                            </li>
+
+                            <li role="presentation">
+                                <a class="bandState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.band_state', band_id=band.id, state=states.ACCEPTED) }}">Status "zugesagt"</a>
+                            </li>
+                                <li role="presentation">
+                                <a class="bandState" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.band_state', band_id=band.id, state=states.DECLINED) }}">Status "abgesagt"</a>
+                            </li>
+
                       </ul>
                     </div>
                 </td>

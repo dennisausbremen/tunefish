@@ -8,8 +8,8 @@ from datetime import datetime
 
 from flask import jsonify, request, g, json, send_file, Response
 from sqlalchemy import func
-from server import app
 
+from server import app
 from server.models import Band, State, db, Vote, Comment, Track
 from server.vote.session_mgmt import RestrictedUserPage
 
@@ -55,24 +55,25 @@ def track2json(track):
 class JsonBandList(RestrictedUserPage):
     def get(self):
         # random for sqlite, rand for mysql
-        bands = Band.query.order_by(func.random()).filter(Band.state == State.IN_VOTE)
+        state_list = [State.IN_VOTE, State.REQUESTED, State.ACCEPTED, State.DECLINED]
+        bands = Band.query.order_by(func.random()).filter(Band.state.in_(state_list))
         return jsonify(bands=[band2json(band) for band in bands],
                        tracks=[track2json(track) for track in Track.query.join(Band).filter(
-                           Band.state == State.IN_VOTE)],
-                       comments=[comment2json(comment) for comment in Comment.query.join(Band).filter(
-                           Band.state == State.IN_VOTE)])
+                           Band.state.in_(state_list))],
+                       comments=[comment2json(comment) for comment in
+                                 Comment.query.join(Band).filter(Band.state.in_(state_list))])
 
 
 class JsonBandDetails(RestrictedUserPage):
     def get(self, band_id):
         band = Band.query.get_or_404(band_id)
-        if band.state != State.IN_VOTE:
+        if band.state == State.NEW or band.state == State.OUT_OF_VOTE:
             return '', 404
         else:
             return jsonify(band=band2json(band),
                            comments=[comment2json(comment) for comment in band.comments],
                            tracks=[track2json(track) for track in band.tracks]
-            )
+                           )
 
 
 class JsonBandVote(RestrictedUserPage):

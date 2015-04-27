@@ -27,7 +27,7 @@ class AdminRemindBands(RestrictedModAdminPage):
         return render_template('admin/band_reminder.html', bands=bands)
 
 
-class AdminBandState(RestrictedModAdminPage):
+class AdminBandVoteState(RestrictedModAdminPage):
     def get(self, band_id):
         band = Band.query.get(band_id)
         if band:
@@ -42,6 +42,19 @@ class AdminBandState(RestrictedModAdminPage):
 
         else:
             return jsonify({'success': False, 'active': False, 'message': u'Es existiert keine Band mit dieser ID'})
+
+
+class AdminBandState(RestrictedModAdminPage):
+    def get(self, band_id, state):
+        if state == State.DECLINED or state == State.ACCEPTED or state == State.REQUESTED:
+            band = Band.query.get(band_id)
+            if band:
+                band.state = state
+                db.session.commit()
+                return jsonify({'success': True, 'state': band.state_label, 'message': 'Band %s %s (ohne E-Mailbenachrichtigung)' % (band.name, band.state_label.lower())})
+            return jsonify({'success': False, 'active': False, 'message': u'Es existiert keine Band mit dieser ID'})
+        return jsonify({'success': False, 'active': False, 'message': u'Diesen Zustand darf die Band nicht annehmen.'})
+
 
 
 class AdminBandDelete(RestrictedModAdminPage):

@@ -62,9 +62,19 @@
             });
         });
 
+
+        $('a.bandState').on('click', function(event) {
+            ajaxFunction(this, event, function(data, self) {
+                var stateCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(10)');
+                changeText(data.state, stateCol);
+            });
+        });
+
+
+
         $('a.voteState').on('click', function(event) {
             ajaxFunction(this, event, function(data, self) {
-                var stateCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(5)');
+                var stateCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(10)');
                 var stateDotCol = $(self).parent().parent().parent().parent().parent().find('td:nth-child(1) div.dot');
                 if (data.state) {
                     changeText('Aus dem Voting nehmen', self);
@@ -91,6 +101,7 @@
                 }
             });
         });
+
 
         $('a.distance').on('click', function(event) {
             ajaxFunction(this, event, function(data, self) {

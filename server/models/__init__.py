@@ -25,13 +25,15 @@ class State:
     DECLINED = 2
     ACCEPTED = 3
     OUT_OF_VOTE = 4
+    REQUESTED = 5
 
     descp = {
         NEW: u'Unvollständig',
         IN_VOTE: u'Im Voting',
-        DECLINED: u'Abgelehnt',
-        ACCEPTED: u'Voting bestanden',
-        OUT_OF_VOTE: u'Aus Voting genommen'
+        DECLINED: u'Abgesagt',
+        ACCEPTED: u'Gebucht',
+        OUT_OF_VOTE: u'Aus Voting genommen',
+        REQUESTED: u'Angefragt'
     }
 
 
