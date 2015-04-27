@@ -52,8 +52,6 @@ class LoginUser(LoginAndRegisterUser):
                 if user.is_inactive:
                     return redirect(url_for('vote.home.inactive'))
                 else:
-                    if 'target' in session:
-                        return redirect(session['target'])
                     return redirect(url_for('vote.bands.app', _anchor='/bands'))
             else:
                 self.login_form.login.errors.append(u'Bitte überprüfe deine Eingaben')
@@ -82,7 +80,6 @@ class RestrictedInactiveUserPage(MethodView):
                 return True
 
     def redirect_to_login(self):
-        session['target'] = request.full_path
         return redirect(url_for('vote.session.index'))
 
     def dispatch_request(self, *args, **kwargs):
