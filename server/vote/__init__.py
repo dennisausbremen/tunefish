@@ -7,7 +7,8 @@ from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRem
     AdminBandVoteState
 from server.vote.band_vote import BandApp
 
-from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON, VoteStatistics
+from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON, VoteStatistics, \
+    VoteResults
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
 from server.vote.user_mgmt import AdminUserActivation, AdminUserAccess
 
@@ -20,6 +21,8 @@ vote_blueprint.add_url_rule('/register', view_func=RegisterUser.as_view('session
 vote_blueprint.add_url_rule('/logout', view_func=LogoutUser.as_view('session.logout'))
 
 vote_blueprint.add_url_rule('/inactive', view_func=InactiveUserIndex.as_view('home.inactive'))
+
+vote_blueprint.add_url_rule('/results', view_func=VoteResults.as_view('home.vote_results'))
 
 vote_blueprint.add_url_rule('/admin', view_func=AdminIndex.as_view('admin.index'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>', view_func=AdminBandView.as_view('admin.bands.view'))

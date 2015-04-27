@@ -1,0 +1,93 @@
+{% extends "vote_layout/layout_vote_admin.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% set sort = request.args.sort|default('vote_average') %}
+{% set reverse = request.args.reverse|default(1)|int %}
+{% set state = request.args.state|default(0)|int %}
+
+{% macro build_filter(stateNo, name) %}
+    {% if state ==  stateNo %}<div class="btn btn-primary">{{ name }}</div>{% else %}
+        <a href="{{ url_for('vote.home.vote_results') }}?sort={{ sort }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if stateNo >= 0 %}&amp;state={{ stateNo }}{% endif %}" class="btn btn-default">{{ name }}</a>
+    {% endif %}{% endmacro %}
+
+
+
+{% block body %}
+<br /><br /><br />
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Ergebnisse <small>des Votings der Sommerfest-Staffler</small></h1>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="btn-group"  role="group" aria-label="Filter">
+                <div class="btn btn-default disabled">Filter:</div>
+                {{ build_filter(0, 'Alle Bands') }} {{ build_filter(1, 'Im Voting') }}
+                {{ build_filter(5, 'Angefragt') }}
+                {{ build_filter(3, 'Gebucht') }} {{ build_filter(2, 'Abgesagt') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br />
+
+{% macro build_sort_url(field) %}{{ url_for('vote.home.vote_results') }}?sort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}{% if state > 0 %}&amp;state={{ state }}
+    {% endif %}{% endmacro %}
+
+<table id="bandsTable" class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th><a id="sortName" href="{{ build_sort_url('name') }}">Band</a></th>
+        <th><a id="sortMembers" href="{{ build_sort_url('amount_members') }}">Mitgl.</a></th>
+        <th><a id="sortCity" href="{{ build_sort_url('city') }}">Herkunft</a></th>
+        <th><a id="sortDistance" href="{{ build_sort_url('distance') }}">Entf.</a></th>
+        <th title="Platz">Pl.</th>
+        <th colspan="2">
+            <a id="sortCount" href="{{ build_sort_url('vote_count') }}">Voting</a>,
+            <a id="sortAverage" href="{{ build_sort_url('vote_average') }}">&#8960;</a>
+            </th>
+        <th title="Varianz"><a id="sortVariance" href="{{ build_sort_url('vote_average') }}">Var.</a></th>
+        <th title="Durschnittsbewertung plus Standardabweichung (Wurzel der Varianz)"><a id="sortDeviation" href="{{ build_sort_url('vote_with_deviation') }}">&#8960; + Dev.</a></th>
+        <th><a id="sortState" href="{{ build_sort_url('state') }}">Status</a></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set place = 1 %}
+    {% for band in bands|sort(attribute=sort, reverse=reverse) %}
+        {% if band.state == state or state == 0 %}
+            <tr>
+                <td><a href="{{ url_for('vote.bands.app', _anchor='/bands/%d' % band.id) }}">{{ band.name|trim }}</a></td>
+                <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
+                <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
+                <td>{% if band.state > 0 %}
+                        {% if band.distance %}
+                            {{ band.distance }} km
+                        {% else %}
+                            <a href="{{ url_for('vote.ajax.distance', band_id=band.id) }}" class="distance btn btn-default btn-sm">
+                                Kalk.
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>{{ place }}. {% set place = place + 1 %}</td>
+                <td>{{ band.vote_count }}</td>
+                <td>&#8960; {{ band.vote_average }}</td>
+                <td>{{ band.vote_variance }}</td>
+                <td>{{ band.vote_with_deviation }}</td>
+                <td>{{ band.state_label }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
