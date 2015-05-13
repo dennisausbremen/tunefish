@@ -347,4 +347,13 @@ class Comment(db.Model):
         return self.timestamp.strftime("%d.%m.%y - %H:%M")
 
 
+class Reminder(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    name = db.Column(String(60))
+    email = db.Column(String(100))
+    register_time = db.Column(DateTime)
+
+    def __init__(self):
+        self.register_time = datetime.datetime.now()
+
 db.create_all()

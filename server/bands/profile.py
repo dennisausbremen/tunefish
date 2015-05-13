@@ -5,12 +5,13 @@ from datetime import datetime
 
 from flask import redirect, url_for, Response, flash
 from flask.templating import render_template
+from flask.views import MethodView
 from server import app
 from server.bands.forms import BandForm, TrackUploadForm, TechriderUploadForm, ImageUploadForm
 from server.bands.mails import send_registration_mail
 from server.bands.session_mgmt import RestrictedBandPage, RestrictedBandAjaxForm
 
-from server.models import Band, db, State
+from server.models import Band, db, State, Reminder
 
 
 class Onepager(RestrictedBandPage):
@@ -28,6 +29,22 @@ class Onepager(RestrictedBandPage):
                                        techrider_form=TechriderUploadForm())
             else:
                 return render_template('main_after_submit.html')
+
+
+class RegisterReminder(MethodView):
+    def get(self, token):
+        band = Band.query_or_404.filter(Band.email_confirmation_token[:15] == token).first()
+        if band:
+            reminder = Reminder()
+            reminder.email = band.email
+            reminder.name = band.name
+
+            db.session.add(reminder)
+            db.session.commit()
+
+            flash('success', 'Erfolgreich für die Benachrichtigung 2016 angemeldet.')
+            return redirect('bands.session.index')
+
 
 class Confirm(RestrictedBandPage):
     def get(self, token):
