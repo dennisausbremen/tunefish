@@ -35,3 +35,8 @@ def send_registration_mail(band):
 def send_reminder_mail(band):
     msg = __prepare_mail(band.email, "[tunefish] Reminder: Eure Bewerbung ist noch nicht abgeschlossen", "mails/reminder_state_new.txt", band=band)
     __sendmail.delay(msg)
+
+
+def send_decline_mail(band):
+    msg = __prepare_mail(band.email, "[tunefish] Leider hat es dieses Jahr nicht gereicht.", "mails/decline_voted_bands.txt", band=band)
+    __sendmail.delay(msg)

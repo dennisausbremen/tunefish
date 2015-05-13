@@ -2,7 +2,7 @@
 from os import unlink
 from flask import flash, url_for, redirect, jsonify
 from flask.templating import render_template
-from server.bands.mails import send_reminder_mail
+from server.bands.mails import send_reminder_mail, send_decline_mail
 
 from server.models import Band, State, db, Comment
 from server.vote.session_mgmt import RestrictedModAdminPage
@@ -24,7 +24,16 @@ class AdminRemindBands(RestrictedModAdminPage):
         for band in bands:
             send_reminder_mail(band)
 
-        return render_template('admin/band_reminder.html', bands=bands)
+        return render_template('admin/band_mail.html', bands=bands, type='Erinnerung')
+
+
+class AdminDeclineBands(RestrictedModAdminPage):
+    def get(self):
+        bands = Band.query.filter(Band.state == State.IN_VOTE)
+        for band in bands:
+            send_decline_mail(band)
+
+        return render_template('admin/band_mail.html', bands=bands, type='Absage')
 
 
 class AdminBandVoteState(RestrictedModAdminPage):

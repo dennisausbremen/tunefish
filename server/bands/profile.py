@@ -33,7 +33,8 @@ class Onepager(RestrictedBandPage):
 
 class RegisterReminder(MethodView):
     def get(self, token):
-        band = Band.query_or_404.filter(Band.email_confirmation_token[:15] == token).first()
+        print token
+        band = Band.query.filter(Band.email_confirmation_token.ilike(token + '%')).first()
         if band:
             reminder = Reminder()
             reminder.email = band.email
@@ -42,8 +43,10 @@ class RegisterReminder(MethodView):
             db.session.add(reminder)
             db.session.commit()
 
-            flash('success', 'Erfolgreich für die Benachrichtigung 2016 angemeldet.')
-            return redirect('bands.session.index')
+            flash(u'Erfolgreich für die Benachrichtigung 2016 angemeldet.', 'info')
+        else:
+            flash(u'Fehler bei der Anmeldung für die Benachrichtigung 2016. Bitte kontaktiere tunefish@vorstrasse-bremen.de', 'error')
+        return redirect(url_for('bands.session.index'))
 
 
 class Confirm(RestrictedBandPage):
