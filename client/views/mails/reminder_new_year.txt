@@ -1,4 +1,4 @@
-Hallo {{ band.name }},
+Hallo {{ reminder.name }},
 
 ihr habt euch letztes Jahr als Band beim Sommerfest Vorstraße feat. Spittaler Straße beworben. Leider war eure Bewerbung im vergangenen Jahr nicht erfolgreich.
 

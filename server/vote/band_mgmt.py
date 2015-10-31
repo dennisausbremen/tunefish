@@ -2,9 +2,9 @@
 from os import unlink
 from flask import flash, url_for, redirect, jsonify
 from flask.templating import render_template
-from server.bands.mails import send_reminder_mail, send_decline_mail
+from server.bands.mails import send_reminder_mail, send_decline_mail, send_remind_start_mail
 
-from server.models import Band, State, db, Comment
+from server.models import Band, State, db, Comment, Reminder
 from server.vote.session_mgmt import RestrictedModAdminPage
 
 
@@ -34,6 +34,14 @@ class AdminDeclineBands(RestrictedModAdminPage):
             send_decline_mail(band)
 
         return render_template('admin/band_mail.html', bands=bands, type='Absage')
+
+class AdminInformBandsAboutVoting(RestrictedModAdminPage):
+    def get(self):
+        reminder = Reminder.query.all()
+        for remind in reminder:
+            send_remind_start_mail(remind)
+
+        return render_template('admin/old_bands_reminder_mail.html', reminders=reminder)
 
 
 class AdminBandVoteState(RestrictedModAdminPage):

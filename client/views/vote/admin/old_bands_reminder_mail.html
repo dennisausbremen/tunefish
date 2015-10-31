@@ -1,0 +1,12 @@
+{% extends "vote_layout/layout_vote_admin.html" %}
+
+{% block body %}
+<br /><br />
+<h2>Letztjährige Bands über aktuelles Voting benachrichtigen</h2>
+
+<ul>
+    {% for reminder in reminders %}
+        <li>{{ reminder.name }}</li>
+    {% endfor %}
+</ul>
+{% endblock body %}
