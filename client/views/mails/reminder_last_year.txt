@@ -1,0 +1,30 @@
+Hallo {{ band.name }},
+
+ihr habt euch letztes Jahr als Band beim Sommerfest Vorstraße feat. Spittaler Straße beworben. Leider war eure Bewerbung im vergangenen Jahr nicht erfolgreich.
+
+Da ihr euch im vergangenen Jahr für diesen Reminder eingetragen habt, hiermit nun die Nachricht:
+
+ Neues Jahr, neue Chance.
+
+ Die Bandbwerbungsphase für das Sommerfest 2016 hat soeben begonnen.
+
+Das Sommerfest findet 2016 am 10. und 11. Juni in Bremen statt. In der Zeit vom 01. November 2015 bis 01. Januar 2016 könnt ihr euch als Band für das Sommerfest bewerben.
+
+Der Link auf unser tunefish-Bewerbungsportal ist derselbe wie im letzten Jahr
+ http://tunefish.vorstrasse-bremen.de
+
+Bitte registriert euch erneut, da wir alle Bewerbungen und die zugehörigen Accounts vom letzten Jahr gelöscht haben.
+
+
+Mit freundlichen Grüßen
+
+Das Organisations-Team
+
+
+Sommerfest Vorstraße feat. Spittaler Straße
+10. und 11. Juni 2016
+
+http://www.vorstrasse-bremen.de
+http://tunefish.vorstrasse-bremen.de
+
+https://facebook.com/sommerfest.vorstrasse
