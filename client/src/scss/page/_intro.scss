@@ -171,7 +171,7 @@
     }
 }
 
-p {
+p{
     width: 80%;
     max-width: 1000px;
     margin: 4rem auto 0;
@@ -188,6 +188,30 @@ p {
         margin-bottom: 1rem;
         border-bottom: 1px solid $bg-ter;
     }
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    width: 80%;
+    max-width: 1000px;
+    padding: 0;
+    margin: 0.7rem auto 0;
+    list-style: none;
+    text-align: left;
+
+    @include breakpoint(m) {
+          width: 60%;
+    }
+
+    b {
+      padding-left: 20px;
+      padding-right: 10px;
+    }
+  }
+
 }
 
 .btn-text {
