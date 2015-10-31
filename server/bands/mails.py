@@ -42,5 +42,5 @@ def send_decline_mail(band):
     __sendmail.delay(msg)
 
 def send_remind_start_mail(reminder):
-    msg = __prepare_mail(reminder.email, "[tunefish] Bewerbungsphase für 2016 startet", "mails/reminder_new_year.txt", reminder=reminder)
+    msg = __prepare_mail(reminder.email, "[tunefish] Bewerbungsphase für das Sommerfest 2016 startet", "mails/reminder_new_year.txt", reminder=reminder)
     __sendmail.delay(msg)
