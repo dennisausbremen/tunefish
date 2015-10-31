@@ -1,6 +1,6 @@
 Hallo {{ band.name }},
 
-leider müssen wir euch heute mitteilen, dass wir euch dieses Jahr keinen Auftritt auf dem Sommerfest Vorstraße feat. Spittaler Straße anbieten können. Uns haben dieses Jahr über 150 vollständige Bewerbungen erreicht, die wir uns alle angehört und bewertet haben. Dieser Prozess dauert seine Zeit.
+leider müssen wir euch heute mitteilen, dass wir euch dieses Jahr keinen Auftritt auf dem Sommerfest Vorstraße feat. Spittaler Straße anbieten können. Uns haben dieses Jahr über 150 Bewerbungen erreicht, die wir in den letzten Wochen alle durchgehört und bewertet haben.
 
 Wir würden uns freuen, wenn ihr euch im kommenden Jahr erneut bei uns bewerben würdet. Als kleine Besonderheit haben wir dieses Jahr einen neuen Reminderservice eingeführt. Wenn ihr diesen über den nachfolgenden Link aktiviert, bekommt ihr im nächsten Jahr automatisch eine E-Mail an diese E-Mailadresse, wenn die Bewerbungsphase wieder los geht:
 
