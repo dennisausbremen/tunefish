@@ -1,5 +1,5 @@
 .idea
-**/*.iml
+*.iml
 client/bower_components/
 client/node_modules
 client/app
