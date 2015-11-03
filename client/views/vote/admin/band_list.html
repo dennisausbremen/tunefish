@@ -1,6 +1,6 @@
 {% set sort = request.args.sort|default('vote_average') %}
 {% set reverse = request.args.reverse|default(1)|int %}
-{% set state = request.args.state|default(1)|int %}
+{% set state = request.args.state|default(0)|int %}
 
 {% macro build_filter(stateNo, name) %}
     {% if state ==  stateNo %}<div class="btn btn-primary">{{ name }}</div>{% else %}
