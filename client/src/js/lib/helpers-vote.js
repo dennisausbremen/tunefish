@@ -328,7 +328,7 @@ var helper = (function ($) {
 
                          // close voting
                         var now = new Date().getTime();
-                        var end = new Date(2015,3,1,16).getTime();
+                        var end = new Date(2016,1,1,16).getTime();
 
                         if(end < now) {
                             alert('Das Voting ist beendet. Deine Stimme wird nicht mehr gezählt!');
