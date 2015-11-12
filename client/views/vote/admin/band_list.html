@@ -72,19 +72,12 @@
                     <td>{{ band.vote_variance }}</td>
                     <td>{{ band.vote_with_deviation }}</td>
                 {% else %}
-                    <td colspan="7" class="text-center">
-                        <i class="{% if band.is_profile_valid %}i-done{% else %}i-close{% endif %}"></i> Profil &nbsp; &nbsp; &nbsp;
-                        <i class="{% if band.is_email_confirmed %}i-done{% else %}i-close{% endif %}"></i> Mail &nbsp; &nbsp; &nbsp;
-                        <i class="{% if band.is_tracks_valid %}i-done{% else %}i-close{% endif %}"></i> Tracks &nbsp; &nbsp; &nbsp;
-                        <i class="{% if band.image %}i-done{% else %}i-close{% endif %}"></i> Bandbild &nbsp; &nbsp; &nbsp;
-                        <i class="{% if band.techrider %}i-done{% else %}i-close{% endif %}"></i> Techrider
-                    </td>
-                    <td class="text-center">
-                        {% if band.is_ready_for_submit %}
-                            <span class="label label-success"> &nbsp; <i class="i-done"></i> &nbsp; </span>
-                        {% else %}
-                            <span class="label label-warning"> &nbsp; <i class="i-close"></i> &nbsp; </span>
-                        {% endif %}
+                    <td colspan="8" class="text-center">
+                        <span class="label {% if band.is_profile_valid %}label-success"><i class="i-done{% else %}label-danger"><i class="i-close{% endif %}"></i> Profil  </span> &nbsp; &nbsp; &nbsp;
+                        <span class="label {% if band.is_email_confirmed %}label-success"><i class="i-done{% else %}label-danger"><i class="i-close{% endif %}"></i> Mail  </span> &nbsp; &nbsp; &nbsp;
+                        <span class="label {% if band.is_tracks_valid %}label-success"><i class="i-done{% else %}label-danger"><i class="i-close{% endif %}"></i> Tracks  </span> &nbsp; &nbsp; &nbsp;
+                        <span class="label {% if band.image %}label-success"><i class="i-done{% else %}label-danger"><i class="i-close{% endif %}"></i> Bandbild  </span> &nbsp; &nbsp; &nbsp;
+                        <span class="label {% if band.techrider %}label-success"><i class="i-done{% else %}label-danger"><i class="i-close{% endif %}"></i> Techrider  </span> &nbsp; &nbsp; &nbsp;
                     </td>
                 {% endif %}
                 {% if state == 0 %} <td>{{ band.state_label }}</td> {% endif %}
