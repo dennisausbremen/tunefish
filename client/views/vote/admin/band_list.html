@@ -52,9 +52,11 @@
         {% if band.state == state or state == 0 %}
             <tr>
                 <td><div class="dot dot-{% if band.state == 0 %}red{% elif band.state == 4 %}yellow{% else %}green{% endif %}"></div> <a href="{{ url_for('vote.admin.bands.view', band_id=band.id) }}">{{ band.name|trim }}</a></td>
-                <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
-                <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
-                <td>{% if band.state > 0 %}
+                {% if band.state > 0 %}
+                    <td>{% if band.amount_members != "NULL" and band.amount_members != None %}{{ band.amount_members }}{% else %}?{% endif %}</td>
+                    <td>{% if band.city != "NULL" and band.city != None %}{{ band.city }}{% else %}?{% endif %}</td>
+
+                    <td>
                         {% if band.distance %}
                             {{ band.distance }} km
                         {% else %}
@@ -62,13 +64,22 @@
                                 Kalk.
                             </a>
                         {% endif %}
-                    {% endif %}
-                </td>
-                <td>{{ place }}. {% set place = place + 1 %}</td>
-                <td>{{ band.vote_count }}</td>
-                <td>&#8960; {{ band.vote_average }}</td>
-                <td>{{ band.vote_variance }}</td>
-                <td>{{ band.vote_with_deviation }}</td>
+
+                    </td>
+                    <td>{{ place }}. {% set place = place + 1 %}</td>
+                    <td>{{ band.vote_count }}</td>
+                    <td>&#8960; {{ band.vote_average }}</td>
+                    <td>{{ band.vote_variance }}</td>
+                    <td>{{ band.vote_with_deviation }}</td>
+                {% else %}
+                    <td colspan="8" class="text-center">
+                        <i class="{% if band.is_profile_valid %}i-done{% else %}i-close{% endif %}"></i> Profil &nbsp; &nbsp; &nbsp;
+                        <i class="{% if band.is_email_confirmed %}i-done{% else %}i-close{% endif %}"></i> Mail &nbsp; &nbsp; &nbsp;
+                        <i class="{% if band.is_tracks_valid %}i-done{% else %}i-close{% endif %}"></i> Tracks &nbsp; &nbsp; &nbsp;
+                        <i class="{% if band.image %}i-done{% else %}i-close{% endif %}"></i> Bandbild &nbsp; &nbsp; &nbsp;
+                        <i class="{% if band.techrider %}i-done{% else %}i-close{% endif %}"></i> Techrider
+                    </td>
+                {% endif %}
                 {% if state == 0 %} <td>{{ band.state_label }}</td> {% endif %}
                 <td class="hidden-print">
                     <div class="dropdown">
