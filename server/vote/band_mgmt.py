@@ -2,8 +2,7 @@
 from os import unlink
 from flask import flash, url_for, redirect, jsonify
 from flask.templating import render_template
-from server.bands.mails import send_reminder_mail, send_decline_mail, send_remind_start_mail
-
+from server.bands.mails import send_reminder_mail, send_decline_mail, send_remind_start_mail, send_registration_mail
 from server.models import Band, State, db, Comment, Reminder
 from server.vote.session_mgmt import RestrictedModAdminPage
 
@@ -35,6 +34,7 @@ class AdminDeclineBands(RestrictedModAdminPage):
 
         return render_template('admin/band_mail.html', bands=bands, type='Absage')
 
+
 class AdminInformBandsAboutVoting(RestrictedModAdminPage):
     def get(self):
         reminder = Reminder.query.all()
@@ -59,6 +59,20 @@ class AdminBandVoteState(RestrictedModAdminPage):
 
         else:
             return jsonify({'success': False, 'active': False, 'message': u'Es existiert keine Band mit dieser ID'})
+
+
+class AdminResendActivationMail(RestrictedModAdminPage):
+    def get(self, band_id):
+        band = Band.query.get(band_id)
+        if band:
+            if band.state == State.NEW:
+                send_registration_mail(band)
+                flash('Der Band "' + band.name + '" wurde erneut eine Aktivierungsmail zugeschickt.', 'success')
+            else:
+                flash('Diese Bandbewerbung ist bereits abgeschlossen.', 'error')
+        else:
+            flash('Es existiert keine Band mit dieser ID', 'error')
+        return redirect(url_for('vote.admin.index'))
 
 
 class AdminBandState(RestrictedModAdminPage):

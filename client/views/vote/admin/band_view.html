@@ -31,7 +31,13 @@
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                             <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Bearbeiten</a></li>
                             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.delete', band_id=band.id) }}" onclick="return confirm('Band &quot;{{ band.name }}&quot; wirklich löschen?')">Löschen</a></li>
-                            {% if band.state == 1 %}
+                            {% if band.state == 0 %}
+                                <li role="presentation" class="divider"></li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.resendConfirmation', band_id=band.id) }}">Aktivierungsmail erneut verschicken</a>
+                                </li>
+
+                            {% elif band.state == 1 %}
                                 <li role="presentation" class="divider"></li>
                                 <li role="presentation">
                                     <a class="voteStateDetail" role="menuitem" tabindex="-1" href="{{ url_for('vote.admin.bands.vote_state', band_id=band.id) }}">Aus dem Voting nehmen</a>

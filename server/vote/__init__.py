@@ -5,7 +5,7 @@ from flask import Blueprint
 from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance, TrackStreaming, \
     after_request
 from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands, AdminBandDelete, \
-    AdminBandVoteState, AdminDeclineBands, AdminInformBandsAboutVoting
+    AdminBandVoteState, AdminDeclineBands, AdminInformBandsAboutVoting, AdminResendActivationMail
 from server.vote.band_vote import BandApp
 from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON, VoteStatistics, \
     VoteResults
@@ -32,6 +32,8 @@ vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/<int:state>',
                             view_func=AdminBandState.as_view('admin.bands.band_state'))
 vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/delete',
                             view_func=AdminBandDelete.as_view('admin.bands.delete'))
+vote_blueprint.add_url_rule('/admin/bands/<int:band_id>/resendConfirmation',
+                            view_func=AdminResendActivationMail.as_view('admin.bands.resendConfirmation'))
 
 vote_blueprint.add_url_rule('/admin/users/<int:user_id>/activate',
                             view_func=AdminUserActivation.as_view('admin.users.access'))
