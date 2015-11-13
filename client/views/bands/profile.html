@@ -12,10 +12,29 @@
     <fieldset>
         <legend>Basics</legend>
 
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-12 col-sm-4">
+                <label>Login</label><br /> {{ g.band.login }}
+            </div>
+            <div class="col-xs-12 col-sm-8">
+                <label>Emailadresse</label><br />
+                <div>
+                    {{ g.band.email }} {% if g.band.is_email_confirmed %}<i class="i-done"></i>{% else %}&nbsp; &nbsp;
+                    <small>
+                        <a href="mailto:tunefish@vorstrasse-bremen.de?subject=Falsche E-Mailadresse&amp;body=Hey Sommerfest-Team, bei unserem Account {{ g.band.login }} ist die Mailadresse falsch. Richtig ist:">stimmt nicht?</a> |
+                        <a href="{{ url_for('bands.profile.resend') }}">Bestätigungsmail erneut senden</a>
+                    </small>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-8">
                 {{ renderDefault(band_form.name) }}
             </div>
+
+
         </div>
 
         <div class="row">
