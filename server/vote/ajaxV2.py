@@ -55,23 +55,23 @@ def track2json(track, band):
 
 class BandListJsonV2(LoginAndRegisterUser):
     def get(self):
-        self.user = User.query.get(1)
+        self.user = User.query.get(3)
         g.user = self.user
-        session['userId'] = 1
+        session['userId'] = 3
         # random for sqlite, rand for mysql
         state_list = [State.IN_VOTE, State.REQUESTED, State.ACCEPTED, State.DECLINED]
         bands = Band.query.order_by(func.random()).filter(Band.state.in_(state_list))
-        return jsonify(bands=[simpleBand(band) for band in bands]), 200, {'Access-Control-Allow-Origin': '*'}
+        return jsonify([simpleBand(band) for band in bands]), 200, {'Access-Control-Allow-Origin': '*'}
 
 
 class BandJsonV2(LoginAndRegisterUser):
     def get(self, band_id):
-        self.user = User.query.get(1)
+        self.user = User.query.get(3)
         g.user = self.user
-        session['userId'] = 1
+        session['userId'] = 3
 
         band = Band.query.get_or_404(band_id)
         if band.state == State.NEW or band.state == State.OUT_OF_VOTE:
             return '', 404
         else:
-            return jsonify(band=band2json(band)), 200, {'Access-Control-Allow-Origin': '*'}
+            return jsonify(band2json(band)), 200, {'Access-Control-Allow-Origin': '*'}
