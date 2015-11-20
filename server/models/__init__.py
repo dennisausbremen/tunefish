@@ -346,6 +346,10 @@ class Comment(db.Model):
     def date_time(self):
         return self.timestamp.strftime("%d.%m.%y - %H:%M")
 
+    @property
+    def timestamp(self):
+        return self.timestamp
+
 
 class Reminder(db.Model):
     id = db.Column(Integer, primary_key=True)
