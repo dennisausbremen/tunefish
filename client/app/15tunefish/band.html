@@ -1,0 +1,36 @@
+<div ng-controller="BandCtrl">
+	<div ng-show="band">
+		<a href="#/">alle Bands</a> / Band {{band.artist}}
+		<h2>{{band.artist}}</h2>
+
+        <div ng-show="loading">Band wird geladen</div>
+        <div ng-hide="loading">
+            <img src="http://tunefish.vorstrasse-bremen.de/{{band.image['thumb']}}" alt="poster"/>
+
+            <small>{{band.rating}}</small>
+            <br /><br />
+            <p style="width: 500px;" ng-bind-html="description"></p>
+            <br />
+                comments ... t.b.i.
+            <br />
+            <table>
+                <tr ng-repeat="track in band.tracks">
+                    <td>{{track.artist}} - {{ track.title }} &nbsp; {{ track }}</td>
+                    <td><button class="btn btn-default btn-sm" music-player add-song="track">Hinzufügen</button></td>
+                    <td><audio src="{{ track.url }}" controls /></td>
+                </tr>
+            </table>
+
+            <h3>Social, YouTube, Web</h3>
+            <ul>
+                <li><a href="{{ band.websiteURL }}">{{ band.websiteURL }}</a></li>
+                <li><a href="{{ band.facebookURL }}">{{ band.facebookURL }}</a></li>
+                <li><a href="{{ band.youtubeURL }}">YouTube</a></li>
+
+            </ul>
+            <br />
+            <img src="http://tunefish.vorstrasse-bremen.de/{{band.image['poster']}}" alt="poster"/>
+        </div>
+
+	</div>
+</div>

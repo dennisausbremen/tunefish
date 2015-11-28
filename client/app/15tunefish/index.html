@@ -1,0 +1,74 @@
+<html ng-app="tutorialApp">
+<head>
+    <meta charset="utf8"/>
+    <title>tunefish @ angular</title>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style type="text/css">
+        .cart-item.ng-enter {
+            -webkit-transition: 0.5s linear all;
+            transition: 0.5s linear all;
+            background-color: yellow;
+        }
+
+        .cart-item.ng-enter-active {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>tunefish</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-9">
+            <div ng-view></div>
+        </div>
+        <div class="col-xs-3">
+
+
+            <sound-manager/>
+
+            <div class="seekBase" seek-track>
+                <div class="seekLoad" ng-style="{width : ( progress + '%' ) }"></div>
+            </div>
+            <br/>
+
+            <div class="btn-group">
+                <button play-music ng-hide="isPlaying" class="btn btn-default">Play</button>
+                <button pause-music ng-show="isPlaying" class="btn btn-default">Pause</button>
+                <button stop-music class="btn btn-default">Stop</button>
+                <button repeat-music class="btn btn-default" ng-show="repeat">No Repeat</button>
+                <button repeat-music class="btn btn-default" ng-hide="repeat">Repeat</button>
+            </div>
+
+            <h5>Playlist</h5>
+            <ul class="list-unstyled">
+                <li ng-repeat="song in playlist track by $index">
+                    <span ng-if="currentPlaying.id == song.id"><i class="glyphicon glyphicon-play-circle"></i></span>
+                    <a play-from-playlist="song">{{ song.artist }} - {{ song.title }}</a>
+
+                    <a remove-from-playlist="song" data-index="{($index)}">
+                        <small>[x]</small>
+                    </a>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
+<script src="angular-soundmanager2.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
