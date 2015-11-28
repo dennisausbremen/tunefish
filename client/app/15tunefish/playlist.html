@@ -1,0 +1,13 @@
+<div ng-controller="JWTCheckCtrl">
+    <h2>Wiedergabeliste</h2>
+    <ul class="playlist">
+        <li ng-repeat="song in playlist">
+            <span ng-if="currentPlaying.id == song.id"><i class="glyphicon glyphicon-play-circle"></i></span>
+            <a play-from-playlist="song">{{ song.artist }} - {{ song.title }}</a>
+
+            <a remove-from-playlist="song" data-index="{($index)}">
+                <small>[x]</small>
+            </a>
+        </li>
+    </ul>
+</div>
