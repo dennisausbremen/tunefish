@@ -1,6 +1,5 @@
 <div ng-controller="BandCtrl">
 	<div ng-show="band">
-		<a href="#/">alle Bands</a> / Band {{band.artist}}
 		<h2>{{band.artist}}</h2>
 
         <div ng-show="loading">Band wird geladen</div>
@@ -8,20 +7,24 @@
             <img src="http://tunefish.vorstrasse-bremen.de/{{band.image['thumb']}}" alt="poster"/>
 
             <small>{{band.rating}}</small>
-            <br /><br />
+
+            <button class="btn btn-default btn-sm pull-right" add-all="band.tracks">Alle zur Playlist</button>
+            <h4>Songs</h4>
+            <div class="clearfix"></div>
+
+             <ul class="playlist">
+                <li ng-repeat="song in band.tracks" ng-class="{playing: currentPlaying.id == song.id}">
+                    <a music-player="play" add-song="song">{{ song.artist }} - {{ song.title }}</a>
+                    <a music-player add-song="song" class="pull-right">Zur Playlist hinzufügen</a>
+                </li>
+            </ul>
+
+           <br /><br />
             <p style="width: 500px;" ng-bind-html="description"></p>
             <br />
                 comments ... t.b.i.
             <br />
-            <table>
-                <tr>
-                    <td><button class="btn btn-default btn-sm" ng-click="addAll()">Add all tracks</button></td>
-                </tr>
-                <tr ng-repeat="track in band.tracks">
-                    <td><a href="#/band/{{ band.id }}" music-player="play" add-song="track">{{track.artist}} - {{ track.title }}</a> &nbsp; </td>
-                    <td><button class="btn btn-default btn-sm" music-player add-song="track">Hinzufügen</button></td>
-                </tr>
-            </table>
+
 
             <h3>Social, YouTube, Web</h3>
             <ul>
