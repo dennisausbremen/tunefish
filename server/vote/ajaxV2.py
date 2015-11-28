@@ -1,17 +1,10 @@
-import mimetypes
-import os
-import re
-from urllib import quote_plus
-import urllib2
-from math import ceil
-from datetime import datetime
-
-from flask import jsonify, request, g, json, send_file, Response, session
+from flask import jsonify, g, session
+from flask.ext.jwt import current_identity, jwt_required
 from sqlalchemy import func
 
-from server import app
-from server.models import Band, State, db, Vote, Comment, Track, User
-from server.vote.session_mgmt import RestrictedUserPage, LoginAndRegisterUser
+from server.models import Band, State, User, Track
+from server.vote.ajax import send_file_partial
+from server.vote.session_mgmt import LoginAndRegisterUser
 
 
 def simpleBand(band):
@@ -21,6 +14,7 @@ def simpleBand(band):
         "image": {"thumb": band.thumbnail},
         "rating": band.get_user_vote(g.user)
     }
+
 
 def band2json(band):
     return {
@@ -49,15 +43,15 @@ def track2json(track, band):
     return {
         "artist": band.name,
         "title": track.nice_trackname,
-        "url": track.get_track_url()
+        "url": track.get_track_url_v2()
     }
 
 
 class BandListJsonV2(LoginAndRegisterUser):
+    decorators = [jwt_required()]
+
     def get(self):
-        self.user = User.query.get(1)
-        g.user = self.user
-        session['userId'] = 1
+        self.user = current_identity
         # random for sqlite, rand for mysql
         state_list = [State.IN_VOTE, State.REQUESTED, State.ACCEPTED, State.DECLINED]
         bands = Band.query.order_by(func.random()).filter(Band.state.in_(state_list))
@@ -65,13 +59,22 @@ class BandListJsonV2(LoginAndRegisterUser):
 
 
 class BandJsonV2(LoginAndRegisterUser):
+    decorators = [jwt_required()]
+
     def get(self, band_id):
-        self.user = User.query.get(3)
-        g.user = self.user
-        session['userId'] = 3
+        self.user = current_identity
 
         band = Band.query.get_or_404(band_id)
         if band.state == State.NEW or band.state == State.OUT_OF_VOTE:
             return '', 404
         else:
             return jsonify(band2json(band)), 200, {'Access-Control-Allow-Origin': '*'}
+
+
+class TrackV2(LoginAndRegisterUser):
+    decorators = [jwt_required()]
+
+    def get(self, track_id):
+        self.user = current_identity
+        track = Track.query.get_or_404(track_id)
+        return send_file_partial(track.path)
