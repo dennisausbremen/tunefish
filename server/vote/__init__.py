@@ -4,7 +4,7 @@ from flask import Blueprint
 
 from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance, TrackStreaming, \
     after_request
-from server.vote.ajaxV2 import BandListJsonV2, BandJsonV2, TrackV2
+from server.vote.ajaxV2 import BandListJsonV2, BandJsonV2, TrackV2, BandVoteV2
 from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands, AdminBandDelete, \
     AdminBandVoteState, AdminDeclineBands, AdminInformBandsAboutVoting, AdminResendActivationMail
 from server.vote.band_vote import BandApp
@@ -68,6 +68,8 @@ vote_blueprint.add_url_rule('/ajax/distance/<int:band_id>', view_func=JsonDistan
 
 vote_blueprint.add_url_rule('/api/v2/bands', view_func=BandListJsonV2.as_view('api.v2.bands'))
 vote_blueprint.add_url_rule('/api/v2/bands/<int:band_id>', view_func=BandJsonV2.as_view('api.v2.band'))
+vote_blueprint.add_url_rule('/api/v2/bands/<int:band_id>/vote', view_func=BandVoteV2.as_view('api.v2.vote'),methods=['PUT'])
+
 
 # own blueprint, because of the after request
 track_blueprint = Blueprint('track', __name__, template_folder='../../client/views/vote')
