@@ -32,7 +32,6 @@
         </div>
         <div class="col-xs-3">
 
-
             <sound-manager/>
 
             <div class="seekBase" seek-track>
@@ -50,14 +49,13 @@
 
             <h5>Playlist</h5>
             <ul class="list-unstyled">
-                <li ng-repeat="song in playlist track by $index">
+                <li ng-repeat="song in playlist">
                     <span ng-if="currentPlaying.id == song.id"><i class="glyphicon glyphicon-play-circle"></i></span>
                     <a play-from-playlist="song">{{ song.artist }} - {{ song.title }}</a>
 
                     <a remove-from-playlist="song" data-index="{($index)}">
                         <small>[x]</small>
                     </a>
-
                 </li>
             </ul>
         </div>
