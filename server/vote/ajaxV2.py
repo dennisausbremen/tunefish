@@ -41,6 +41,7 @@ def comment2json(comment):
 
 def track2json(track, band):
     return {
+        "id": track.id,
         "artist": band.name,
         "title": track.nice_trackname,
         "url": track.get_track_url_v2()
