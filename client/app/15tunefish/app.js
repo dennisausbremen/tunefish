@@ -136,13 +136,16 @@ tunefish.factory('JwtFactory', function ($http, $location) {
     }
 });
 
-tunefish.controller('BandCtrl', function ($scope, $routeParams, $sce, Bands, BandFactory, JwtFactory) {
+tunefish.controller('BandCtrl', function ($scope, $routeParams, angularPlayer, $sce, Bands, BandFactory, JwtFactory) {
 
+    var band = {};
     if (JwtFactory.hasToken()) {
-        $scope.band = Bands.getBand($routeParams.bandID);
+        band = Bands.getBand($routeParams.bandID);;
+        $scope.band = band;
         $scope.loading = true;
 
-        BandFactory.getBand($routeParams.bandID).then(function (band) {
+        BandFactory.getBand($routeParams.bandID).then(function (gotBand) {
+            band = gotBand;
             $scope.band = band;
 
             band.tracks.forEach(function(track) {
@@ -153,4 +156,12 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, $sce, Bands, Ban
             $scope.loading = false;
         });
     }
+
+    $scope.addAll = function() {
+        band.tracks.forEach(function(track) {
+            angularPlayer.addTrack(track);
+        });
+    }
+
+
 });

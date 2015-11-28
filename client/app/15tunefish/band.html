@@ -14,10 +14,12 @@
                 comments ... t.b.i.
             <br />
             <table>
+                <tr>
+                    <td><button class="btn btn-default btn-sm" ng-click="addAll()">Add all tracks</button></td>
+                </tr>
                 <tr ng-repeat="track in band.tracks">
-                    <td>{{track.artist}} - {{ track.title }} &nbsp; {{ track }}</td>
+                    <td><a href="#/band/{{ band.id }}" music-player="play" add-song="track">{{track.artist}} - {{ track.title }}</a> &nbsp; </td>
                     <td><button class="btn btn-default btn-sm" music-player add-song="track">Hinzufügen</button></td>
-                    <td><audio src="{{ track.url }}" controls /></td>
                 </tr>
             </table>
 
