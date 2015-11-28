@@ -44,7 +44,9 @@ def track2json(track, band):
         "id": track.id,
         "artist": band.name,
         "title": track.nice_trackname,
-        "url": track.get_track_url_v2()
+        "url": track.get_track_url_v2(),
+        "band_id": band.id,
+        "thumbnail": band.thumbnail
     }
 
 
