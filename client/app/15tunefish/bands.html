@@ -1,13 +1,17 @@
-<input type="text" ng-model="search">
-<p ng-show="search">Du suchst gerade nach: {{search}}</p>
-
 <div ng-controller="BandsCtrl">
-	<div ng-repeat="band in bands | filter:search">
-		<div style="width: 200px; height: 200px; margin: 10px; float: left; background-image: url('http://tunefish.vorstrasse-bremen.de/{{band.image['thumb']}}');">
-		    <a href="#/band/{{band.id}}" style="color: #fff; text-align: center; bottom: 5px;">{{band.artist}}</a>
-		</div>
-	</div>
+    <div ng-hide="bands.length" class="hexdots-loader" style="margin: 200px;"></div>
+
+    <div ng-show="bands.length">
+        <input type="text" ng-model="search">
+        <p ng-show="search">Du suchst gerade nach: {{search}}</p>
+
+        <div ng-repeat="band in bands | filter:search">
+            <div style="width: 200px; height: 200px; margin: 10px; float: left; background-image: url('http://tunefish.vorstrasse-bremen.de/{{band.image['thumb']}}');">
+                <a href="#/band/{{band.id}}" style="color: #fff; text-align: center; bottom: 5px;">{{band.artist}}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
 </div>
-
-<div class="clearfix"></div>
-
