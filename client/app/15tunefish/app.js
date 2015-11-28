@@ -4,7 +4,10 @@ var apiBase = 'http://localhost:5000/vote/api/v2/';
 tunefish.config(function ($routeProvider) {
     $routeProvider
         .when('/', {templateUrl: 'bands.html'})
+        .when('/stats', {templateUrl: 'stats.html'})
+        .when('/results', {templateUrl: 'results.html'})
         .when('/login', {templateUrl: 'login.html'})
+        .when('/playlist', {templateUrl: 'playlist.html'})
         .when('/band/:bandID', {templateUrl: 'band.html'})
         .otherwise({redirectTo: '/'});
 });
@@ -66,6 +69,9 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, angularPlayer, $
 
 });
 
+tunefish.controller('JWTCheckCtrl', function (JwtFactory) {
+    JwtFactory.hasToken();
+});
 
 
 tunefish.factory('JwtFactory', function ($http, $location) {
