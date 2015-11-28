@@ -7,3 +7,4 @@ celery==3.1.17
 sqlalchemy_utils==0.28.2
 Flask-Mail==0.9.1
 Flask-Images==2.1.2
+Flask-JWT==0.3.2
