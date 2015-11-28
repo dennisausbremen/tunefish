@@ -13,15 +13,21 @@ tunefish.config(function ($routeProvider) {
 });
 
 
+tunefish.controller('MainCtrl', function($scope, $location) {
+    $scope.searchBand = function() {
+        $location.path('/');
+    }
+});
+
 tunefish.controller('LoginCtrl', function ($scope, $http, $sce, $location, JwtFactory) {
-    $scope.user = {username: 'ebroda', password: ''};
+    $scope.user = {username: 'test', password: 'testtest'};
     $scope.login = function (user) {
         $scope.feedback = '';
 
         JwtFactory.determineToken(user).then(function (result) {
             if (result) {
                 $scope.feedback = $sce.trustAsHtml('<div class="alert alert-success">Login erfolgreich!</div>');
-                $location.path('/bands');
+                $location.path('/'); ///band/54');
             } else {
                 $scope.feedback = $sce.trustAsHtml('<div class="alert alert-danger">Falsche Zugangsdaten</div>');
             }
@@ -59,14 +65,6 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, angularPlayer, $
             $scope.loading = false;
         });
     }
-
-    $scope.addAll = function() {
-        band.tracks.forEach(function(track) {
-            angularPlayer.addTrack(track);
-        });
-    }
-
-
 });
 
 tunefish.controller('JWTCheckCtrl', function (JwtFactory) {
@@ -176,3 +174,25 @@ tunefish.factory('Bands', function ($http, $q, $location, JwtFactory) {
         }
     };
 });
+
+
+tunefish.directive('addAll', ['angularPlayer', function(angularPlayer) {
+    return {
+        restrict: "EA",
+        scope: {
+            songs: '=addAll'
+        },
+        link: function (scope, element) {
+            element.bind('click', function () {
+                //add songs to playlist
+                for (var i = 0; i < scope.songs.length; i++) {
+                    angularPlayer.addTrack(scope.songs[i]);
+                }
+
+                if (!angularPlayer.isPlayingStatus()) {
+                    angularPlayer.play();
+                }
+            });
+        }
+    }
+}]);
