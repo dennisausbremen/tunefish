@@ -5,62 +5,74 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="http://css-spinners.com/css/spinner/hexdots.css" type="text/css">
-
-    <style type="text/css">
-        .cart-item.ng-enter {
-            -webkit-transition: 0.5s linear all;
-            transition: 0.5s linear all;
-            background-color: yellow;
-        }
-
-        .cart-item.ng-enter-active {
-            background-color: white;
-        }
-    </style>
 </head>
 <body>
-
-<div class="container">
+<div class="container" id="main" ng-controller="MainCtrl">
     <div class="row">
-        <div class="col-xs-12">
-            <h1>tunefish</h1>
+        <div class="col-sm-3 col-xs-0">
+            <img src="tunefish.svg" id="tunefishLogo" alt="tunefish" />
+
+            <ul id="mainNav">
+                <li>
+                    <a href="#/">Alle Bands</a>
+                    <input class="form-control" placeholder="Bandname" ng-model="search" ng-change="searchBand(search)"/>
+                </li>
+                <li><a href="#/playlist">Playlist</a></li>
+                <li><a href="#/stats">Statistiken</a></li>
+            </ul>
+
+            <div ng-show="isPlaying">
+                <br />
+                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.thumbnail }}" style="width: 100%" />
+                 <strong>{{ currentPlaying.title }}</strong><br />
+                von <a href="#/band/{{currentPlaying.band_id}}"> {{ currentPlaying.artist }}</a>
+                <br />
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-xs-9">
+        <div class="col-sm-9 col-xs-12" id="mainContent">
             <div ng-view></div>
         </div>
-        <div class="col-xs-3">
+    </div>
+</div>
 
-            <sound-manager/>
+<div class="navbar navbar-fixed-bottom">
+    <sound-manager/>
 
-            <div class="seekBase" seek-track>
-                <div class="seekLoad" ng-style="{width : ( progress + '%' ) }"></div>
-            </div>
-            <br/>
-
-            <div class="btn-group">
-                <button play-music ng-hide="isPlaying" class="btn btn-default">Play</button>
-                <button pause-music ng-show="isPlaying" class="btn btn-default">Pause</button>
-                <button stop-music class="btn btn-default">Stop</button>
-                <button repeat-music class="btn btn-default" ng-show="repeat">No Repeat</button>
-                <button repeat-music class="btn btn-default" ng-hide="repeat">Repeat</button>
-            </div>
-
-            <h5>Playlist</h5>
-            <ul class="list-unstyled">
-                <li ng-repeat="song in playlist">
-                    <span ng-if="currentPlaying.id == song.id"><i class="glyphicon glyphicon-play-circle"></i></span>
-                    <a play-from-playlist="song">{{ song.artist }} - {{ song.title }}</a>
-
-                    <a remove-from-playlist="song" data-index="{($index)}">
-                        <small>[x]</small>
-                    </a>
-                </li>
-            </ul>
+    <div class="col-md-3">
+        <div class="btn-group">
+            <button prev-track class="btn btn-default"><i class="glyphicon glyphicon-fast-backward"></i></button>
+            <button play-music ng-hide="isPlaying" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></button>
+            <button pause-music ng-show="isPlaying" class="btn btn-default"><i class="glyphicon glyphicon-pause"></i></button>
+            <button stop-music class="btn btn-default"><i class="glyphicon glyphicon-stop"></i></button>
+            <button repeat-music class="btn btn-default" ng-show="repeat"><i class="glyphicon glyphicon-repeat"></i></button>
+            <button repeat-music class="btn btn-default" ng-hide="repeat"><i class="glyphicon glyphicon-refresh"></i></button>
+            <button next-track class="btn btn-default"><i class="glyphicon glyphicon-fast-forward"></i></button>
         </div>
     </div>
+    <div class="col-md-6 col-xs-12">
+
+        <div class="progress" seek-track>
+            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ progress }}"
+                 aria-valuemin="0" aria-valuemax="100" ng-style="{width : ( progress + '%' ) }">
+                <span class="sr-only">{{ progress }}% playing</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+        <i class="glyphicon glyphicon-star"></i>
+        <i class="glyphicon glyphicon-star"></i>
+        <i class="glyphicon glyphicon-star-empty"></i>
+        <i class="glyphicon glyphicon-star-empty"></i>
+        <i class="glyphicon glyphicon-star-empty"></i>
+    </div>
+
 </div>
 
 

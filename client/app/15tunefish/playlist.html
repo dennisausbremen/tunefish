@@ -1,13 +1,28 @@
 <div ng-controller="JWTCheckCtrl">
+    <button class="btn btn-default pull-right" clear-playlist ng-show="playlist.length">Leeren</button>
     <h2>Wiedergabeliste</h2>
-    <ul class="playlist">
-        <li ng-repeat="song in playlist">
-            <span ng-if="currentPlaying.id == song.id"><i class="glyphicon glyphicon-play-circle"></i></span>
-            <a play-from-playlist="song">{{ song.artist }} - {{ song.title }}</a>
 
-            <a remove-from-playlist="song" data-index="{($index)}">
-                <small>[x]</small>
-            </a>
-        </li>
-    </ul>
+    <div class="clearfix"></div>
+
+    <div ng-hide="playlist.length">
+        <h3>Momentan keine Songs in der Playlist.</h3>
+        <h4>Füge welche hinzu: <a href="#/">Alle Bands</a></h4>
+    </div>
+
+
+    <table class="playlist" ng-show="playlist.length">
+        <tr ng-repeat="song in playlist" ng-class="{playing: currentPlaying.id == song.id}">
+            <td class="artist"><a href="#/band/{{song.band_id}}">{{ song.artist }}</a></td>
+            <td class="song" title="Jetzt abspielen!" play-from-playlist="song">{{ song.title }}</td>
+            <td>
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+            </td>
+            <td class="remove" remove-from-playlist="song" data-index="{{ $index }}">x</td>
+        </tr>
+    </table>
+
 </div>

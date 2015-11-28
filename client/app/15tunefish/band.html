@@ -1,39 +1,52 @@
 <div ng-controller="BandCtrl">
-	<div ng-show="band">
-		<h2>{{band.artist}}</h2>
-
+	<div ng-show="band" id="band">
         <div ng-show="loading">Band wird geladen</div>
         <div ng-hide="loading">
-            <img src="http://tunefish.vorstrasse-bremen.de/{{band.image['thumb']}}" alt="poster"/>
+            <div class="row">
+                <div class="col-xs-5 col-md-3 col-sm-4">
+                    <img class="bandimg" src="http://tunefish.vorstrasse-bremen.de/{{band.image['thumb']}}" alt="poster" />
+                </div>
 
-            <small>{{band.rating}}</small>
+                <div class="col-xs-6 col-sm-5">
+                    <h2>{{ band.artist }}</h2>
+                    <br />
+
+                    <i class="glyphicon glyphicon-star"></i>
+                    <i class="glyphicon glyphicon-star"></i>
+                    <i class="glyphicon glyphicon-star-empty"></i>
+                    <i class="glyphicon glyphicon-star-empty"></i>
+                    <i class="glyphicon glyphicon-star-empty"></i>
+                </div>
+            </div>
 
             <button class="btn btn-default btn-sm pull-right" add-all="band.tracks">Alle zur Playlist</button>
             <h4>Songs</h4>
             <div class="clearfix"></div>
 
-             <ul class="playlist">
-                <li ng-repeat="song in band.tracks" ng-class="{playing: currentPlaying.id == song.id}">
-                    <a music-player="play" add-song="song">{{ song.artist }} - {{ song.title }}</a>
-                    <a music-player add-song="song" class="pull-right">Zur Playlist hinzufügen</a>
-                </li>
-            </ul>
+             <table class="playlist">
+                <tr ng-repeat="song in band.tracks" ng-class="{playing: currentPlaying.id == song.id}">
+                    <td class="song" music-player add-song="song">{{ song.artist }}</td>
+                    <td class="song" title="Jetzt abspielen!" music-player="play" add-song="song">{{ song.title }}</td>
+                    <td class="remove" music-player add-song="song" data-index="{{ $index }}">+</td>
+                </tr>
+            </table>
 
-           <br /><br />
-            <p style="width: 500px;" ng-bind-html="description"></p>
+            <br /><br />
+            <h4>Kommentare</h4>
+            t.b.i.
+
+            <br /><br />
+            <h4>Bandbeschreibung</h4>
+            <div ng-bind-html="description"></div>
             <br />
-                comments ... t.b.i.
-            <br />
-
-
-            <h3>Social, YouTube, Web</h3>
-            <ul>
+            <ul class="list-inline">
                 <li><a href="{{ band.websiteURL }}">{{ band.websiteURL }}</a></li>
                 <li><a href="{{ band.facebookURL }}">{{ band.facebookURL }}</a></li>
                 <li><a href="{{ band.youtubeURL }}">YouTube</a></li>
-
             </ul>
-            <br />
+            <br /><br />
+            <h4>Bandfoto</h4>
+
             <img src="http://tunefish.vorstrasse-bremen.de/{{band.image['poster']}}" style="width: 100%" alt="poster"/>
         </div>
 
