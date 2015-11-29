@@ -53,7 +53,7 @@ tunefish.filter('ownRating', function () {
 });
 
 tunefish.controller('LoginCtrl', function ($scope, $http, $sce, $location, JwtFactory) {
-    $scope.user = {username: 'test', password: 'testtest'};
+   // $scope.user = {username: 'test', password: 'testtest'};
     $scope.login = function (user) {
         $scope.feedback = '';
 
