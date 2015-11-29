@@ -28,7 +28,20 @@
 
             <br /><br />
             <h4>Kommentare</h4>
-            t.b.i.
+            <div ng-hide="band.comments.length">
+                <h5>Es sind noch keine Kommentare vorhanden. Verfasse den ersten!</h5>
+            </div>
+            <div ng-repeat="comment in band.comments">
+                <blockquote>
+                    <p>{{ comment.message }}</p>
+                    <footer>{{ comment.author }}, <timeago time="comment.timestamp"></timeago></footer>
+                </blockquote>
+            </div>
+            <br />
+            <textarea placeholder="Kommentar" class="form-control" ng-model="comment"></textarea>
+            <br />
+            <button type="submit" class="btn btn-default" ng-click="saveComment(comment)">Kommentieren</button>
+
 
             <br /><br />
             <h4>Bandbeschreibung</h4>

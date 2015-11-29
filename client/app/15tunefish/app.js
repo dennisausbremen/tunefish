@@ -13,23 +13,23 @@ tunefish.config(function ($routeProvider) {
 });
 
 
-tunefish.controller('MainCtrl', function($scope, $location, BandFactory, angularPlayer, JwtFactory) {
-    $scope.searchBand = function() {
+tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angularPlayer, JwtFactory) {
+    $scope.searchBand = function () {
         $location.path('/');
     };
 
     $scope.minRating = 0;
     $scope.maxRating = 5;
 
-    $scope.setRating = function(min, max) {
+    $scope.setRating = function (min, max) {
         $scope.minRating = min;
         $scope.maxRating = max;
     }
 
-    $scope.allToPlaylist = function(filteredBands) {
+    $scope.allToPlaylist = function (filteredBands) {
         angular.forEach(filteredBands, function (band) {
-            BandFactory.getBand(band.id).then(function(fullBand) {
-                fullBand.tracks.forEach(function(track) {
+            BandFactory.getBand(band.id).then(function (fullBand) {
+                fullBand.tracks.forEach(function (track) {
                     track.url = track.url + '?Authorization=JWT%20' + JwtFactory.getToken();
                     angularPlayer.addTrack(track);
                 });
@@ -40,7 +40,7 @@ tunefish.controller('MainCtrl', function($scope, $location, BandFactory, angular
 
 });
 
-tunefish.filter('ownRating', function() {
+tunefish.filter('ownRating', function () {
     return function (values, minRating, maxRating) {
         var filtered = [];
         angular.forEach(values, function (value) {
@@ -60,7 +60,7 @@ tunefish.controller('LoginCtrl', function ($scope, $http, $sce, $location, JwtFa
         JwtFactory.determineToken(user).then(function (result) {
             if (result) {
                 $scope.feedback = $sce.trustAsHtml('<div class="alert alert-success">Login erfolgreich!</div>');
-                $location.path('/'); //band/54');
+                $location.path('/');
             } else {
                 $scope.feedback = $sce.trustAsHtml('<div class="alert alert-danger">Falsche Zugangsdaten</div>');
             }
@@ -78,7 +78,7 @@ tunefish.controller('BandsCtrl', function ($scope, $location, BandsFactory, JwtF
 });
 
 
-tunefish.controller('BandCtrl', function ($scope, $routeParams, angularPlayer, $sce, BandsFactory, BandFactory, JwtFactory) {
+tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, angularPlayer, BandsFactory, BandFactory, JwtFactory) {
 
     var band = {};
     if (JwtFactory.hasToken()) {
@@ -91,7 +91,7 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, angularPlayer, $
             band = gotBand;
             $scope.band = band;
 
-            band.tracks.forEach(function(track) {
+            band.tracks.forEach(function (track) {
                 track.url = track.url + '?Authorization=JWT%20' + JwtFactory.getToken();
             });
 
@@ -100,6 +100,18 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, angularPlayer, $
 
 
         });
+
+        $scope.saveComment = function (comment) {
+            var success = function (commentData) {
+                band.comments.push(commentData.data.comment);
+            };
+
+            var fail = function (commentData) {
+                // TODO handle error case
+                console.log('error occured while savin comment: ', comment);
+            };
+            $http.post(apiBase + "bands/" + band.id + "/comment", {'comment': comment}, JwtFactory.getHeaders()).then(success, fail);
+        }
     }
 });
 
@@ -147,7 +159,6 @@ tunefish.factory('JwtFactory', function ($http, $location) {
 });
 
 
-
 tunefish.factory('BandFactory', function ($http, $q, $location, JwtFactory) {
 
     var bandCache = [];
@@ -168,7 +179,7 @@ tunefish.factory('BandFactory', function ($http, $q, $location, JwtFactory) {
 
             var success = function (bandResponse) {
                 band = bandResponse.data;
-                band.tracks.forEach(function(track) {
+                band.tracks.forEach(function (track) {
                     track.band = band;
                 });
 
@@ -196,7 +207,7 @@ tunefish.factory('BandsFactory', function ($http, $q, $location, JwtFactory) {
         getBand: function (bandId) {
             var singleBand = {artist: '', id: bandId};
 
-            bands.forEach(function(band) {
+            bands.forEach(function (band) {
                 if (band.id == bandId) {
                     singleBand = band;
                 }
@@ -228,8 +239,8 @@ tunefish.factory('BandsFactory', function ($http, $q, $location, JwtFactory) {
             deferred.resolve(bands);
             return deferred.promise;
         },
-        setRating: function(bandId, rating) {
-             bands.forEach(function(band) {
+        setRating: function (bandId, rating) {
+            bands.forEach(function (band) {
                 if (band.id == bandId) {
                     band.rating = rating;
                 }
@@ -238,45 +249,45 @@ tunefish.factory('BandsFactory', function ($http, $q, $location, JwtFactory) {
     };
 });
 
-tunefish.directive('voting', function(){
-  return {
-    restrict: 'E',
-    scope: {
-      band: '='
-    },
-    template: '<span ng-repeat="cnt in [1,2,3,4,5]"><star digit="cnt" band="band"></star></span>'
-  };
+tunefish.directive('voting', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            band: '='
+        },
+        template: '<span ng-repeat="cnt in [1,2,3,4,5]"><star digit="cnt" band="band"></star></span>'
+    };
 });
 
-tunefish.directive('star', function($http, JwtFactory, BandsFactory) {
-   return {
-       restrict: 'E',
-       scope: {
-           digit: '=',
-           band: '='
-       },
-       link: function (scope, element) {
-        element.bind('click', function () {
+tunefish.directive('star', function ($http, JwtFactory, BandsFactory) {
+    return {
+        restrict: 'E',
+        scope: {
+            digit: '=',
+            band: '='
+        },
+        link: function (scope, element) {
+            element.bind('click', function () {
 
-            var success = function() {
-                scope.band.rating = scope.digit;
-                BandsFactory.setRating(scope.band.id, scope.digit);
-            };
+                var success = function () {
+                    scope.band.rating = scope.digit;
+                    BandsFactory.setRating(scope.band.id, scope.digit);
+                };
 
-            var fail = function() {
-                // TODO: notify the user?, check whether token was still valid
-                console.log('voting failed');
-            };
+                var fail = function () {
+                    // TODO: notify the user?, check whether token was still valid
+                    console.log('voting failed');
+                };
 
-            $http.put(apiBase + 'bands/' + scope.band.id + '/vote', {vote: scope.digit}, JwtFactory.getHeaders()).then(success, fail);
-        });
-       },
-       template: '<i class="glyphicon " ng-class="{\'glyphicon-star\': digit <= band.rating, \'glyphicon-star-empty\': digit > band.rating}"></i>'
-   };
+                $http.put(apiBase + 'bands/' + scope.band.id + '/vote', {vote: scope.digit}, JwtFactory.getHeaders()).then(success, fail);
+            });
+        },
+        template: '<i class="glyphicon " ng-class="{\'glyphicon-star\': digit <= band.rating, \'glyphicon-star-empty\': digit > band.rating}"></i>'
+    };
 });
 
 
-tunefish.directive('addAll', ['angularPlayer', function(angularPlayer) {
+tunefish.directive('addAll', ['angularPlayer', function (angularPlayer) {
     return {
         restrict: "EA",
         scope: {
@@ -298,7 +309,7 @@ tunefish.directive('addAll', ['angularPlayer', function(angularPlayer) {
 }]);
 
 
-tunefish.directive('random', ['angularPlayer', function(angularPlayer) {
+tunefish.directive('random', ['angularPlayer', function (angularPlayer) {
     return {
         restrict: "EA",
         scope: {
@@ -311,3 +322,94 @@ tunefish.directive('random', ['angularPlayer', function(angularPlayer) {
         }
     }
 }]);
+
+// https://gist.github.com/marshall007/6039852#gistcomment-945767
+tunefish.directive('timeago', function () {
+    var getTimeAgo, template, templates;
+    templates = {
+        seconds: 'vor einigen Sekunden',
+        minute: 'vor einer Minute',
+        minutes: 'vor %d Minuten',
+        hour: 'vor einer Stunde',
+        hours: 'vor %d Studen',
+        day: 'vor einem Tag',
+        days: 'vor %d Tagen',
+        month: 'vor einem Monat',
+        months: 'vor %d Monaten',
+        year: 'vor einem Jahr',
+        years: 'vor %d Jahren'
+    };
+    template = function (name, value) {
+        var ref;
+        return (ref = templates[name]) != null ? ref.replace(/%d/i, Math.abs(Math.round(value))) : void 0;
+    };
+    getTimeAgo = function (time) {
+        var d2 = new Date(Date.parse(time));
+
+        var days, hours, minutes, now, seconds, years;
+        if (!time) {
+            return 'Never';
+        }
+        time = time.replace(/\.\d+/, '');
+        time = time.replace(/-/, '/').replace(/-/, '/');
+        time = time.replace(/T/, ' ').replace(/Z/, ' UTC');
+        time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, ' $1$2');
+        time = new Date(time * 1000 || time);
+
+        now = new Date;
+
+        seconds = ((now.getTime() - time) * .001) >> 0;
+
+        minutes = seconds / 60;
+        hours = minutes / 60;
+        days = hours / 24;
+        years = days / 365;
+        if (seconds < 30) {
+            return template('seconds', seconds);
+        }
+        if (seconds < 90) {
+            return template('minute', 1);
+        }
+        if (minutes < 45) {
+            return template('minutes', minutes);
+        }
+        if (minutes < 90) {
+            return template('hour', 1);
+        }
+        if (hours < 24) {
+            return template('hours', hours);
+        }
+        if (hours < 42) {
+            return template('day', 1);
+        }
+        if (days < 30) {
+            return template('days', days);
+        }
+        if (days < 45) {
+            return template('month', 1);
+        }
+        if (days < 365) {
+            return template('months', days / 30);
+        }
+        if (years < 1.5) {
+            return template('year', 1);
+        }
+        return template('years', years);
+    };
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<time datetime="{{time}}" title="{{time|date:\'medium\'}}">{{timeago}}</time>',
+        scope: {
+            time: "="
+        },
+        controller: [
+            '$scope', '$interval', function ($scope, $interval) {
+                $scope.timeago = getTimeAgo($scope.time);
+                return $interval(function () {
+                    return $scope.timeago = getTimeAgo($scope.time);
+                }, 30000);
+            }
+        ]
+    };
+});
