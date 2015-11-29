@@ -1,5 +1,5 @@
 var tunefish = angular.module('tunefishApp', ['ngRoute', 'angularSoundManager']);
-var apiBase = 'http://localhost:5000/vote/api/v2/';
+var apiBase = '/vote/api/v2/';
 
 tunefish.config(function ($routeProvider) {
     $routeProvider
