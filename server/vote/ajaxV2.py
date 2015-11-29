@@ -5,7 +5,7 @@ from flask.ext.jwt import current_identity, jwt_required
 from sqlalchemy import func
 
 from server import app
-from server.models import Band, State, Track, Vote, db
+from server.models import Band, State, Track, Vote, db, Comment
 from server.vote.ajax import send_file_partial
 from server.vote.session_mgmt import LoginAndRegisterUser
 
@@ -106,3 +106,25 @@ class BandVoteV2(LoginAndRegisterUser):
             db.session.commit()
 
         return jsonify()
+
+
+class BandCommentV2(LoginAndRegisterUser):
+    decorators = [jwt_required()]
+
+    def post(self, band_id):
+        self.user = current_identity
+        data = json.loads(request.data)
+        comment_text = data["comment"]
+
+        band = Band.query.get_or_404(band_id)
+        if band and 0 < len(comment_text) < 1001:
+            comment = Comment()
+            comment.author_id = self.user.id
+            comment.message = comment_text.strip()
+            comment.band_id = band_id
+            db.session.add(comment)
+            db.session.commit()
+
+            return jsonify(comment=comment2json(comment))
+        else:
+            return "{}", 400
