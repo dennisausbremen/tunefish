@@ -30,7 +30,6 @@ tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angula
         angular.forEach(filteredBands, function (band) {
             BandFactory.getBand(band.id).then(function (fullBand) {
                 fullBand.tracks.forEach(function (track) {
-                    track.url = track.url + '?Authorization=JWT%20' + JwtFactory.getToken();
                     angularPlayer.addTrack(track);
                 });
             });
@@ -90,15 +89,8 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, ang
         BandFactory.getBand($routeParams.bandID).then(function (gotBand) {
             band = gotBand;
             $scope.band = band;
-
-            band.tracks.forEach(function (track) {
-                track.url = track.url + '?Authorization=JWT%20' + JwtFactory.getToken();
-            });
-
             $scope.description = $sce.trustAsHtml(band.description);
             $scope.loading = false;
-
-
         });
 
         $scope.saveComment = function (comment) {
@@ -181,6 +173,7 @@ tunefish.factory('BandFactory', function ($http, $q, $location, JwtFactory) {
                 band = bandResponse.data;
                 band.tracks.forEach(function (track) {
                     track.band = band;
+                    track.url = track.url + '?Authorization=JWT%20' + JwtFactory.getToken();
                 });
 
                 bandCache[band.id] = band;
