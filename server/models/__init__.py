@@ -236,6 +236,11 @@ class Track(db.Model):
         if track_name.lower().endswith(".mp3"):
             track_name = track_name[:-4]
 
+        # remove mp3
+        if track_name.lower().endswith("mp3"):
+            track_name = track_name[:-3]
+
+
         # replace underscores through whitespaces
         track_name = track_name.replace('_', ' ').strip()
 
