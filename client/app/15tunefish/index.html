@@ -1,4 +1,4 @@
-<html ng-app="tutorialApp">
+<html ng-app="tunefishApp">
 <head>
     <meta charset="utf8"/>
     <title>tunefish @ angular</title>
@@ -14,24 +14,23 @@
 
             <ul id="mainNav">
                 <li>
-                    <a href="#/">Alle Bands</a>
                     <input class="form-control" placeholder="Bandname" ng-model="search" ng-change="searchBand(search)"/>
+                    <a href="#/" ng-click="setRating(0,5)">Alle Bands</a>
                 </li>
+                <li><a href="#/" ng-click="setRating(0,0)">Noch nicht gevotet</a></li>
+                <li><a href="#/" ng-click="setRating(5,5)">Beste Bands</a></li>
                 <li><a href="#/playlist">Playlist</a></li>
+                <li><a href="#/tracks">Alle Tracks</a></li>
                 <li><a href="#/stats">Statistiken</a></li>
             </ul>
 
             <div ng-show="isPlaying">
                 <br />
-                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.thumbnail }}" style="width: 100%" />
+                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
                  <strong>{{ currentPlaying.title }}</strong><br />
-                von <a href="#/band/{{currentPlaying.band_id}}"> {{ currentPlaying.artist }}</a>
+                von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
                 <br />
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
+                <voting band="currentPlaying.band"></voting>
             </div>
         </div>
 
@@ -50,8 +49,7 @@
             <button play-music ng-hide="isPlaying" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></button>
             <button pause-music ng-show="isPlaying" class="btn btn-default"><i class="glyphicon glyphicon-pause"></i></button>
             <button stop-music class="btn btn-default"><i class="glyphicon glyphicon-stop"></i></button>
-            <button repeat-music class="btn btn-default" ng-show="repeat"><i class="glyphicon glyphicon-repeat"></i></button>
-            <button repeat-music class="btn btn-default" ng-hide="repeat"><i class="glyphicon glyphicon-refresh"></i></button>
+            <button random class="btn btn-default" ng-class="{'btn-success': repeat}"><i class="glyphicon glyphicon-random"></i></button>
             <button next-track class="btn btn-default"><i class="glyphicon glyphicon-fast-forward"></i></button>
         </div>
     </div>
@@ -66,11 +64,7 @@
 
     </div>
     <div class="col-md-2 col-md-offset-1">
-        <i class="glyphicon glyphicon-star"></i>
-        <i class="glyphicon glyphicon-star"></i>
-        <i class="glyphicon glyphicon-star-empty"></i>
-        <i class="glyphicon glyphicon-star-empty"></i>
-        <i class="glyphicon glyphicon-star-empty"></i>
+        <voting band="currentPlaying.band" ng-show="isPlaying"></voting>
     </div>
 
 </div>

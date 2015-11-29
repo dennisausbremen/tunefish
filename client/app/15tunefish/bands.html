@@ -6,7 +6,8 @@
     </div>
 
     <div ng-show="bands.length">
-        <div ng-repeat="band in bands | filter:search">
+        <h2>Die Bands <small>Filter: <span ng-show="search.length">"{{ search }}"</span> {{ minRating }}-{{ maxRating }} Sterne <a ng-click="allToPlaylist(filteredBands)" class="btn btn-default pull-right">Alle zur Playlist</a></small></h2>
+        <div ng-repeat="band in (filteredBands = (bands|filter:search|ownRating:minRating:maxRating))">
             <div class="band-grid">
                 <a href="#/band/{{band.id}}" class="band-tile">
                     <div class="band-tile-content">

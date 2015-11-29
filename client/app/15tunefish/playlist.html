@@ -9,18 +9,11 @@
         <h4>Füge welche hinzu: <a href="#/">Alle Bands</a></h4>
     </div>
 
-
     <table class="playlist" ng-show="playlist.length">
         <tr ng-repeat="song in playlist" ng-class="{playing: currentPlaying.id == song.id}">
-            <td class="artist"><a href="#/band/{{song.band_id}}">{{ song.artist }}</a></td>
+            <td class="artist"><a href="#/band/{{song.band.id}}">{{ song.artist }}</a></td>
             <td class="song" title="Jetzt abspielen!" play-from-playlist="song">{{ song.title }}</td>
-            <td>
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
-            </td>
+            <td><voting band="song.band"></voting></td>
             <td class="remove" remove-from-playlist="song" data-index="{{ $index }}">x</td>
         </tr>
     </table>

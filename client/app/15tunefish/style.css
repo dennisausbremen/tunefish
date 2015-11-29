@@ -145,6 +145,11 @@ ul#mainNav li a:hover {
     background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.6));
 }
 
+.progress {
+    margin-top: 7px;
+    height: 15px;
+}
+
 .i-done:before {
     content: "\e013";
     font-family: "Glyphicons Halflings";
