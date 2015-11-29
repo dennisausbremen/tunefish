@@ -345,7 +345,7 @@ class Comment(db.Model):
     timestamp = db.Column(DateTime)
 
     def __init__(self):
-        self.timestamp = datetime.datetime.now()
+        self.timestamp = datetime.datetime.utcnow()
 
     @property
     def date_time(self):
