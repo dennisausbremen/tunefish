@@ -2,18 +2,29 @@ Hallo {{ band.name }},
 
 ihr habt euch mit dem Login „{{ band.login }}“ auf tunefish, dem Bandbewerbungsportal des Sommerfests Vorstraße feat. Spittaler Straße, registriert und eure Bewerbung bisher nicht abgeschlossen.
 
-Die Bewerbungsfrist endet am 01. März 2015 um 23:59 Uhr.
+Die Bewerbungsfrist endet am 01. Januar 2016 um 23:59 Uhr.
+
+Der momentane Status eurer Bewerbung:
+{% if band.is_profile_valid %}[OKAY] {% else %}[OFFEN]{% endif %} Allgemeine Bandinfos
+{% if band.is_tracks_valid %}[OKAY] {% else %}[OFFEN]{% endif %} 3-5 Tracks
+{% if band.image %}[OKAY] {% else %}[OFFEN]{% endif %} Bandfoto
+{% if band.techrider %}[OKAY] {% else %}[OFFEN]{% endif %} Techrider
+{% if band.is_email_confirmed %}[OKAY] {% else %}[OFFEN]{% endif %} E-Mail bestätigt
+
+[OFFEN] Bewerbung abschließen
 
 Einige Hinweise:
-- Die Bandbewerbung besteht aus fünf Schritten (Allgemeine Infos, Trackupload, Bandfoto, Techrider und Abschließen der Bewerbung). Habt ihr alle diese fünf Schritte ausgefüllt und die Bewerbung abgeschlossen?
+- Die Bandbewerbung besteht aus fünf Schritten (Allgemeine Infos, Trackupload, Bandfoto, Techrider und Abschließen der Bewerbung). Alle fünf müssen für eine erfolgreiche Bewerbung abgeschlossen sein. Zudem muss eure E-Mailadresse bestätigt sein.
 
 - Möglicherweise habt ihr euch mehrfach registriert, weil die Bestätigungsmail nicht angekommen ist oder ihr euch beim Login vertippt habt. Bitte kontrolliert einmal den oben angegebenen Loginnamen. Falls ihr unter einem anderen Loginnamen die Bewerbung bereits abgeschlossen habt, sagt uns bitte kurz Bescheid, dann löschen wir den überflüssigen Account und ihr bekommt bezüglich dieses Accounts keine weiteren Mails von uns.
 
 - Bei allgemeinen Bandfragen steht euch die Bandorga unter play@vorstrasse-bremen.de und bei technischen Fragen der tunefish Support unter tunefish@vorstrasse-bremen.de zur Verfügung.
 
 
-Mit freundlichen Grüßen aus Bremen,
+Mit freundlichen Grüßen aus Bremen
 
 tunefish Support
 des Sommerfest Vorstraße feat. Spittaler Straße
 http://tunefish.vorstrasse-bremen.de/
+
+10. + 11. Juni 2016
