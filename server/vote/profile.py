@@ -28,6 +28,7 @@ class AdminIndex(RestrictedModAdminPage):
 
 class VoteResults(RestrictedUserPage):
     def get(self):
+	return render_template('main_no_results.html')
         state_list = [State.IN_VOTE, State.REQUESTED, State.ACCEPTED, State.DECLINED]
         bands = Band.query.filter(Band.state.in_(state_list))
         return render_template('band_list.html', bands=bands, states=State)

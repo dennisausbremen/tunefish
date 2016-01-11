@@ -1,0 +1,33 @@
+{% extends "vote_layout/layout_vote.html" %}
+{% from "_formhelpers.html" import renderMessages %}
+
+{% block body %}
+
+<div id="messages" class="message-container">
+    {{ renderMessages() }}
+</div>
+
+
+
+<section class="main-content profile finish">
+    <div class="row">
+        <div class="profile-form-wrapper col-xs-12">
+            <div class="form-action" id="step-finish">
+                <div class="step-content">
+                    <h2>Voting läuft noch!</h2>
+
+                    <p>
+                        Hey {{ g.user.login }},<br/>
+                        momentan läuft noch die Votingphase. Daher kannst du dir noch nicht die Ergebnisse des Votings anschauen!
+                        <br/><br/>
+                        Liebe Grüße<br/>
+                        Deine Sommerfest Orga
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
