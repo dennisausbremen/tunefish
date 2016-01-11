@@ -1,0 +1,90 @@
+<html ng-app="tunefishApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>tunefish @ angular</title>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/app/15tunefish/style.css">
+</head>
+<body>
+<div class="container" id="main" ng-controller="MainCtrl">
+    <div class="row">
+
+        <div class="col-sm-3 col-xs-0">
+            <img src="/app/15tunefish/tunefish.svg" id="tunefishLogo" alt="tunefish" />
+
+            <ul id="mainNav">
+                {% if g.user %}
+                    <li><a class="logout" href="{{ url_for('vote.session.logout') }}">{{ g.user.login }}: Logout</a></li>
+                    {% if g.user.is_mod or g.user.is_admin %}
+                        <li><span><a href="{{ url_for('vote.admin.index') }}">Administration</a></li>
+                    {% endif %}
+                    {# <li><span>&nbsp; <a href="{{ url_for('vote.home.vote_results') }}">Ergebnisse</a></span></li> #}
+                {% endif %}
+
+                <li>
+                    <input class="form-control" placeholder="Bandname" ng-model="search" ng-change="searchBand(search)"/>
+                    <a href="#/" ng-click="setRating(0,5)">Alle Bands</a>
+                </li>
+                <li><a href="#/" ng-click="setRating(0,0)">Noch nicht gevotet</a></li>
+                <li><a href="#/" ng-click="setRating(5,5)">Beste Bands</a></li>
+                <li><a href="#/playlist">Playlist</a></li>
+                <li><a href="#/stats">Statistiken</a></li>
+            </ul>
+{% raw %}
+            <div ng-show="isPlaying">
+                <br />
+                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
+                 <strong>{{ currentPlaying.title }}</strong><br />
+                von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
+                <br />
+                <voting band="currentPlaying.band"></voting>
+            </div>
+        </div>
+
+        <div class="col-sm-9 col-xs-12" id="mainContent">
+            <div ng-view></div>
+        </div>
+    </div>
+</div>
+
+<div class="navbar navbar-fixed-bottom">
+    <sound-manager/>
+
+    <div class="col-md-3">
+        <div class="btn-group">
+            <button prev-track class="btn btn-default"><i class="glyphicon glyphicon-fast-backward"></i></button>
+            <button play-music ng-hide="isPlaying" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></button>
+            <button pause-music ng-show="isPlaying" class="btn btn-default"><i class="glyphicon glyphicon-pause"></i></button>
+            <button stop-music class="btn btn-default"><i class="glyphicon glyphicon-stop"></i></button>
+            <button random class="btn btn-default" ng-class="{'btn-success': repeat}"><i class="glyphicon glyphicon-random"></i></button>
+            <button next-track class="btn btn-default"><i class="glyphicon glyphicon-fast-forward"></i></button>
+        </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+
+        <div class="progress" seek-track>
+            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ progress }}"
+                 aria-valuemin="0" aria-valuemax="100" ng-style="{width : ( progress + '%' ) }">
+                <span class="sr-only">{{ progress }}% playing</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+        <voting band="currentPlaying.band" ng-show="isPlaying"></voting>
+    </div>
+{% endraw %}
+
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
+<script src="/app/15tunefish/angular-soundmanager2.min.js"></script>
+<script src="/app/15tunefish/app.js"></script>
+</body>
+</html>

@@ -5,9 +5,11 @@ from flask import Blueprint
 from server.vote.ajax import JsonBandList, JsonBandDetails, JsonBandVote, JsonCommentAdd, JsonDistance, TrackStreaming, \
     after_request
 from server.vote.ajaxV2 import BandListJsonV2, BandJsonV2, TrackV2, BandVoteV2, BandCommentV2
+from server.vote.ajaxV3 import BandCommentV3, BandJsonV3, BandListJsonV3, TrackV3
+from server.vote.ajaxV3 import BandVoteV3
 from server.vote.band_mgmt import AdminBandView, AdminBandState, AdminCommentRemove, AdminRemindBands, AdminBandDelete, \
     AdminBandVoteState, AdminDeclineBands, AdminInformBandsAboutVoting, AdminResendActivationMail
-from server.vote.band_vote import BandApp
+from server.vote.band_vote import BandApp, AngularApp
 from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON, VoteStatistics, \
     VoteResults
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
@@ -49,8 +51,8 @@ vote_blueprint.add_url_rule('/admin/comments/<int:comment_id>/remove',
 # vote_blueprint.add_url_rule('/admin/inform_bands', view_func=AdminInformBandsAboutVoting.as_view('admin.inform'))
 
 
-
-vote_blueprint.add_url_rule('/app', view_func=BandApp.as_view('bands.app'))
+vote_blueprint.add_url_rule('/app', view_func=AngularApp.as_view('bands.app'))
+vote_blueprint.add_url_rule('/ember', view_func=BandApp.as_view('bands.ember'))
 
 vote_blueprint.add_url_rule('/progress', view_func=VotingOverview.as_view('voting.overview'))
 vote_blueprint.add_url_rule('/stats', view_func=VoteStatistics.as_view('stats.vote'))
@@ -71,9 +73,16 @@ vote_blueprint.add_url_rule('/api/v2/bands/<int:band_id>', view_func=BandJsonV2.
 vote_blueprint.add_url_rule('/api/v2/bands/<int:band_id>/vote', view_func=BandVoteV2.as_view('api.v2.vote'),methods=['PUT'])
 vote_blueprint.add_url_rule('/api/v2/bands/<int:band_id>/comment', view_func=BandCommentV2.as_view('api.v2.comment'))
 
+vote_blueprint.add_url_rule('/api/v3/bands', view_func=BandListJsonV3.as_view('api.v3.bands'))
+vote_blueprint.add_url_rule('/api/v3/bands/<int:band_id>', view_func=BandJsonV3.as_view('api.v3.band'))
+vote_blueprint.add_url_rule('/api/v3/bands/<int:band_id>/vote', view_func=BandVoteV3.as_view('api.v3.vote'),methods=['PUT'])
+vote_blueprint.add_url_rule('/api/v3/bands/<int:band_id>/comment', view_func=BandCommentV3.as_view('api.v3.comment'))
+
+
 
 # own blueprint, because of the after request
 track_blueprint = Blueprint('track', __name__, template_folder='../../client/views/vote')
 track_blueprint.add_url_rule('/ajax/track/<int:track_id>.mp3', view_func=TrackStreaming.as_view('ajax.track'))
 track_blueprint.add_url_rule('/api/v2/track/<int:track_id>.mp3', view_func=TrackV2.as_view('api.v2.track'))
+track_blueprint.add_url_rule('/api/v3/track/<int:track_id>.mp3', view_func=TrackV3.as_view('api.v3.track'))
 track_blueprint.after_request(after_request)

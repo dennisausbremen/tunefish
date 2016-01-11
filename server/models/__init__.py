@@ -208,9 +208,11 @@ class Track(db.Model):
         else:
             return url_for('track.ajax.track', track_id=self.id)
 
-
     def get_track_url_v2(self):
         return url_for('track.api.v2.track', track_id=self.id)
+
+    def get_track_url_v3(self):
+        return url_for('track.api.v3.track', track_id=self.id)
 
 
     @property

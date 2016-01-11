@@ -1,19 +1,18 @@
 var tunefish = angular.module('tunefishApp', ['ngRoute', 'angularSoundManager']);
-var apiBase = '/vote/api/v2/';
+var apiBase = '/vote/api/v3/';
 
 tunefish.config(function ($routeProvider) {
     $routeProvider
-        .when('/', {templateUrl: 'bands.html'})
-        .when('/stats', {templateUrl: 'stats.html'})
-        .when('/results', {templateUrl: 'results.html'})
-        .when('/login', {templateUrl: 'login.html'})
-        .when('/playlist', {templateUrl: 'playlist.html'})
-        .when('/band/:bandID', {templateUrl: 'band.html'})
+        .when('/', {templateUrl: '/app/15tunefish/bands.html'})
+        .when('/stats', {templateUrl: '/app/15tunefish/stats.html'})
+        .when('/results', {templateUrl: '/app/15tunefish/results.html'})
+        .when('/playlist', {templateUrl: '/app/15tunefish/playlist.html'})
+        .when('/band/:bandID', {templateUrl: '/app/15tunefish/band.html'})
         .otherwise({redirectTo: '/'});
 });
 
 
-tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angularPlayer, JwtFactory) {
+tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angularPlayer) {
     $scope.searchBand = function () {
         $location.path('/');
     };
@@ -51,107 +50,42 @@ tunefish.filter('ownRating', function () {
     }
 });
 
-tunefish.controller('LoginCtrl', function ($scope, $http, $sce, $location, JwtFactory) {
-   // $scope.user = {username: 'test', password: 'testtest'};
-    $scope.login = function (user) {
-        $scope.feedback = '';
-
-        JwtFactory.determineToken(user).then(function (result) {
-            if (result) {
-                $scope.feedback = $sce.trustAsHtml('<div class="alert alert-success">Login erfolgreich!</div>');
-                $location.path('/');
-            } else {
-                $scope.feedback = $sce.trustAsHtml('<div class="alert alert-danger">Falsche Zugangsdaten</div>');
-            }
-        });
-    }
-
-});
-
-tunefish.controller('BandsCtrl', function ($scope, $location, BandsFactory, JwtFactory) {
-    if (JwtFactory.hasToken()) {
-        BandsFactory.getBands().then(function (bands) {
-            $scope.bands = bands;
-        });
-    }
+tunefish.controller('BandsCtrl', function ($scope, $location, BandsFactory) {
+    BandsFactory.getBands().then(function (bands) {
+        $scope.bands = bands;
+    });
 });
 
 
-tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, angularPlayer, BandsFactory, BandFactory, JwtFactory) {
+tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, angularPlayer, BandsFactory, BandFactory) {
 
     var band = {};
-    if (JwtFactory.hasToken()) {
 
-        band = BandsFactory.getBand($routeParams.bandID);
+    band = BandsFactory.getBand($routeParams.bandID);
+    $scope.band = band;
+    $scope.loading = true;
+
+    BandFactory.getBand($routeParams.bandID).then(function (gotBand) {
+        band = gotBand;
         $scope.band = band;
-        $scope.loading = true;
+        $scope.description = $sce.trustAsHtml(band.description);
+        $scope.loading = false;
+    });
 
-        BandFactory.getBand($routeParams.bandID).then(function (gotBand) {
-            band = gotBand;
-            $scope.band = band;
-            $scope.description = $sce.trustAsHtml(band.description);
-            $scope.loading = false;
-        });
+    $scope.saveComment = function (comment) {
+        var success = function (commentData) {
+            band.comments.push(commentData.data.comment);
+        };
 
-        $scope.saveComment = function (comment) {
-            var success = function (commentData) {
-                band.comments.push(commentData.data.comment);
-            };
-
-            var fail = function (commentData) {
-                // TODO handle error case
-                console.log('error occured while savin comment: ', comment);
-            };
-            $http.post(apiBase + "bands/" + band.id + "/comment", {'comment': comment}, JwtFactory.getHeaders()).then(success, fail);
-        }
+        var fail = function (commentData) {
+            // TODO handle error case
+            console.log('error occured while savin comment: ', comment);
+        };
+        $http.post(apiBase + "bands/" + band.id + "/comment", {'comment': comment}).then(success, fail);
     }
 });
 
-tunefish.controller('JWTCheckCtrl', function (JwtFactory) {
-    JwtFactory.hasToken();
-});
-
-
-tunefish.factory('JwtFactory', function ($http, $location) {
-    var jwt = undefined;
-
-    return {
-        determineToken: function (user) {
-            var success = function (response) {
-                jwt = response.data.access_token;
-                return true;
-            };
-
-            var error = function () {
-                return false;
-            };
-
-            return $http.post(apiBase + "auth", user).then(success, error);
-        },
-
-        hasToken: function () {
-            if (jwt == undefined) {
-                $location.path('/login');
-            }
-            return jwt != undefined;
-        },
-
-        clearToken: function () {
-            jwt = undefined;
-        },
-
-        getToken: function () {
-            return jwt;
-        },
-
-        getHeaders: function () {
-            return {headers: {'Authorization': 'JWT ' + jwt}};
-        }
-    }
-});
-
-
-tunefish.factory('BandFactory', function ($http, $q, $location, JwtFactory) {
+tunefish.factory('BandFactory', function ($http, $q, $location) {
 
     var bandCache = [];
     var bands = [];
@@ -173,7 +107,6 @@ tunefish.factory('BandFactory', function ($http, $q, $location, JwtFactory) {
                 band = bandResponse.data;
                 band.tracks.forEach(function (track) {
                     track.band = band;
-                    track.url = track.url + '?Authorization=JWT%20' + JwtFactory.getToken();
                 });
 
                 bandCache[band.id] = band;
@@ -182,19 +115,18 @@ tunefish.factory('BandFactory', function ($http, $q, $location, JwtFactory) {
 
             var fail = function (bandResponse) {
                 if (bandResponse.status == 401) {
-                    $location.path('/login');
                 }
                 // TODO: In other cases?
                 console.log('Bands couldn\'t be fetched ...');
             };
 
-            return $http.get(apiBase + 'bands/' + bandId, JwtFactory.getHeaders()).then(success, fail);
+            return $http.get(apiBase + 'bands/' + bandId).then(success, fail);
         }
     };
 });
 
 
-tunefish.factory('BandsFactory', function ($http, $q, $location, JwtFactory) {
+tunefish.factory('BandsFactory', function ($http, $q, $location) {
     var bands = [];
     return {
         getBand: function (bandId) {
@@ -219,13 +151,12 @@ tunefish.factory('BandsFactory', function ($http, $q, $location, JwtFactory) {
 
                 var fail = function (bandResponse) {
                     if (bandResponse.status == 401) {
-                        $location.path('/login');
                     }
                     // TODO: In other cases?
                     console.log('Bands couldn\'t be fetched ...');
                 };
 
-                return $http.get(apiBase + 'bands', JwtFactory.getHeaders()).then(success, fail);
+                return $http.get(apiBase + 'bands').then(success, fail);
             }
 
             var deferred = $q.defer();
@@ -252,7 +183,7 @@ tunefish.directive('voting', function () {
     };
 });
 
-tunefish.directive('star', function ($http, JwtFactory, BandsFactory) {
+tunefish.directive('star', function ($http, BandsFactory) {
     return {
         restrict: 'E',
         scope: {
@@ -272,7 +203,7 @@ tunefish.directive('star', function ($http, JwtFactory, BandsFactory) {
                     console.log('voting failed');
                 };
 
-                $http.put(apiBase + 'bands/' + scope.band.id + '/vote', {vote: scope.digit}, JwtFactory.getHeaders()).then(success, fail);
+                $http.put(apiBase + 'bands/' + scope.band.id + '/vote', {vote: scope.digit}).then(success, fail);
             });
         },
         template: '<i class="glyphicon " ng-class="{\'glyphicon-star\': digit <= band.rating, \'glyphicon-star-empty\': digit > band.rating}"></i>'

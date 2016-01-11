@@ -1,6 +1,14 @@
 <div ng-controller="BandCtrl">
 	<div ng-show="band" id="band">
-        <div ng-show="loading">Band wird geladen</div>
+        <div ng-show="loading">
+            <div class="spinner">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+              <div class="rect5"></div>
+            </div>
+        </div>
         <div ng-hide="loading">
             <div class="row">
                 <div class="col-xs-5 col-md-3 col-sm-4">
