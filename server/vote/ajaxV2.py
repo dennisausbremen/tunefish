@@ -91,7 +91,7 @@ class BandVoteV2(LoginAndRegisterUser):
         self.user = current_identity
         data = json.loads(request.data)
         vote = int(data['vote'])
-        if datetime.strptime(app.SETTINGS['BAND_CANDIDATURE_END'], "%Y-%m-%d %H:%M:%S") < datetime.now():
+        if datetime.strptime(app.SETTINGS['VOTING_END'], "%Y-%m-%d %H:%M:%S") < datetime.now():
             return '', 404
         band = Band.query.get_or_404(band_id)
         if band and 0 < vote < 6:

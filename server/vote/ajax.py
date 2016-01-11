@@ -80,7 +80,7 @@ class JsonBandVote(RestrictedUserPage):
     def put(self, band_id):
         data = json.loads(request.data)
         vote = int(data["band"]["ownVote"])
-        if datetime.strptime(app.SETTINGS['BAND_CANDIDATURE_END'], "%Y-%m-%d %H:%M:%S") < datetime.now():
+        if datetime.strptime(app.SETTINGS['VOTING_END'], "%Y-%m-%d %H:%M:%S") < datetime.now():
             return '', 404
         band = Band.query.get_or_404(band_id)
         if band and 0 < vote < 6:
