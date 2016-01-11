@@ -32,13 +32,14 @@ class RegisterUser(LoginAndRegisterUser):
         if self.registration_form.validate_on_submit():
             try:
                 user = User(self.registration_form.login.data, self.registration_form.password.data)
+                user.email = self.registration_form.email.data
                 db.session.add(user)
                 db.session.commit()
                 session['userId'] = user.id
                 flash('Willkommen Benutzer "%s".' % user.login, 'info')
                 return redirect(url_for('vote.home.inactive'))
             except IntegrityError:
-                self.registration_form.login.errors.append("Eine Band mit diesem Login existiert bereits")
+                self.registration_form.login.errors.append("Eine Benutzer mit diesem Login existiert bereits")
                 return self.render()
         return self.render()
 

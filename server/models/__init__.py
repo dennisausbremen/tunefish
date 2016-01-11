@@ -258,6 +258,7 @@ class Track(db.Model):
 class User(db.Model):
     id = db.Column(Integer, primary_key=True)
     login = db.Column(String(25), unique=True)
+    email = db.Column(String(100))
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']))
     name = db.Column(String(60))
     _access = db.Column(Integer)

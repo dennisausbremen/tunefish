@@ -49,6 +49,7 @@
                         <form method="POST" action="{{ url_for('vote.session.register') }}">
                             {{ registerForm.csrf_token }}
                             {{ renderDefault(registerForm.login, 'Login') }}
+                            {{ renderDefault(registerForm.email, 'E-Mail') }}
                             {{ renderDefault(registerForm.password, 'Passwort') }}
                             {{ renderDefault(registerForm.confirm, 'Passwort wiederholen') }}
                             <input type="submit" value="Benutzer registrieren">
