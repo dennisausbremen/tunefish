@@ -17,14 +17,14 @@
 
                     <p>
                         Hey {{ g.band.name }},<br/>
-                        der Bewerbungszeitraum für 2015 ist abgelaufen.<br /><br />
+                        der Bewerbungszeitraum für 2016 ist abgelaufen.<br /><br />
                         {% if g.band.state == states.NEW %}
                             Leider habt ihr die Bewerbung nicht vollständig ausgefüllt und abgeschickt. Daher seid ihr leider
-                            dieses Jahr nicht mit im Voting. Wir freuen uns aber über eure Bewerbung 2016!
+                            dieses Jahr nicht mit im Voting. Wir freuen uns aber über eure Bewerbung 2017!
                         {% endif %}
                         {% if g.band.state > states.NEW %}
                             Eure Bewerbung ist erfolgreich bei uns eingegangen. Wir müssen jetzt eure Bewerbungen sichten,
-                            durchhören und bewerten. Wir melden uns auf jeden Fall bis Mitte Mai 2015.
+                            durchhören und bewerten. Wir melden uns auf jeden Fall spätestens Ende März 2016.
                         {% endif %}
                          <br/><br/>
                         Liebe Grüße<br/>
