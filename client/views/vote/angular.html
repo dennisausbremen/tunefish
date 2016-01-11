@@ -14,6 +14,17 @@
 
         <div class="col-sm-3 col-xs-0">
             <img src="/app/15tunefish/tunefish.svg" id="tunefishLogo" alt="tunefish" />
+            {% raw %}
+            <div ng-show="isPlaying">
+                <br />
+                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
+                 <strong>{{ currentPlaying.title }}</strong><br />
+                von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
+                <br />
+                <voting band="currentPlaying.band"></voting>
+                <br />
+            </div>
+            {% endraw %}
 
             <ul id="mainNav">
                 {% if g.user %}
@@ -32,17 +43,10 @@
                 <li><a href="#/" ng-click="setRating(5,5)">Beste Bands</a></li>
                 <li><a href="#/playlist">Playlist</a></li>
                 <li><a href="#/stats">Statistiken</a></li>
-                <li><a href="/vote/ember">Altes Voting-Interface</a></li>
+                <li><a href="/vote/ember#/bands">Altes Voting-Interface</a></li>
             </ul>
 {% raw %}
-            <div ng-show="isPlaying">
-                <br />
-                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
-                 <strong>{{ currentPlaying.title }}</strong><br />
-                von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
-                <br />
-                <voting band="currentPlaying.band"></voting>
-            </div>
+
         </div>
 
         <div class="col-sm-9 col-xs-12" id="mainContent">
