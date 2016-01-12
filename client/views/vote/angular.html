@@ -22,7 +22,7 @@
                 von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
                 <br />
                 <voting band="currentPlaying.band"></voting>
-                <br />
+                <br /><br />
             </div>
             {% endraw %}
 
@@ -30,7 +30,7 @@
                 {% if g.user %}
                     <li><a class="logout" href="{{ url_for('vote.session.logout') }}">{{ g.user.login }}: Logout</a></li>
                     {% if g.user.is_mod or g.user.is_admin %}
-                        <li><span><a href="{{ url_for('vote.admin.index') }}">Administration</a></li>
+                        <li><span><a target="admin" href="{{ url_for('vote.admin.index') }}">Administration</a></li>
                     {% endif %}
                     {# <li><span>&nbsp; <a href="{{ url_for('vote.home.vote_results') }}">Ergebnisse</a></span></li> #}
                 {% endif %}
