@@ -41,14 +41,15 @@
 
                     <div id="register-toggle" class="form-action">
                         <h2>Registrieren</h2>
-                        <form method="POST" action="{{ url_for('bands.session.register') }}">
+                        {# <form method="POST" action="{{ url_for('bands.session.register') }}">
                             {{ registerForm.csrf_token }}
                             {{ renderDefault(registerForm.login, 'Login') }}
                             {{ renderDefault(registerForm.email, 'E-Mail') }}
                             {{ renderDefault(registerForm.password, 'Passwort') }}
                             {{ renderDefault(registerForm.confirm, 'Passwort wiederholen') }}
                             <input type="submit" value="Band registrieren">
-                        </form>
+                        </form> #}
+			<h3>Die Bandbewerbungsphase ist beendet!</h3>
                     </div>
 
                 </div>
