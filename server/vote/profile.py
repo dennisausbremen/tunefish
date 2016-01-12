@@ -34,6 +34,7 @@ class VoteResults(RestrictedUserPage):
         return render_template('band_list.html', bands=bands, states=State)
 
 
+# TODO: Statistiken sind nicht ganz genau, es werden nun einfach lale Votes vor der ofiziellen Votingphase in den Graphen misachtet ... aber naja :D
 class VoteStatistics(RestrictedUserPage):
     def get(self):
 
@@ -57,7 +58,7 @@ class VoteStatistics(RestrictedUserPage):
         dict['vote_average'] = round(float(dict['vote_count']) / dict['user_voted'], 2)
         dict['vote_average2'] = round(float(dict['vote_count']) / dict['user_voted_2digit'], 2)
         start_day = 305 # 3.3. ist der 62. Tag des Jahres
-        voting_time = date.today().timetuple().tm_yday - start_day
+        voting_time = date.today().timetuple().tm_yday# - start_day
         dict['votes_per_day'] = round(float(dict['vote_count']) / voting_time, 2)
         base_votes_min_max = db.session.query(func.count(Vote.band_id).label('count')).group_by(Vote.band_id)
         dict['votes_min'] = base_votes_min_max.order_by('count').limit(1).all()[0][0]
@@ -83,11 +84,11 @@ class VoteStatisticsJSON(RestrictedUserPage):
         votes = vote_query.all()
 
         # initialize the dict with empty data
-        day = 305 # 16.3, the starting day; set because previous data has no date!, must be beginning of vote period
+        day = 1 # 16.3, the starting day; set because previous data has no date!, must be beginning of vote period
 
         today = date.today().timetuple().tm_yday
-        if today < 305:
-            today = 365;
+        if today > 31:
+            today = 365
 
         json_vote = {}
         while day <= today:
@@ -95,6 +96,8 @@ class VoteStatisticsJSON(RestrictedUserPage):
             day += 1
 
         for vote in votes:
+            if vote[0] > 60:
+                continue
             indicie = str(vote[0])
             if indicie in json_vote:
                 voteDict = json_vote[indicie]
