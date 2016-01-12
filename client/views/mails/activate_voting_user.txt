@@ -1,0 +1,22 @@
+Hallo {{ user.login }},
+
+dein Benutzeraccount für das tunefish Voting 2016 wurde soeben von einem Moderator aktiviert.
+
+Du kannst somit nun die tollen Bands für 2016 anhören, bewerten und kommentieren.
+
+Bei Fragen oder Problemen, schreib' einfach ins Forum oder eine Mail an tunefish@vorstrasse-bremen.de!
+
+
+Frohes Hören und Abstimmen wünscht
+
+Die Bandorga & das Tunefish-Team
+
+
+
+Sommerfest Vorstraße feat. Spittaler Straße
+10. und 11. Juni 2016
+
+http://www.vorstrasse-bremen.de
+http://tunefish.vorstrasse-bremen.de
+
+https://facebook.com/sommerfest.vorstrasse/

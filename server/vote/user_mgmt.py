@@ -1,6 +1,7 @@
 # coding=utf-8
 from flask import jsonify
 
+from server.bands.mails import send_activation_mail
 from server.models import Access, User, db
 from server.vote.session_mgmt import RestrictedAdminPage, RestrictedModAdminPage
 
@@ -15,6 +16,7 @@ class AdminUserActivation(RestrictedModAdminPage):
             if user.is_inactive:
                 user.access = Access.USER
                 db.session.commit()
+                send_activation_mail(user)
                 return jsonify({'success': True, 'active': True, 'message': u'Benutzer %s ist jetzt aktiviert' % user.login})
             elif user.is_user:
                 user.access = Access.INACTIVE

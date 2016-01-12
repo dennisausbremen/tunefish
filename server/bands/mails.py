@@ -41,6 +41,12 @@ def send_decline_mail(band):
     msg = __prepare_mail(band.email, "[tunefish] Leider hat es dieses Jahr nicht gereicht.", "mails/decline_voted_bands.txt", band=band)
     __sendmail.delay(msg)
 
+
 def send_remind_start_mail(reminder):
     msg = __prepare_mail(reminder.email, "[tunefish] Bewerbungsphase für das Sommerfest 2016 startet", "mails/reminder_new_year.txt", reminder=reminder)
+    __sendmail.delay(msg)
+
+
+def send_activation_mail(user):
+    msg = __prepare_mail(user.email, "[tunefish] Dein Votingaccount 2016 ist aktiviert", "mails/activate_voting_user.txt", user=user)
     __sendmail.delay(msg)
