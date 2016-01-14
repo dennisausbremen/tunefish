@@ -17,7 +17,7 @@
             {% raw %}
             <div ng-show="isPlaying">
                 <br />
-                <img src="http://tunefish.vorstrasse-bremen.de/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
+                <img src="/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
                  <strong>{{ currentPlaying.title }}</strong><br />
                 von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
                 <br />
@@ -87,7 +87,7 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
 <script src="/app/15tunefish/angular-soundmanager2.min.js"></script>
 <script src="/app/15tunefish/app.js"></script>
