@@ -17,7 +17,7 @@
             {% raw %}
             <div ng-show="isPlaying">
                 <br />
-                <img src="/{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
+                <img src="{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
                  <strong>{{ currentPlaying.title }}</strong><br />
                 von <a href="#/band/{{currentPlaying.band.id}}"> {{ currentPlaying.artist }}</a>
                 <br />
