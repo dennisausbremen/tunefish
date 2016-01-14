@@ -6,7 +6,7 @@ body {
     padding-bottom: 70px;
 }
 
-td {
+td, .glyphicon {
     cursor: pointer;
 }
 
