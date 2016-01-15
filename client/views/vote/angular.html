@@ -15,7 +15,7 @@
         <div class="col-sm-3 col-xs-0">
             <a href="#/"><img src="/app/15tunefish/tunefish.svg" id="tunefishLogo" alt="tunefish" /></a>
             {% raw %}
-            <div ng-show="isPlaying">
+            <div ng-show="playlist.length">
                 <br />
                 <img src="{{ currentPlaying.band.image['thumb'] }}" style="width: 100%" />
                  <strong>{{ currentPlaying.title }}</strong><br />
