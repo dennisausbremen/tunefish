@@ -53,6 +53,7 @@ tunefish.filter('ownRating', function () {
 tunefish.controller('BandsCtrl', function ($scope, $location, BandsFactory) {
     BandsFactory.getBands().then(function (bands) {
         $scope.bands = bands;
+        $scope.ratings = [0,1,2,3,4,5];
     });
 });
 
