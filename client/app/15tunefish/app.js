@@ -12,7 +12,7 @@ tunefish.config(function ($routeProvider) {
 });
 
 
-tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angularPlayer) {
+tunefish.controller('MainCtrl', function ($scope, $location, $filter, $rootScope,    BandFactory, BandsFactory, angularPlayer) {
     $scope.searchBand = function () {
         $location.path('/');
     };
@@ -23,6 +23,19 @@ tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angula
     $scope.setRating = function (min, max) {
         $scope.minRating = min;
         $scope.maxRating = max;
+    };
+
+    $scope.showRandomUnvoted = function() {
+      BandsFactory.getBands().then(function(bands) {
+          var selectedBands = $filter('filter')(bands, function (band) { return band.rating == 0});
+
+          if (selectedBands.length == 0) {
+              selectedBands = bands;
+          }
+
+          var rndBand = selectedBands[Math.floor(Math.random()*selectedBands.length)];
+          $location.path('/band/' + rndBand.id);
+      });
     };
 
     $scope.allToPlaylist = function (filteredBands) {
