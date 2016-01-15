@@ -59,7 +59,8 @@ tunefish.controller('MainCtrl', function ($scope, $location, $filter, $rootScope
         } else {
             document.title = event.targetScope.currentPlaying.artist + ' - ' + event.targetScope.currentPlaying.title + ' - tunefish';
         }
-    })
+    });
+
 });
 
 tunefish.filter('ownRating', function () {
@@ -279,7 +280,7 @@ tunefish.directive('timeago', function () {
         minute: 'vor einer Minute',
         minutes: 'vor %d Minuten',
         hour: 'vor einer Stunde',
-        hours: 'vor %d Studen',
+        hours: 'vor %d Stunden',
         day: 'vor einem Tag',
         days: 'vor %d Tagen',
         month: 'vor einem Monat',
