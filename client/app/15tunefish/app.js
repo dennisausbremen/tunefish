@@ -23,7 +23,7 @@ tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angula
     $scope.setRating = function (min, max) {
         $scope.minRating = min;
         $scope.maxRating = max;
-    }
+    };
 
     $scope.allToPlaylist = function (filteredBands) {
         angular.forEach(filteredBands, function (band) {
@@ -34,8 +34,19 @@ tunefish.controller('MainCtrl', function ($scope, $location, BandFactory, angula
             });
 
         });
-    }
+    };
 
+    $scope.$on('track:loaded', function(event) {
+        document.title = event.targetScope.currentPlaying.artist + ' - ' + event.targetScope.currentPlaying.title + ' - tunefish';
+    });
+
+    $scope.$on('music:isPlaying', function(event, value) {
+        if (!value) {
+            document.title = 'tunefish - Sommerfest Vorstraße feat. Spittaler Straße';
+        } else {
+            document.title = event.targetScope.currentPlaying.artist + ' - ' + event.targetScope.currentPlaying.title + ' - tunefish';
+        }
+    })
 });
 
 tunefish.filter('ownRating', function () {
