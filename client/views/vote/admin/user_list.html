@@ -1,5 +1,5 @@
 {% set userSort = request.args.userSort|default('login') %}
-{% set reverse = request.args.reverse|default(0)|int %}
+{% set reverse = request.args.reverse|default(-1)|int %}
 
 {% macro build_sort_url(field, reverse) %}{{ url_for('vote.admin.index') }}?userSort={{ field }}{% if reverse == 0 %}&amp;reverse=1{% endif %}#users{% endmacro %}
 
@@ -7,8 +7,8 @@
     <thead>
     <tr>
         <th><a id="sortLogin" href="{{ build_sort_url('login', reverse) }}">Benutzer</a></th>
-        <th>E-Mail</th>
         <th><a id="sortAccess" href="{{ build_sort_url('access_name', reverse) }}">Zugriff</a></th>
+	<th>E-Mail</th>
         <th class="hidden-print">Status</th>
         {% if g.user.is_admin %}
             <th class="hidden-print">Berechtigungen</th>
@@ -23,8 +23,8 @@
     {% for user in users|sort(attribute=userSort, reverse=reverse) %}
         <tr>
             <td>{{ user.login }}</td>
-            <td>{% if user.email %}{{ user.email }}{% else %}-{% endif %}</td>
             <td>{% if user.is_inactive %}<span class="label label-danger"><i class="i-close"></i> {{ user.access_name }} </span>{% else %}{{ user.access_name }}{% endif %}</td>
+            <td>{% if user.email %}{{ user.email }}{% else %}-{% endif %}</td>
             <td class="hidden-print"><a class="access" href="{{ url_for('vote.admin.users.access', user_id=user.id) }}">{% if user.is_inactive %}
                 aktivieren{% else %}deaktivieren{% endif %}</td>
             {% if g.user.is_admin %}
