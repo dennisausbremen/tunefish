@@ -245,6 +245,40 @@ tunefish.directive('addAll', ['angularPlayer', function (angularPlayer) {
 }]);
 
 
+
+tunefish.directive('clearAddAll', ['angularPlayer', function (angularPlayer) {
+    return {
+        restrict: "EA",
+        scope: {
+            songs: '=clearAddAll'
+        },
+        link: function (scope, element) {
+            element.bind('click', function () {
+                // clear playlist
+                angularPlayer.stop();
+                angularPlayer.clearPlaylist(function(){});
+
+                setTimeout(function() {
+                    //add songs to playlist
+                    for (var i = 0; i < scope.songs.length; i++) {
+                        angularPlayer.addTrack(scope.songs[i]);
+                    }
+
+                    if (!angularPlayer.isPlayingStatus()) {
+                        angularPlayer.play();
+                    }
+
+                    // hack! ...
+                    angularPlayer.nextTrack();
+                    angularPlayer.prevTrack();
+                }, 500);
+
+            });
+        }
+    }
+}]);
+
+
 tunefish.directive('random', ['angularPlayer', function (angularPlayer) {
     return {
         restrict: "EA",
