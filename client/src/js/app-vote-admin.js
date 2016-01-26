@@ -161,10 +161,10 @@
         /** Sort users */
         sortLinkHandler('#usersTable', '#sortLogin', 2, 0, 0);
         sortLinkHandler('#usersTable', '#sortAccess', 4, 1, 0);
-        sortLinkHandler('#usersTable', '#sortVotes', 6, 4, 1);
-        sortLinkHandler('#usersTable', '#sortVotesLatest', 8, 5, 1);
-        sortLinkHandler('#usersTable', '#sortVoteAverage', 10, 6, 1);
-        sortLinkHandler('#usersTable', '#sortVoteVariance', 12, 7, 1);
+        sortLinkHandler('#usersTable', '#sortVotes', 6, 5, 1);
+        sortLinkHandler('#usersTable', '#sortVotesLatest', 8, 6, 1);
+        sortLinkHandler('#usersTable', '#sortVoteAverage', 10, 7, 1);
+        sortLinkHandler('#usersTable', '#sortVoteVariance', 12, 8, 1);
 
 
         function sortBandTable(elem, num, col, desc) {
