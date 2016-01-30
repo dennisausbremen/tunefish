@@ -2,7 +2,7 @@ Hey {{ user.login }},
 
 du bist im tunefish Voting registriert um für die Bands des Sommerfest 2016 abzustimmen.
 
-Bisher hast du {{user.vote_count}} von 135 Bands ({{round((user.vote_count/135)*100,2)}} %) bewertet.
+Bisher hast du {{user.vote_count}} von 135 Bands ({{user.round_vote_percentage}} %) bewertet.
 
 
 Die Votingphase endet am morgigen Sonntag, 31.01.2016 um 23:59 Uhr!

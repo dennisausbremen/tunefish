@@ -27,14 +27,13 @@ class AdminUserActivation(RestrictedModAdminPage):
 
 class AdminSentUserReminder(RestrictedAdminPage):
     def get(self):
-        users = User.query.get(1)#()
-        send_user_reminder_mail(users)
-        return '', 200
+        users = User.query.all()
 
         for user in users:
             if user.vote_count < 135:
-                print user.login
+                user.round_vote_percentage = round((user.vote_count/135.0)*100,2)
                 send_user_reminder_mail(user)
+
         return render_template('admin/user_notify.html', users=users)
 
 
