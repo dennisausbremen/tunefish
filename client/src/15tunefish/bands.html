@@ -32,7 +32,7 @@
                 <a href="#/band/{{band.id}}" class="band-tile">
                     <div class="band-tile-content">
                         <i ng-class="{'i-done band-voted': band.rating > 0}"></i>
-                        <img class="band-tile-img" src="{{band.image['thumb']}}" alt="{{band.artist}}"/>
+                        <img class="band-tile-img" ng-src="{{band.image['thumb']}}" alt="{{band.artist}}"/>
                         <div class="band-tile-desc">
                          {{band.artist}}
                         </div>

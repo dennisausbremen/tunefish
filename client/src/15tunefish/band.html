@@ -12,7 +12,7 @@
         <div ng-hide="loading">
             <div class="row">
                 <div class="col-xs-5 col-md-3 col-sm-4">
-                    <img class="bandimg" ng-src="{{band.image['thumb']}}" alt="poster" />
+                    <img class="bandimg" ng-src="{{band.image['thumb']}}" alt="bandimg" />
                 </div>
 
                 <div class="col-xs-6 col-sm-5">
@@ -67,7 +67,7 @@
             <br /><br />
             <h4>Bandfoto</h4>
 
-            <img src="{{band.image['poster']}}" style="width: 100%" alt="poster"/>
+            <img ng-src="{{band.image['poster']}}" style="width: 100%" alt="poster"/>
         </div>
 
 	</div>
