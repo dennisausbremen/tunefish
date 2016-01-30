@@ -1,0 +1,17 @@
+
+<h2>Login</h2>
+
+<div ng-controller="LoginCtrl">
+
+    <h3>Hallo "{{user.username}}"</h3>
+
+    <div ng-bind-html="feedback"></div>
+
+    <label for="username">Benutzer</label>
+    <input type="text" class="form-control" id="username" placeholder="Benutzername" ng-model="user.username" />
+    <br />
+    <label for="password">Passwort</label>
+    <input type="password" id="password" placeholder="Passwort" class="form-control" ng-model="user.password" />
+    <br />
+    <button type="submit" class="btn btn-default" ng-click="login(user)">Login</button>
+</div>

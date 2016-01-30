@@ -1,0 +1,74 @@
+<div ng-controller="BandCtrl">
+	<div ng-show="band" id="band">
+        <div ng-show="loading">
+            <div class="spinner">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+              <div class="rect5"></div>
+            </div>
+        </div>
+        <div ng-hide="loading">
+            <div class="row">
+                <div class="col-xs-5 col-md-3 col-sm-4">
+                    <img class="bandimg" ng-src="{{band.image['thumb']}}" alt="poster" />
+                </div>
+
+                <div class="col-xs-6 col-sm-5">
+                    <h2>{{ band.artist }}</h2>
+                    <br />
+                    <voting band="band"></voting>
+                </div>
+            </div>
+
+            <div class="btn-group pull-right">
+                <button class="btn btn-default btn-sm" add-all="band.tracks" title="Alle Titel zur Playlist hinzufügen">&nbsp;<i class="glyphicon glyphicon-list-alt"></i>&nbsp;</button>
+                <button class="btn btn-default btn-sm" clear-playlist title="Playlist leeren"> <i class="glyphicon glyphicon-trash"></i>&nbsp;</button>
+            </div>
+
+            <h4>Songs</h4>
+            <div class="clearfix"></div>
+
+             <table class="playlist">
+                <tr ng-repeat="song in band.tracks" ng-class="{playing: currentPlaying.id == song.id}">
+                    <td class="song" music-player add-song="song">{{ song.artist }}</td>
+                    <td class="song" title="Jetzt abspielen!" music-player="play" add-song="song">{{ song.title }}</td>
+                    <td class="remove" music-player add-song="song" data-index="{{ $index }}">+</td>
+                </tr>
+            </table>
+
+            <br /><br />
+            <h4>Kommentare</h4>
+            <div ng-hide="band.comments.length">
+                <h5>Es sind noch keine Kommentare vorhanden. Verfasse den ersten!</h5>
+            </div>
+            <div ng-repeat="comment in band.comments">
+                <blockquote>
+                    <p>{{ comment.message }}</p>
+                    <footer>{{ comment.author }}, <timeago time="comment.timestamp"></timeago></footer>
+                </blockquote>
+            </div>
+            <br />
+            <textarea placeholder="Kommentar" class="form-control" ng-model="comment"></textarea>
+            <br />
+            <button type="submit" class="btn btn-default" ng-click="saveComment(comment)">Kommentieren</button>
+
+
+            <br /><br />
+            <h4>Bandbeschreibung</h4>
+            <div ng-bind-html="description"></div>
+            <br />
+            <ul class="list-inline">
+                <li><a href="{{ band.websiteURL }}">{{ band.websiteURL }}</a></li>
+                <li><a href="{{ band.facebookURL }}">{{ band.facebookURL }}</a></li>
+                <li><a href="{{ band.youtubeURL }}">YouTube</a></li>
+            </ul>
+            <br /><br />
+            <h4>Bandfoto</h4>
+
+            <img src="{{band.image['poster']}}" style="width: 100%" alt="poster"/>
+        </div>
+
+	</div>
+</div>
