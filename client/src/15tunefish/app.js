@@ -12,10 +12,11 @@ tunefish.config(function ($routeProvider) {
 });
 
 
-tunefish.controller('MainCtrl', function ($scope, $location, $filter, $rootScope, BandFactory, BandsFactory, angularPlayer, hotkeys) {
+tunefish.controller('MainCtrl', function ($scope, $location, $filter, $http, $rootScope, BandFactory, BandsFactory, angularPlayer, hotkeys) {
     $scope.searchBand = function () {
         $location.path('/');
     };
+
 
     $scope.minRating = 0;
     $scope.maxRating = 5;
@@ -54,7 +55,7 @@ tunefish.controller('MainCtrl', function ($scope, $location, $filter, $rootScope
         combo: 't',
         description: 'Deine Lieblingsbands',
         callback: function () {
-            $scope.setRating(5,5);
+            $scope.setRating(5, 5);
         }
     });
 
@@ -62,16 +63,15 @@ tunefish.controller('MainCtrl', function ($scope, $location, $filter, $rootScope
     hotkeys.add({
         combo: 'p',
         description: 'Playlist',
-        callback: function() {
+        callback: function () {
             $location.path('/playlist');
         }
     });
 
-
     hotkeys.add({
         combo: '+space',
         description: 'Play/Pause',
-        callback: function() {
+        callback: function () {
             if (angularPlayer.isPlayingStatus()) {
                 angularPlayer.pause();
             } else {
@@ -79,65 +79,61 @@ tunefish.controller('MainCtrl', function ($scope, $location, $filter, $rootScope
             }
         }
     });
-
 
     hotkeys.add({
         combo: 'b',
         description: 'vorheriger Track',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
-            }
+        callback: function () {
+            angularPlayer.prevTrack();
         }
     });
-
 
     hotkeys.add({
         combo: 'n',
         description: 'Nächster Track',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
+        callback: function () {
+            angularPlayer.nextTrack();
+        }
+    });
+
+    var vote = function(vote, band_id) {
+        var success = function () {
+            BandsFactory.setRating(band_id, vote);
+            $scope.currentPlaying.band.rating = vote;
+        };
+
+        var fail = function () {
+            // TODO: notify the user?, check whether token was still valid
+            console.log('voting failed');
+        };
+
+        $http.put(apiBase + 'bands/' + band_id + '/vote', {vote: vote}).then(success, fail);
+    };
+
+    hotkeys.add({
+        combo: '1',
+        description: 'Bewertung 1 Stern für akt. Band',
+        callback: function () {
+            if ($scope.isPlaying) {
+                vote(1, $scope.currentPlaying.band.id);
             }
         }
     });
 
     hotkeys.add({
-        combo: '1',
-        description: 'Bewertung 1 Stern für akt. Band',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
-            }
-        }
-    });
-
-hotkeys.add({
         combo: '2',
         description: 'Bewertung 2 Stern für akt. Band',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
-            }
+        callback: function () {
+            vote(2, $scope.currentPlaying.band.id);
         }
     });
 
     hotkeys.add({
         combo: '3',
         description: 'Bewertung 3 Stern für akt. Band',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
+        callback: function () {
+            if ($scope.isPlaying) {
+                vote(3, $scope.currentPlaying.band.id);
             }
         }
     });
@@ -145,11 +141,9 @@ hotkeys.add({
     hotkeys.add({
         combo: '4',
         description: 'Bewertung 4 Stern für akt. Band',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
+        callback: function () {
+            if ($scope.isPlaying) {
+                vote(4, $scope.currentPlaying.band.id);
             }
         }
     });
@@ -157,41 +151,20 @@ hotkeys.add({
     hotkeys.add({
         combo: '5',
         description: 'Bewertung 5 Stern für akt. Band',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
+        callback: function () {
+            if ($scope.isPlaying) {
+                vote(5, $scope.currentPlaying.band.id);
             }
         }
     });
-
-
-    hotkeys.add({
-        combo: 'a',
-        description: 'Alle Tracks der aktuellen Band hinzufügen',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
-            }
-        }
-    });
-
 
     hotkeys.add({
         combo: 'd',
         description: 'Playlist leeren',
-        callback: function() {
-            if (angularPlayer.isPlayingStatus()) {
-                angularPlayer.pause();
-            } else {
-                angularPlayer.play();
-            }
+        callback: function () {
+            angularPlayer.clearPlaylist(function(){});
         }
     });
-
 
 
     $scope.allToPlaylist = function (filteredBands) {
@@ -239,7 +212,7 @@ tunefish.controller('BandsCtrl', function ($scope, $location, BandsFactory) {
 });
 
 
-tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, angularPlayer, BandsFactory, BandFactory) {
+tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, angularPlayer, BandsFactory, BandFactory, hotkeys) {
 
     var band = {};
 
@@ -265,9 +238,23 @@ tunefish.controller('BandCtrl', function ($scope, $routeParams, $http, $sce, ang
         };
         $http.post(apiBase + "bands/" + band.id + "/comment", {'comment': comment}).then(success, fail);
     }
+
+    hotkeys.add({
+        combo: 'a',
+        description: 'Alle Tracks der aktuellen Band hinzufügen',
+        callback: function () {
+            $scope.band.tracks.forEach(function (track) {
+                setTimeout(angularPlayer.addTrack(track), 250);
+            });
+
+            if (!angularPlayer.isPlayingStatus()) {
+                angularPlayer.play();
+            }
+        }
+    });
 });
 
-tunefish.factory('BandFactory', function ($http, $q, $location) {
+tunefish.factory('BandFactory', function ($http, $q, BandsFactory) {
 
     var bandCache = [];
     var bands = [];
@@ -391,7 +378,6 @@ tunefish.directive('star', function ($http, BandsFactory) {
         template: '<i class="glyphicon " ng-class="{\'glyphicon-star\': digit <= band.rating, \'glyphicon-star-empty\': digit > band.rating}"></i>'
     };
 });
-
 
 tunefish.directive('addAll', ['angularPlayer', function (angularPlayer) {
     return {
