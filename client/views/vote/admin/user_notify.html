@@ -1,0 +1,12 @@
+{% extends "vote_layout/layout_vote_admin.html" %}
+
+{% block body %}
+<br /><br />
+<h2>Benutzer benachrichtigen</h2>
+
+<ul>
+    {% for user in users %}
+        <li>{{ user.login }} ({{ user.vote_count }})</li>
+    {% endfor %}
+</ul>
+{% endblock body %}

@@ -1,7 +1,6 @@
 # coding=utf-8
-from flask import jsonify
-
-from server.bands.mails import send_activation_mail
+from flask import jsonify, render_template
+from server.bands.mails import send_activation_mail, send_user_reminder_mail
 from server.models import Access, User, db
 from server.vote.session_mgmt import RestrictedAdminPage, RestrictedModAdminPage
 
@@ -24,6 +23,19 @@ class AdminUserActivation(RestrictedModAdminPage):
                 return jsonify({'success': True, 'active': False, 'message': u'Benutzer %s ist jetzt deaktiviert' % user.login})
             else:
                 return jsonify({'success': False, 'active': True, 'message': u'Du kannst keine Berechtigungen von Moderatoren/Admins ändern'})
+
+
+class AdminSentUserReminder(RestrictedAdminPage):
+    def get(self):
+        users = User.query.get(1)#()
+        send_user_reminder_mail(users)
+        return '', 200
+
+        for user in users:
+            if user.vote_count < 135:
+                print user.login
+                send_user_reminder_mail(user)
+        return render_template('admin/user_notify.html', users=users)
 
 
 class AdminUserAccess(RestrictedAdminPage):

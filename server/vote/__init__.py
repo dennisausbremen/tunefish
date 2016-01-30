@@ -13,8 +13,7 @@ from server.vote.band_vote import BandApp, AngularApp
 from server.vote.profile import InactiveUserIndex, AdminIndex, VotingOverview, VoteStatisticsJSON, VoteStatistics, \
     VoteResults
 from server.vote.session_mgmt import LoginAndRegisterUser, LogoutUser, RegisterUser, LoginUser
-from server.vote.user_mgmt import AdminUserActivation, AdminUserAccess
-
+from server.vote.user_mgmt import AdminUserActivation, AdminUserAccess, AdminSentUserReminder
 
 vote_blueprint = Blueprint('vote', __name__, template_folder='../../client/views/vote')
 
@@ -49,6 +48,7 @@ vote_blueprint.add_url_rule('/admin/comments/<int:comment_id>/remove',
 # vote_blueprint.add_url_rule('/admin/reminder', view_func=AdminRemindBands.as_view('admin.remind'))
 # vote_blueprint.add_url_rule('/admin/decline', view_func=AdminDeclineBands.as_view('admin.decline'))
 # vote_blueprint.add_url_rule('/admin/inform_bands', view_func=AdminInformBandsAboutVoting.as_view('admin.inform'))
+vote_blueprint.add_url_rule('/admin/remind_users', view_func=AdminSentUserReminder.as_view('user.reminder'))
 
 
 vote_blueprint.add_url_rule('/app', view_func=AngularApp.as_view('bands.app'))

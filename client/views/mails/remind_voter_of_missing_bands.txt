@@ -1,0 +1,22 @@
+Hey {{ user.login }},
+
+du bist im tunefish Voting registriert um für die Bands des Sommerfest 2016 abzustimmen.
+
+Bisher hast du {{user.votes.length}} von 135 Bands bewertet.
+
+Die Votingphase geht noch bis morgen, Sonntag, 31.01.2016, 23:59 Uhr.
+
+
+Frohes Hören und Abstimmen wünscht
+
+Die Bandorga & das Tunefish-Team
+
+
+
+Sommerfest Vorstraße feat. Spittaler Straße
+10. und 11. Juni 2016
+
+http://www.vorstrasse-bremen.de
+http://tunefish.vorstrasse-bremen.de
+
+https://facebook.com/sommerfest.vorstrasse/
