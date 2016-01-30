@@ -48,7 +48,7 @@ vote_blueprint.add_url_rule('/admin/comments/<int:comment_id>/remove',
 # vote_blueprint.add_url_rule('/admin/reminder', view_func=AdminRemindBands.as_view('admin.remind'))
 # vote_blueprint.add_url_rule('/admin/decline', view_func=AdminDeclineBands.as_view('admin.decline'))
 # vote_blueprint.add_url_rule('/admin/inform_bands', view_func=AdminInformBandsAboutVoting.as_view('admin.inform'))
-vote_blueprint.add_url_rule('/admin/remind_users', view_func=AdminSentUserReminder.as_view('user.reminder'))
+# vote_blueprint.add_url_rule('/admin/remind_users', view_func=AdminSentUserReminder.as_view('user.reminder'))
 
 
 vote_blueprint.add_url_rule('/app', view_func=AngularApp.as_view('bands.app'))
