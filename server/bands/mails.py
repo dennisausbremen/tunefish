@@ -54,6 +54,5 @@ def send_activation_mail(user):
 
 def send_user_reminder_mail(user):
     msg = __prepare_mail(user.email, "[tunefish] Das Voting endet ...", "mails/remind_voter_of_missing_bands.txt", user=user)
-    print msg
-#    __sendmail.delay(msg)
+    __sendmail.delay(msg)
 
