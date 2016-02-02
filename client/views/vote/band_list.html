@@ -57,6 +57,7 @@
         <th title="Varianz"><a id="sortVariance" href="{{ build_sort_url('vote_average') }}">Var.</a></th>
         <th title="Durschnittsbewertung plus Standardabweichung (Wurzel der Varianz)"><a id="sortDeviation" href="{{ build_sort_url('vote_with_deviation') }}">&#8960; + Dev.</a></th>
         <th><a id="sortState" href="{{ build_sort_url('state') }}">Status</a></th>
+        <th>Eigenes Voting</th>
         {% if state == states.ACCEPTED %}<th>Techrider</th>{% endif %}
     </tr>
     </thead>
@@ -84,6 +85,7 @@
                 <td>{{ band.vote_variance }}</td>
                 <td>{{ band.vote_with_deviation }}</td>
                 <td>{{ band.state_label }}</td>
+                <td>{{ band.get_user_vote(g.user) }}</td>
                 {% if state == states.ACCEPTED %}<th><a href="{{ band.techrider_url }}">Techrider</a></th>{% endif %}
 
             </tr>
