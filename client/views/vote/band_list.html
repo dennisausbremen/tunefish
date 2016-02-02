@@ -65,7 +65,7 @@
     {% for band in bands|sort(attribute=sort, reverse=reverse) %}
         {% if band.state == state or state == 0 %}
             <tr>
-                <td><a href="{{ url_for('vote.bands.app', _anchor='/bands/%d' % band.id) }}">{{ band.name|trim }}</a></td>
+                <td><a href="{{ url_for('vote.bands.app', _anchor='/band/%d' % band.id) }}">{{ band.name|trim }}</a></td>
                 <td>{% if band.amount_members != "NULL" %}{{ band.amount_members }}{% else %}?{% endif %}</td>
                 <td>{% if band.city != "NULL" %}{{ band.city }}{% else %}?{% endif %}</td>
                 <td>{% if band.state > 0 %}
