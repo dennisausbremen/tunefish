@@ -28,7 +28,7 @@ class AdminIndex(RestrictedModAdminPage):
 
 class VoteResults(RestrictedUserPage):
     def get(self):
-	return render_template('main_no_results.html')
+	#return render_template('main_no_results.html')
         state_list = [State.IN_VOTE, State.REQUESTED, State.ACCEPTED, State.DECLINED]
         bands = Band.query.filter(Band.state.in_(state_list))
         return render_template('band_list.html', bands=bands, states=State)
@@ -87,7 +87,7 @@ class VoteStatisticsJSON(RestrictedUserPage):
         day = 1 # 16.3, the starting day; set because previous data has no date!, must be beginning of vote period
 
         today = date.today().timetuple().tm_yday
-        if today > 31:
+        if today > 34:
             today = 365
 
         json_vote = {}
