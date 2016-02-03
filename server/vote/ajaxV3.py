@@ -55,8 +55,12 @@ class BandListJsonV3(RestrictedUserPage):
     def get(self):
         # random for sqlite, rand for mysql
         state_list = [State.IN_VOTE, State.REQUESTED, State.ACCEPTED, State.DECLINED]
-        bands = Band.query.order_by(func.random()).filter(Band.state.in_(state_list))
-        return jsonify(bands=[simpleBand(band) for band in bands]), 200, {'Access-Control-Allow-Origin': '*'}
+
+        #bands = Band.query.order_by(func.random()).filter(Band.state.in_(state_list))
+        bands = Band.query.filter(Band.state.in_(state_list))
+        bands_sorted = sorted(bands, key=lambda x: x.vote_average, reverse=True)
+
+        return jsonify(bands=[simpleBand(band) for band in bands_sorted]), 200, {'Access-Control-Allow-Origin': '*'}
 
 
 class BandJsonV3(RestrictedUserPage):
