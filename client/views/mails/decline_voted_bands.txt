@@ -1,8 +1,9 @@
 Hallo {{ band.name }},
 
-leider müssen wir euch heute mitteilen, dass wir euch dieses Jahr keinen Auftritt auf dem Sommerfest Vorstraße feat. Spittaler Straße anbieten können. Uns haben dieses Jahr über 150 Bewerbungen erreicht, die wir in den letzten Wochen alle durchgehört und bewertet haben.
+leider müssen wir euch heute mitteilen, dass wir euch dieses Jahr keinen Auftritt auf dem Sommerfest Vorstraße feat. Spittaler Straße anbieten können. Uns haben dieses Jahr über 150 Bewerbungen erreicht aus denen wir eine Auswahl treffen mussten.
 
-Wir freuen uns, wenn ihr euch im kommenden Jahr erneut bei uns bewerbt. Über den nachfolgenden Link könnt ihr einen Reminder aktivieren, sodass ihr im kommenden Jahr automatisch eine E-Mail an diese E-Mailadresse erhaltet, sobald die Bewerbungsphase wieder los geht:
+
+Wir freuen uns auf eine erneute Bewerbung von euch im kommenden Jahr. Über den nachfolgenden Link könnt ihr einen Reminder aktivieren, sodass ihr im kommenden Jahr automatisch eine E-Mail an diese E-Mailadresse erhaltet, sobald die Bewerbungsphase wieder los geht:
 
 {{ url_for('bands.profile.reminder', token=band.email_confirmation_token[:15], _external=True) }}
 
@@ -15,7 +16,6 @@ Wir danken euch nochmals für eure Bewerbung und wünschen euch alles Gute für 
 Mit freundlichen Grüßen aus Bremen
 
 Euer Bandteam
-
 
 "Sommerfest Vorstrasse feat. Spittaler Strasse" 2016
 
