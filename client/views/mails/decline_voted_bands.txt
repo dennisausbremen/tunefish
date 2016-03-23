@@ -2,7 +2,7 @@ Hallo {{ band.name }},
 
 leider müssen wir euch heute mitteilen, dass wir euch dieses Jahr keinen Auftritt auf dem Sommerfest Vorstraße feat. Spittaler Straße anbieten können. Uns haben dieses Jahr über 150 Bewerbungen erreicht, die wir in den letzten Wochen alle durchgehört und bewertet haben.
 
-Wir würden uns freuen, wenn ihr euch im kommenden Jahr erneut bei uns bewerben würdet. Als kleine Besonderheit haben wir dieses Jahr einen neuen Reminderservice eingeführt. Wenn ihr diesen über den nachfolgenden Link aktiviert, bekommt ihr im nächsten Jahr automatisch eine E-Mail an diese E-Mailadresse, wenn die Bewerbungsphase wieder los geht:
+Wir freuen uns, wenn ihr euch im kommenden Jahr erneut bei uns bewerbt. Über den nachfolgenden Link könnt ihr einen Reminder aktivieren, sodass ihr im kommenden Jahr automatisch eine E-Mail an diese E-Mailadresse erhaltet, sobald die Bewerbungsphase wieder los geht:
 
 {{ url_for('bands.profile.reminder', token=band.email_confirmation_token[:15], _external=True) }}
 
@@ -19,11 +19,10 @@ Euer Bandteam
 
 "Sommerfest Vorstrasse feat. Spittaler Strasse" 2016
 
-http://www.vorstrasse-bremen.de/play
-Kontakt: bands@vorstrasse-bremen.de
+bands@vorstrasse-bremen.de
 
 http://www.vorstrasse-bremen.de
 http://www.facebook.com/sommerfest.vorstrasse
 
 
-Ihr bekommt diese E-Mail weil ihr auf dem Tunefish-Portal des Sommerfest Vorstraße feat. Spittaler Straße unter http://tunefish.vorstrasse-bremen.de eine komplette Bandbewerbung für das Sommerfest 2015 abgegeben habt. Euer Login ist „{{ band.login }}“.
+Ihr bekommt diese E-Mail weil ihr auf dem Tunefish-Portal des Sommerfest Vorstraße feat. Spittaler Straße unter http://tunefish.vorstrasse-bremen.de eine vollständige Bandbewerbung für das Sommerfest 2016 abgegeben habt. Euer Login ist „{{ band.login }}“.
