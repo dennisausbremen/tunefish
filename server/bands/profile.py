@@ -43,9 +43,9 @@ class RegisterReminder(MethodView):
             db.session.add(reminder)
             db.session.commit()
 
-            flash(u'Erfolgreich für die Benachrichtigung 2016 angemeldet.', 'info')
+            flash(u'Erfolgreich für die Benachrichtigung 2017 angemeldet.', 'info')
         else:
-            flash(u'Fehler bei der Anmeldung für die Benachrichtigung 2016. Bitte kontaktiere tunefish@vorstrasse-bremen.de', 'error')
+            flash(u'Fehler bei der Anmeldung für die Benachrichtigung 2017. Bitte kontaktiere tunefish@vorstrasse-bremen.de', 'error')
         return redirect(url_for('bands.session.index'))
 
 
