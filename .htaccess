@@ -1,0 +1,40 @@
+# ExpiresHeader: verhindert bedingte GET-Anfragen
+<IfModule mod_expires.c>
+ExpiresActive on
+ExpiresDefault "access plus 35 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Connection keep-alive
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-javascript
+
+# mod_deflate (gzip) aktivieren
+AddType image/svg+xml svg svgz
+AddEncoding gzip svgz
+
+# CHARSET
+AddDefaultCharset utf-8
+
+
+<IfModule mod_rewrite.c>
+   RewriteEngine On
+#   RewriteBase /tunefish-beta/
+
+   RewriteCond %{HTTPS} !=on
+   RewriteCond %{ENV:HTTPS} !=on
+   RewriteRule ^(.*)$ https://%{SERVER_NAME}/$1 [R=301,L]
+
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteRule ^(.*)$ /fcgi-bin/tunefish-beta/$1 [QSA,L]
+</IfModule>
