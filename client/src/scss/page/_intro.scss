@@ -13,6 +13,9 @@
     margin-bottom: 0;
 
     > h1 {
+        svg {
+          max-width: 30rem;
+        }
         span {
             font-size: 14px;
             font-weight: 300;
@@ -251,4 +254,8 @@ ul {
         opacity: 0;
         transform: translateY(100%);
     }
+}
+
+svg:not(:root) {
+    overflow: hidden;
 }
